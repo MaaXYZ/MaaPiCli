@@ -1,5 +1,5 @@
 [remote.github]
-owner = "Craun718"
+owner = "MaaXYZ"
 repo = "MaaPiCli"
 
 [changelog]
@@ -15,7 +15,7 @@ body = """
     - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
         {% if commit.breaking %}[**breaking**] {% endif %}\
         {{ commit.message | split(pat="\\n") | first | upper_first }} \
-        {% if commit.github.username %} @{{ commit.github.username }}{% else %} {{ commit.author.name }}{% endif %}
+        {% if commit.remote.username %} @{{ commit.remote.username }}{% else %} {{ commit.author.name }}{% endif %}
 {% endmacro -%}
 
 {% if version %}\
@@ -67,6 +67,7 @@ commit_parsers = [
     { message = "^refactor", group = "Refactoring" },
     { message = "^style", group = "Style" },
     { message = "^test", group = "Tests" },
+    { message = "^build", group = "Build" },
     { message = "^chore\\(deps\\)", group = "Dependencies" },
     { message = "^chore", group = "Maintenance" },
     { message = "^ci", group = "Continuous integration" },
