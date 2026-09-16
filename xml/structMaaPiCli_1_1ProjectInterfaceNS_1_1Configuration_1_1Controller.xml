@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configuration::Controller</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a2aa9d53b552648f7576eb068f2d75204" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::Controller::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Controller::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="384" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="384" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a5e2fb493c1367785ef665c67bb303a1a" prot="public" static="no" mutable="no">
+        <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19" kindref="member">InterfaceData::Controller::Type</ref></type>
+        <definition>InterfaceData::Controller::Type MaaPiCli::ProjectInterfaceNS::Configuration::Controller::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Controller::type</qualifiedname>
+        <initializer>= <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19a4fadce6328a17465cedd158e9c4059fc" kindref="member">InterfaceData::Controller::Type::Adb</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="385" column="41" bodyfile="include/ProjectInterface/Types.h" bodystart="385" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::Configuration::Controller</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="382" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="383" bodyend="388"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a2aa9d53b552648f7576eb068f2d75204" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Controller</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a5e2fb493c1367785ef665c67bb303a1a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Controller</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

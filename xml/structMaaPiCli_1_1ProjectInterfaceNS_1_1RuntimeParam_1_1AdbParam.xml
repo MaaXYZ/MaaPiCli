@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1abdaea3af8426599762bc3a804f42e54c" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="508" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="508" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a060489d0a3c123ae46a231846a09ddb6" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::adb_path</definition>
+        <argsstring></argsstring>
+        <name>adb_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::adb_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="509" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="509" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a63c790702ef215757bdbd474741f57ae" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::address</definition>
+        <argsstring></argsstring>
+        <name>address</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::address</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="510" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="510" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a54a93f0af08dc6687bb9ecef80b641ce" prot="public" static="no" mutable="no">
+        <type>MaaAdbScreencapMethod</type>
+        <definition>MaaAdbScreencapMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::screencap</qualifiedname>
+        <initializer>= MaaAdbScreencapMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="511" column="31" bodyfile="include/ProjectInterface/Types.h" bodystart="511" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1ac4e9b855fd149d6f65f8c4f3da4115f7" prot="public" static="no" mutable="no">
+        <type>MaaAdbInputMethod</type>
+        <definition>MaaAdbInputMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::input</definition>
+        <argsstring></argsstring>
+        <name>input</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::input</qualifiedname>
+        <initializer>= MaaAdbInputMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="512" column="27" bodyfile="include/ProjectInterface/Types.h" bodystart="512" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1abd946568285db7f724cc45fe9e14c2d7" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="513" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="513" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a9658096e889f7661a9fa801dcd370e3b" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::agent_path</definition>
+        <argsstring></argsstring>
+        <name>agent_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam::agent_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="514" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="514" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>adb_path</edgelabel>
+          <edgelabel>address</edgelabel>
+          <edgelabel>agent_path</edgelabel>
+          <edgelabel>config</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="506" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="507" bodyend="515"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a060489d0a3c123ae46a231846a09ddb6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>adb_path</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a63c790702ef215757bdbd474741f57ae" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>address</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a9658096e889f7661a9fa801dcd370e3b" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>agent_path</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1abd946568285db7f724cc45fe9e14c2d7" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>config</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1ac4e9b855fd149d6f65f8c4f3da4115f7" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>input</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1abdaea3af8426599762bc3a804f42e54c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1a54a93f0af08dc6687bb9ecef80b641ce" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</scope><name>screencap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

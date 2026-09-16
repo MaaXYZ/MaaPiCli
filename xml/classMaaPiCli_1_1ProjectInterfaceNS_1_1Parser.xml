@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser" kind="class" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Parser</compoundname>
+    <includes refid="Parser_8h" local="no">Parser.h</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a029ba3a9089ef28ec80bc37c2d96abf7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kindref="compound">InterfaceData::Pretask</ref> &gt;</type>
+        <definition>static std::vector&lt; InterfaceData::Pretask &gt; MaaPiCli::ProjectInterfaceNS::Parser::flatten_pretask</definition>
+        <argsstring>(const std::optional&lt; std::variant&lt; InterfaceData::Pretask, std::vector&lt; InterfaceData::Pretask &gt; &gt; &gt; &amp;pretask)</argsstring>
+        <name>flatten_pretask</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::flatten_pretask</qualifiedname>
+        <param>
+          <type>const std::optional&lt; std::variant&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kindref="compound">InterfaceData::Pretask</ref>, std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kindref="compound">InterfaceData::Pretask</ref> &gt; &gt; &gt; &amp;</type>
+          <declname>pretask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1ae77f21f4de589d2fd2410e24adca5810" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &gt;</type>
+        <definition>static std::optional&lt; InterfaceData &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_interface</definition>
+        <argsstring>(const std::filesystem::path &amp;path)</argsstring>
+        <name>parse_interface</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_interface</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="22" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1abe6932f5e3695e0e62b5b8bbcdf4d38c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &gt;</type>
+        <definition>static std::optional&lt; InterfaceData &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_interface</definition>
+        <argsstring>(const json::value &amp;json)</argsstring>
+        <name>parse_interface</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_interface</qualifiedname>
+        <param>
+          <type>const json::value &amp;</type>
+          <declname>json</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="23" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9062c100cb4e22c75ef55695535acd5f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>static std::optional&lt; Configuration &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_config</definition>
+        <argsstring>(const std::filesystem::path &amp;path)</argsstring>
+        <name>parse_config</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_config</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="24" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9108bfd0733fdb1e61e7262a90813628" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>static std::optional&lt; Configuration &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_config</definition>
+        <argsstring>(const json::value &amp;json)</argsstring>
+        <name>parse_config</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_config</qualifiedname>
+        <param>
+          <type>const json::value &amp;</type>
+          <declname>json</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="25" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9c6a5d62e475716e0be26ba728123b15" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MaaPiCli::ProjectInterfaceNS::Parser::check_configuration</definition>
+        <argsstring>(const InterfaceData &amp;data, Configuration &amp;config)</argsstring>
+        <name>check_configuration</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::check_configuration</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="27" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a7836fad1a6651ecf3bfd034a434e2814" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData" kindref="compound">ImportData</ref> &gt;</type>
+        <definition>static std::optional&lt; ImportData &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data</definition>
+        <argsstring>(const std::filesystem::path &amp;path)</argsstring>
+        <name>parse_import_data</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="29" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af516bf5275f379cc415286b9a567f022" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData" kindref="compound">ImportData</ref> &gt;</type>
+        <definition>static std::optional&lt; ImportData &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data</definition>
+        <argsstring>(const json::value &amp;json)</argsstring>
+        <name>parse_import_data</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data</qualifiedname>
+        <param>
+          <type>const json::value &amp;</type>
+          <declname>json</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="30" column="26"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a39d40a828884877092f64ea935c9d2ec" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MaaPiCli::ProjectInterfaceNS::Parser::check_task</definition>
+        <argsstring>(const InterfaceData &amp;data, Configuration::Task &amp;config_task)</argsstring>
+        <name>check_task</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::check_task</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kindref="compound">Configuration::Task</ref> &amp;</type>
+          <declname>config_task</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="33" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Parser.h" line="16" column="1" bodyfile="include/ProjectInterface/Parser.h" bodystart="17" bodyend="34"/>
+    <listofallmembers>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9c6a5d62e475716e0be26ba728123b15" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>check_configuration</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a39d40a828884877092f64ea935c9d2ec" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>check_task</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a029ba3a9089ef28ec80bc37c2d96abf7" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>flatten_pretask</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9062c100cb4e22c75ef55695535acd5f" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_config</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9108bfd0733fdb1e61e7262a90813628" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_config</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a7836fad1a6651ecf3bfd034a434e2814" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_import_data</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af516bf5275f379cc415286b9a567f022" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_import_data</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1ae77f21f4de589d2fd2410e24adca5810" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_interface</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1abe6932f5e3695e0e62b5b8bbcdf4d38c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig_1a4dac19d00fdf04448d1990582b4ac745" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig::wlr_socket_path</definition>
+        <argsstring></argsstring>
+        <name>wlr_socket_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig::wlr_socket_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="442" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="442" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>wlr_socket_path</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="440" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="441" bodyend="445"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig_1a4dac19d00fdf04448d1990582b4ac745" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig</scope><name>wlr_socket_path</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

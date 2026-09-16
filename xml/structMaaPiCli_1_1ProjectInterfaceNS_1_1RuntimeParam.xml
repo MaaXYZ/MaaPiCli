@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Agent</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Pretask" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Pretask</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam::WlRootsParam</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac572eac5ed9ea344f29c647ded27486d" prot="public" static="no" mutable="no">
+        <type>std::variant&lt; std::monostate, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam" kindref="compound">AdbParam</ref>, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param" kindref="compound">Win32Param</ref>, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam" kindref="compound">MacOSParam</ref>, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam" kindref="compound">PlayCoverParam</ref>, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam" kindref="compound">GamepadParam</ref>, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam" kindref="compound">WlRootsParam</ref> &gt;</type>
+        <definition>std::variant&lt;std::monostate, AdbParam, Win32Param, MacOSParam, PlayCoverParam, GamepadParam, WlRootsParam&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::controller_param</definition>
+        <argsstring></argsstring>
+        <name>controller_param</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::controller_param</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="575" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="575" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac2a3295d06337608d0190081896ba343" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::filesystem::path &gt;</type>
+        <definition>std::vector&lt;std::filesystem::path&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::resource_path</definition>
+        <argsstring></argsstring>
+        <name>resource_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::resource_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="576" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="576" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a199fc1db60338e2a8df159bc6dd6dbc2" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t MaaPiCli::ProjectInterfaceNS::RuntimeParam::primary_resource_count</definition>
+        <argsstring></argsstring>
+        <name>primary_resource_count</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::primary_resource_count</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="577" column="12" bodyfile="include/ProjectInterface/Types.h" bodystart="577" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a83b52eaaea5e85ffbc5d4f52579a3fd2" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::resource_hash</definition>
+        <argsstring></argsstring>
+        <name>resource_hash</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::resource_hash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="578" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="578" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1afefb81975836aecf16b3999cbadf8f4e" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">Task</ref> &gt;</type>
+        <definition>std::vector&lt;Task&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::task</definition>
+        <argsstring></argsstring>
+        <name>task</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::task</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="580" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="580" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a8c8652ec16b160bdc60144e5203425d9" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Pretask" kindref="compound">Pretask</ref> &gt;</type>
+        <definition>std::vector&lt;Pretask&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::pretask</definition>
+        <argsstring></argsstring>
+        <name>pretask</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::pretask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="581" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="581" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1aef682f5e1d4730e3128841625ec1b8f8" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent" kindref="compound">Agent</ref> &gt;</type>
+        <definition>std::vector&lt;Agent&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::agent</definition>
+        <argsstring></argsstring>
+        <name>agent</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::agent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="583" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="583" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1abd6c44aca5c37f6c9a19aa5dce9decd4" prot="public" static="no" mutable="no">
+        <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig" kindref="compound">DisplayConfig</ref></type>
+        <definition>DisplayConfig MaaPiCli::ProjectInterfaceNS::RuntimeParam::display_config</definition>
+        <argsstring></argsstring>
+        <name>display_config</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::display_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="584" column="19" bodyfile="include/ProjectInterface/Types.h" bodystart="584" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>resource_path</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>resource_hash</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>task</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>pretask</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>agent</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>display_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Agent</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>child_args</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>identifier</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>env_vars</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig"/>
+      </node>
+      <node id="8">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Pretask</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Pretask"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>args</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>entry</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::unordered_map&lt; std::string, std::string &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::Agent &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::Pretask &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; std::filesystem::path &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::vector&lt; std::string &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="496" column="1" bodyfile="include/ProjectInterface/Types.h" bodystart="497" bodyend="585"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1aef682f5e1d4730e3128841625ec1b8f8" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>agent</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac572eac5ed9ea344f29c647ded27486d" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>controller_param</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1abd6c44aca5c37f6c9a19aa5dce9decd4" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>display_config</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a8c8652ec16b160bdc60144e5203425d9" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>pretask</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a199fc1db60338e2a8df159bc6dd6dbc2" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>primary_resource_count</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a83b52eaaea5e85ffbc5d4f52579a3fd2" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>resource_hash</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac2a3295d06337608d0190081896ba343" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>resource_path</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1afefb81975836aecf16b3999cbadf8f4e" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>task</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

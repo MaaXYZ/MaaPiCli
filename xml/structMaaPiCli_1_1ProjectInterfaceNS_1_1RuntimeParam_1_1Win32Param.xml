@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a586a084f5467442e7a771086714fe4d3" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::hwnd</definition>
+        <argsstring></argsstring>
+        <name>hwnd</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::hwnd</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="519" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="519" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a0e4b5c5a289bf64044e83c4f1e521996" prot="public" static="no" mutable="no">
+        <type>MaaWin32ScreencapMethod</type>
+        <definition>MaaWin32ScreencapMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::screencap</qualifiedname>
+        <initializer>= MaaWin32ScreencapMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="520" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="520" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ae42e22c30738dbe532f9e1c6a77526f4" prot="public" static="no" mutable="no">
+        <type>MaaWin32InputMethod</type>
+        <definition>MaaWin32InputMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::mouse</definition>
+        <argsstring></argsstring>
+        <name>mouse</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::mouse</qualifiedname>
+        <initializer>= MaaWin32InputMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="521" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="521" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ade7ec03c10d2a8402cb9ea8a3be74749" prot="public" static="no" mutable="no">
+        <type>MaaWin32InputMethod</type>
+        <definition>MaaWin32InputMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::keyboard</definition>
+        <argsstring></argsstring>
+        <name>keyboard</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param::keyboard</qualifiedname>
+        <initializer>= MaaWin32InputMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="522" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="522" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Types.h" line="517" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="518" bodyend="523"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a586a084f5467442e7a771086714fe4d3" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>hwnd</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ade7ec03c10d2a8402cb9ea8a3be74749" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>keyboard</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ae42e22c30738dbe532f9e1c6a77526f4" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>mouse</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a0e4b5c5a289bf64044e83c4f1e521996" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>screencap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1aae608c472a78a0caa6123a92f53c0316" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::hwnd</definition>
+        <argsstring></argsstring>
+        <name>hwnd</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::hwnd</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="540" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="540" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a718ddfdd471af0528b77006fced05915" prot="public" static="no" mutable="no">
+        <type>MaaGamepadType</type>
+        <definition>MaaGamepadType MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::gamepad_type</definition>
+        <argsstring></argsstring>
+        <name>gamepad_type</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::gamepad_type</qualifiedname>
+        <initializer>= MaaGamepadType_Xbox360</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="541" column="24" bodyfile="include/ProjectInterface/Types.h" bodystart="541" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a88fad86216980dac1c0954c07b74f503" prot="public" static="no" mutable="no">
+        <type>MaaWin32ScreencapMethod</type>
+        <definition>MaaWin32ScreencapMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam::screencap</qualifiedname>
+        <initializer>= MaaWin32ScreencapMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="542" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="542" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Types.h" line="538" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="539" bodyend="543"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a718ddfdd471af0528b77006fced05915" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</scope><name>gamepad_type</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1aae608c472a78a0caa6123a92f53c0316" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</scope><name>hwnd</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a88fad86216980dac1c0954c07b74f503" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</scope><name>screencap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

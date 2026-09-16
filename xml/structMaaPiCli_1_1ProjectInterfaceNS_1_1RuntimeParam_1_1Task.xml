@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1a2d463a8ceb457c0ef3bc4f28caf819cf" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="553" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="553" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1a91530504a8e6f4b36030ca70344a32eb" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::entry</definition>
+        <argsstring></argsstring>
+        <name>entry</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::entry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="554" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="554" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1aadcaf0b7b78d08cbe2b292064ecd9d4c" prot="public" static="no" mutable="no">
+        <type>json::value</type>
+        <definition>json::value MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::pipeline_override</definition>
+        <argsstring></argsstring>
+        <name>pipeline_override</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task::pipeline_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="555" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="555" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>entry</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="551" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="552" bodyend="556"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1a91530504a8e6f4b36030ca70344a32eb" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</scope><name>entry</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1a2d463a8ceb457c0ef3bc4f28caf819cf" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_1aadcaf0b7b78d08cbe2b292064ecd9d4c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</scope><name>pipeline_override</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

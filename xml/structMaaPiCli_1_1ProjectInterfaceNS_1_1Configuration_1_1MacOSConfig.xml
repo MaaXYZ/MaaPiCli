@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ac3aa50c4883e527f07515f5508b90245" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::window_id</definition>
+        <argsstring></argsstring>
+        <name>window_id</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::window_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="403" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="403" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1a27fd02688b8af4af9f80ec2c13aa2548" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::title</definition>
+        <argsstring></argsstring>
+        <name>title</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::title</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="404" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="404" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ab8ae6428e400762f5e4db9366b072186" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::screencap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="405" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="405" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1affd5b272c2f874867f7a1a83f96ffa44" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::input</definition>
+        <argsstring></argsstring>
+        <name>input</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig::input</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="406" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="406" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>input</edgelabel>
+          <edgelabel>screencap</edgelabel>
+          <edgelabel>title</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="401" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="402" bodyend="409"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1affd5b272c2f874867f7a1a83f96ffa44" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>input</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ab8ae6428e400762f5e4db9366b072186" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>screencap</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1a27fd02688b8af4af9f80ec2c13aa2548" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>title</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ac3aa50c4883e527f07515f5508b90245" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>window_id</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

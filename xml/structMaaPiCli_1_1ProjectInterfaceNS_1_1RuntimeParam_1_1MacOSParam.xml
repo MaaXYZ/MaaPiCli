@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1a33a57d3e2bd5342c9d3cc280f267dd75" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::window_id</definition>
+        <argsstring></argsstring>
+        <name>window_id</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::window_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="527" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="527" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1acd02944b8996a56ba4b3058a3aaf2701" prot="public" static="no" mutable="no">
+        <type>MaaMacOSScreencapMethod</type>
+        <definition>MaaMacOSScreencapMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::screencap</qualifiedname>
+        <initializer>= MaaMacOSScreencapMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="528" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="528" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1aec96fc9a552f56464b9982f6f64c9ea9" prot="public" static="no" mutable="no">
+        <type>MaaMacOSInputMethod</type>
+        <definition>MaaMacOSInputMethod MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::input</definition>
+        <argsstring></argsstring>
+        <name>input</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam::input</qualifiedname>
+        <initializer>= MaaMacOSInputMethod_None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="529" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="529" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Types.h" line="525" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="526" bodyend="530"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1aec96fc9a552f56464b9982f6f64c9ea9" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam</scope><name>input</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1acd02944b8996a56ba4b3058a3aaf2701" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam</scope><name>screencap</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1MacOSParam_1a33a57d3e2bd5342c9d3cc280f267dd75" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::MacOSParam</scope><name>window_id</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

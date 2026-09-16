@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner" kind="class" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Runner</compoundname>
+    <includes refid="Runner_8h" local="no">Runner.h</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner_1ae963e0666560c18c05fea7fbe6424c85" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MaaPiCli::ProjectInterfaceNS::Runner::run_pretasks</definition>
+        <argsstring>(const std::vector&lt; RuntimeParam::Pretask &gt; &amp;pretasks)</argsstring>
+        <name>run_pretasks</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Runner::run_pretasks</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Pretask" kindref="compound">RuntimeParam::Pretask</ref> &gt; &amp;</type>
+          <declname>pretasks</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Runner.h" line="12" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner_1a25d2d68fc9eee99160f54a8b3885b40c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MaaPiCli::ProjectInterfaceNS::Runner::run</definition>
+        <argsstring>(const RuntimeParam &amp;param)</argsstring>
+        <name>run</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Runner::run</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam" kindref="compound">RuntimeParam</ref> &amp;</type>
+          <declname>param</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Runner.h" line="13" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Runner.h" line="9" column="1" bodyfile="include/ProjectInterface/Runner.h" bodystart="10" bodyend="14"/>
+    <listofallmembers>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner_1a25d2d68fc9eee99160f54a8b3885b40c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Runner</scope><name>run</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner_1ae963e0666560c18c05fea7fbe6424c85" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Runner</scope><name>run_pretasks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

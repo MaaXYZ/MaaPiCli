@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1ac4d331818373557a146c48e6e49b1bec" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; int &gt;</type>
+        <definition>std::optional&lt;int&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::short_side</definition>
+        <argsstring></argsstring>
+        <name>short_side</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::short_side</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="501" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="501" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; int &gt;</type>
+        <definition>std::optional&lt;int&gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::long_side</definition>
+        <argsstring></argsstring>
+        <name>long_side</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::long_side</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="502" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="502" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::raw</definition>
+        <argsstring></argsstring>
+        <name>raw</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::raw</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="503" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="503" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Types.h" line="499" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="500" bodyend="504"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>long_side</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>raw</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1ac4d331818373557a146c48e6e49b1bec" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>short_side</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

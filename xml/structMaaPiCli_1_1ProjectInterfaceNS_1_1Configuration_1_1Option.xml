@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configuration::Option</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ae240d7df759a553f607a4a57a4e0a5cb" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::Option::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Option::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="449" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="449" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1a54640e3dd53072e06f4a2b1291b305c3" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::Option::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Option::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="450" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="450" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ae494d616e7bc04df3de5f8951c9a0704" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::Configuration::Option::values</definition>
+        <argsstring></argsstring>
+        <name>values</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Option::values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="451" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="451" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1aa6d4f9f738e99a356ee659d723e5d1ef" prot="public" static="no" mutable="no">
+        <type>std::unordered_map&lt; std::string, std::string &gt;</type>
+        <definition>std::unordered_map&lt;std::string, std::string&gt; MaaPiCli::ProjectInterfaceNS::Configuration::Option::inputs</definition>
+        <argsstring></argsstring>
+        <name>inputs</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Option::inputs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="452" column="28" bodyfile="include/ProjectInterface/Types.h" bodystart="452" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::Configuration::Option</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>value</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>values</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>inputs</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unordered_map&lt; std::string, std::string &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; std::string &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="447" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="448" bodyend="455"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1aa6d4f9f738e99a356ee659d723e5d1ef" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Option</scope><name>inputs</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ae240d7df759a553f607a4a57a4e0a5cb" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Option</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1a54640e3dd53072e06f4a2b1291b305c3" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Option</scope><name>value</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ae494d616e7bc04df3de5f8951c9a0704" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Option</scope><name>values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

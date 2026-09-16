@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask" prot="public">MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1af9955ca212c943ae67a8dbdb98da70f5" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="298" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a0d82aa9832c11c16ba9413395d224c25" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="299" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a147e5f89bee06df3326dac0d3b02d777" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="300" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="300" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a9253c6b262e32b2b42d49222074df785" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::icon</definition>
+        <argsstring></argsstring>
+        <name>icon</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::icon</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="301" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a78387ea11a7fb52e218e8a3bd171f62f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask" kindref="compound">PresetTask</ref> &gt;</type>
+        <definition>std::vector&lt;PresetTask&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::task</definition>
+        <argsstring></argsstring>
+        <name>task</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::task</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="302" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="302" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>description</edgelabel>
+          <edgelabel>icon</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>task</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="287" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="288" bodyend="305"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a147e5f89bee06df3326dac0d3b02d777" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a9253c6b262e32b2b42d49222074df785" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>icon</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a0d82aa9832c11c16ba9413395d224c25" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>label</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1af9955ca212c943ae67a8dbdb98da70f5" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a78387ea11a7fb52e218e8a3bd171f62f" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>task</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

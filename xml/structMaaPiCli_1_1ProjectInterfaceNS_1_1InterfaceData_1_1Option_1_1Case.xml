@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1aec30bc28719db084c7e4a95e8b89c345" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="171" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1ad269e313f177d9482f54668ed2a676af" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="172" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1a1530a52e405e5da675fbb94da908b724" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="173" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1aa6643ad6fa51f46c5ce83bff08f3221a" prot="public" static="no" mutable="no">
+        <type>json::object</type>
+        <definition>json::object MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::pipeline_override</definition>
+        <argsstring></argsstring>
+        <name>pipeline_override</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::pipeline_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="174" column="26" bodyfile="include/ProjectInterface/Types.h" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1a850f09bcb2fb3d0cc4d8bf6e28b5a3ff" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::option</definition>
+        <argsstring></argsstring>
+        <name>option</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case::option</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="175" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="175" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>description</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>option</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; std::string &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="169" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="170" bodyend="178"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1a1530a52e405e5da675fbb94da908b724" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1ad269e313f177d9482f54668ed2a676af" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</scope><name>label</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1aec30bc28719db084c7e4a95e8b89c345" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1a850f09bcb2fb3d0cc4d8bf6e28b5a3ff" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</scope><name>option</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case_1aa6643ad6fa51f46c5ce83bff08f3221a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</scope><name>pipeline_override</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af92340acebcc22d7ba17ec3ba4b0a641" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::class_regex</definition>
+        <argsstring></argsstring>
+        <name>class_regex</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::class_regex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="23" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1acc4d1040f90f2e0c03e37e677d857dba" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::window_regex</definition>
+        <argsstring></argsstring>
+        <name>window_regex</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::window_regex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="24" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af49755a168e54334b9e51cd4ef261e16" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::screencap</definition>
+        <argsstring></argsstring>
+        <name>screencap</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::screencap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="25" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1aaf37990da2e59caf8c14251ced07c8d8" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::mouse</definition>
+        <argsstring></argsstring>
+        <name>mouse</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::mouse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="26" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af5f4a29950a18d205e468187e14a15ab" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::keyboard</definition>
+        <argsstring></argsstring>
+        <name>keyboard</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config::keyboard</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="27" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>class_regex</edgelabel>
+          <edgelabel>keyboard</edgelabel>
+          <edgelabel>mouse</edgelabel>
+          <edgelabel>screencap</edgelabel>
+          <edgelabel>window_regex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="21" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="22" bodyend="30"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af92340acebcc22d7ba17ec3ba4b0a641" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</scope><name>class_regex</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af5f4a29950a18d205e468187e14a15ab" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</scope><name>keyboard</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1aaf37990da2e59caf8c14251ced07c8d8" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</scope><name>mouse</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af49755a168e54334b9e51cd4ef261e16" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</scope><name>screencap</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1acc4d1040f90f2e0c03e37e677d857dba" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</scope><name>window_regex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

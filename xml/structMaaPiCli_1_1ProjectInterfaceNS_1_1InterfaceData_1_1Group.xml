@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1a098d4643bbfe8d98e154d4b40b2823e0" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="266" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1af8c59ddd4095fc6435d1bd80e725601b" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="267" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1aeee2829a8c0ca5aea2d40511cce28911" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="268" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1a28fd4ae3fdf3d85f8560f4658083bbef" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::icon</definition>
+        <argsstring></argsstring>
+        <name>icon</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::icon</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="269" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1aa3c8c7e0ce02569933b2ded55642e001" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::default_expand</definition>
+        <argsstring></argsstring>
+        <name>default_expand</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group::default_expand</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="270" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="270" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>description</edgelabel>
+          <edgelabel>icon</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="264" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="265" bodyend="273"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1aa3c8c7e0ce02569933b2ded55642e001" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</scope><name>default_expand</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1aeee2829a8c0ca5aea2d40511cce28911" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1a28fd4ae3fdf3d85f8560f4658083bbef" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</scope><name>icon</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1af8c59ddd4095fc6435d1bd80e725601b" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</scope><name>label</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group_1a098d4643bbfe8d98e154d4b40b2823e0" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

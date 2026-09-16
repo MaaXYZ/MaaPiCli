@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig_1abfc7514913665bd9bd0eb3458df808be" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig::use_win32_vk_code</definition>
+        <argsstring></argsstring>
+        <name>use_win32_vk_code</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig::use_win32_vk_code</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="61" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Types.h" line="59" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="60" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig_1abfc7514913665bd9bd0eb3458df808be" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig</scope><name>use_win32_vk_code</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="Conf_8h" kind="file" language="C++">
+    <compoundname>Conf.h</compoundname>
+    <includes local="yes">MaaUtils/Conf.h</includes>
+    <includedby refid="Configurator_8h" local="yes">include/ProjectInterface/Configurator.h</includedby>
+    <includedby refid="Parser_8h" local="yes">include/ProjectInterface/Parser.h</includedby>
+    <includedby refid="Runner_8h" local="yes">include/ProjectInterface/Runner.h</includedby>
+    <includedby refid="Types_8h" local="yes">include/ProjectInterface/Types.h</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/ProjectInterface/Conf.h</label>
+        <link refid="Conf_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>MaaUtils/Conf.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/ProjectInterface/Conf.h</label>
+        <link refid="Conf_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>include/ProjectInterface/Configurator.h</label>
+        <link refid="Configurator_8h"/>
+      </node>
+      <node id="3">
+        <label>include/ProjectInterface/Parser.h</label>
+        <link refid="Parser_8h"/>
+      </node>
+      <node id="4">
+        <label>include/ProjectInterface/Runner.h</label>
+        <link refid="Runner_8h"/>
+      </node>
+      <node id="5">
+        <label>include/ProjectInterface/Types.h</label>
+        <link refid="Types_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="Conf_8h_1adb6122bdaaf3d364c68d1e215ceddca8" prot="public" static="no">
+        <name>MAA_PROJECT_INTERFACE_NS</name>
+        <initializer>MAA_NS::ProjectInterfaceNS</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Conf.h" line="5" column="9" bodyfile="include/ProjectInterface/Conf.h" bodystart="5" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Conf_8h_1a1ad05088b35493ae047bc81861829b9d" prot="public" static="no">
+        <name>MAA_PROJECT_INTERFACE_NS_BEGIN</name>
+        <initializer>    namespace <ref refid="Conf_8h_1adb6122bdaaf3d364c68d1e215ceddca8" kindref="member">MAA_PROJECT_INTERFACE_NS</ref> \
+    {</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Conf.h" line="6" column="9" bodyfile="include/ProjectInterface/Conf.h" bodystart="6" bodyend="8"/>
+      </memberdef>
+      <memberdef kind="define" id="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" prot="public" static="no">
+        <name>MAA_PROJECT_INTERFACE_NS_END</name>
+        <initializer>}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Conf.h" line="9" column="9" bodyfile="include/ProjectInterface/Conf.h" bodystart="9" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MaaUtils/Conf.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5" refid="Conf_8h_1adb6122bdaaf3d364c68d1e215ceddca8" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAA_PROJECT_INTERFACE_NS<sp/>MAA_NS::ProjectInterfaceNS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6" refid="Conf_8h_1a1ad05088b35493ae047bc81861829b9d" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAA_PROJECT_INTERFACE_NS_BEGIN<sp/>\</highlight></codeline>
+<codeline lineno="7"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>namespace<sp/>MAA_PROJECT_INTERFACE_NS<sp/>\</highlight></codeline>
+<codeline lineno="8"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>{</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAA_PROJECT_INTERFACE_NS_END<sp/>}</highlight></codeline>
+    </programlisting>
+    <location file="include/ProjectInterface/Conf.h"/>
+  </compounddef>
+</doxygen>

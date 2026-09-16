@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['use_5fwin32_5fvk_5fcode_0',['use_win32_vk_code',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig.html#abfc7514913665bd9bd0eb3458df808be',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig::use_win32_vk_code'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam.html#a1ce1097e2de465e02de9cf3cc0c80e68',1,'MaaPiCli::ProjectInterfaceNS::RuntimeParam::WlRootsParam::use_win32_vk_code']]],
+  ['uuid_1',['uuid',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig.html#add50ed995a6a7fe77c4bf14a57b1b010',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::PlayCoverConfig::uuid'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig.html#abeb072930f4976c3375091d2e11be215',1,'MaaPiCli::ProjectInterfaceNS::Configuration::PlayCoverConfig::uuid'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam.html#a320e6f9bfd94fae1061ac7de773e761a',1,'MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam::uuid']]]
+];

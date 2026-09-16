@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="namespaceMaaPiCli" kind="namespace" language="C++">
+    <compoundname>MaaPiCli</compoundname>
+    <innernamespace refid="namespaceMaaPiCli_1_1ProjectInterfaceNS">MaaPiCli::ProjectInterfaceNS</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Configurator.h" line="12" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,418 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" kind="class" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configurator</compoundname>
+    <includes refid="Configurator_8h" local="no">Configurator.h</includes>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac053d3b399c4ecd0aea20421a8558906" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view MaaPiCli::ProjectInterfaceNS::Configurator::kInterfaceFilename</definition>
+        <argsstring></argsstring>
+        <name>kInterfaceFilename</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::kInterfaceFilename</qualifiedname>
+        <initializer>= &quot;interface.json&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="16" column="39" bodyfile="include/ProjectInterface/Configurator.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a15b75dd5e1e5de823dd0379056d0c6c2" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view MaaPiCli::ProjectInterfaceNS::Configurator::kConfigPath</definition>
+        <argsstring></argsstring>
+        <name>kConfigPath</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::kConfigPath</qualifiedname>
+        <initializer>= &quot;config/maa_pi_config.json&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="17" column="39" bodyfile="include/ProjectInterface/Configurator.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af241e5ee11acf54976ea47d13f7aac3b" prot="private" static="no" mutable="no">
+        <type>std::filesystem::path</type>
+        <definition>std::filesystem::path MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir_</definition>
+        <argsstring></argsstring>
+        <name>resource_dir_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="53" column="27" bodyfile="include/ProjectInterface/Configurator.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a079d5b3187f15dd1958662acf9701554" prot="private" static="no" mutable="no">
+        <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref></type>
+        <definition>InterfaceData MaaPiCli::ProjectInterfaceNS::Configurator::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="55" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a03ad2ec7a2c139d4560b401bdb01a328" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::first_time_use_</definition>
+        <argsstring></argsstring>
+        <name>first_time_use_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::first_time_use_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="56" column="10" bodyfile="include/ProjectInterface/Configurator.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9d59264d120edfc24f1ccedad69dd50f" prot="private" static="no" mutable="no">
+        <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref></type>
+        <definition>Configuration MaaPiCli::ProjectInterfaceNS::Configurator::config_</definition>
+        <argsstring></argsstring>
+        <name>config_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::config_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="57" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abaf5301ad81b8d9b6c3d1d9186663a4e" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; std::string, std::string &gt;</type>
+        <definition>std::unordered_map&lt;std::string, std::string&gt; MaaPiCli::ProjectInterfaceNS::Configurator::translations_</definition>
+        <argsstring></argsstring>
+        <name>translations_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::translations_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="58" column="24" bodyfile="include/ProjectInterface/Configurator.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::load</definition>
+        <argsstring>(const std::filesystem::path &amp;project_dir, const std::filesystem::path &amp;user_dir)</argsstring>
+        <name>load</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::load</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>project_dir</declname>
+        </param>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>user_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="20" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::check_configuration</definition>
+        <argsstring>()</argsstring>
+        <name>check_configuration</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::check_configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="21" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::save</definition>
+        <argsstring>(const std::filesystem::path &amp;user_dir)</argsstring>
+        <name>save</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::save</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>user_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="22" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam" kindref="compound">RuntimeParam</ref> &gt;</type>
+        <definition>std::optional&lt; RuntimeParam &gt; MaaPiCli::ProjectInterfaceNS::Configurator::generate_runtime</definition>
+        <argsstring>() const</argsstring>
+        <name>generate_runtime</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::generate_runtime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="24" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; MaaPiCli::ProjectInterfaceNS::Configurator::interface_data</definition>
+        <argsstring>() const</argsstring>
+        <name>interface_data</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::interface_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="26" column="16" bodyfile="include/ProjectInterface/Configurator.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; MaaPiCli::ProjectInterfaceNS::Configurator::configuration</definition>
+        <argsstring>() const</argsstring>
+        <name>configuration</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="28" column="16" bodyfile="include/ProjectInterface/Configurator.h" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; MaaPiCli::ProjectInterfaceNS::Configurator::configuration</definition>
+        <argsstring>()</argsstring>
+        <name>configuration</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="30" column="10" bodyfile="include/ProjectInterface/Configurator.h" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::is_first_time_use</definition>
+        <argsstring>() const</argsstring>
+        <name>is_first_time_use</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::is_first_time_use</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="32" column="10" bodyfile="include/ProjectInterface/Configurator.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir</definition>
+        <argsstring>() const</argsstring>
+        <name>resource_dir</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="34" column="16" bodyfile="include/ProjectInterface/Configurator.h" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configurator::translate</definition>
+        <argsstring>(const std::string &amp;text) const</argsstring>
+        <name>translate</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::translate</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="37" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2827311de4f89db9ccdfd9b588764cba" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">RuntimeParam::Task</ref> &gt;</type>
+        <definition>std::optional&lt; RuntimeParam::Task &gt; MaaPiCli::ProjectInterfaceNS::Configurator::generate_runtime_task</definition>
+        <argsstring>(const Configuration::Task &amp;config_task) const</argsstring>
+        <name>generate_runtime_task</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::generate_runtime_task</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kindref="compound">Configuration::Task</ref> &amp;</type>
+          <declname>config_task</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="40" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9152587e17e4f652260cc004f1e6c1ca" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::is_option_applicable</definition>
+        <argsstring>(const InterfaceData::Option &amp;opt) const</argsstring>
+        <name>is_option_applicable</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::is_option_applicable</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option" kindref="compound">InterfaceData::Option</ref> &amp;</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="42" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</definition>
+        <argsstring>(RuntimeParam::Task &amp;runtime_task, const std::vector&lt; Configuration::Option &gt; &amp;config_options) const</argsstring>
+        <name>merge_option_overrides</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</qualifiedname>
+        <param>
+          <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">RuntimeParam::Task</ref> &amp;</type>
+          <declname>runtime_task</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option" kindref="compound">Configuration::Option</ref> &gt; &amp;</type>
+          <declname>config_options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="43" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ad23d4eb868eb568e8f918cfcf6b33c13" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::append_pretask_option</definition>
+        <argsstring>(const std::string &amp;option_name, const Configuration::Pretask &amp;config_pretask, json::object &amp;options, std::unordered_set&lt; std::string &gt; &amp;expanding) const</argsstring>
+        <name>append_pretask_option</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::append_pretask_option</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>option_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask" kindref="compound">Configuration::Pretask</ref> &amp;</type>
+          <declname>config_pretask</declname>
+        </param>
+        <param>
+          <type>json::object &amp;</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>std::unordered_set&lt; std::string &gt; &amp;</type>
+          <declname>expanding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="44" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5599e23f7350c742fe0a36a4176cd8b4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MaaPiCli::ProjectInterfaceNS::Configurator::load_translations</definition>
+        <argsstring>()</argsstring>
+        <name>load_translations</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::load_translations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="50" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2eda943d3a032d2e96f32e63b2fab3d5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configurator::detect_system_language</definition>
+        <argsstring>() const</argsstring>
+        <name>detect_system_language</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::detect_system_language</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="51" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Configurator.h" line="14" column="1" bodyfile="include/ProjectInterface/Configurator.h" bodystart="15" bodyend="59"/>
+    <listofallmembers>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ad23d4eb868eb568e8f918cfcf6b33c13" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>append_pretask_option</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>check_configuration</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9d59264d120edfc24f1ccedad69dd50f" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>config_</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>configuration</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>configuration</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a079d5b3187f15dd1958662acf9701554" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>data_</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2eda943d3a032d2e96f32e63b2fab3d5" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>detect_system_language</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a03ad2ec7a2c139d4560b401bdb01a328" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>first_time_use_</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>generate_runtime</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2827311de4f89db9ccdfd9b588764cba" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>generate_runtime_task</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>interface_data</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>is_first_time_use</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9152587e17e4f652260cc004f1e6c1ca" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>is_option_applicable</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a15b75dd5e1e5de823dd0379056d0c6c2" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>kConfigPath</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac053d3b399c4ecd0aea20421a8558906" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>kInterfaceFilename</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>load</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5599e23f7350c742fe0a36a4176cd8b4" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>load_translations</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>merge_option_overrides</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>resource_dir</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af241e5ee11acf54976ea47d13f7aac3b" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>resource_dir_</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>save</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>translate</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abaf5301ad81b8d9b6c3d1d9186663a4e" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>translations_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

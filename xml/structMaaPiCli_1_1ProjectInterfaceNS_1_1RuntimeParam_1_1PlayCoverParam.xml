@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam_1ad2951a928a92b3cce033a59025edb95a" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam::address</definition>
+        <argsstring></argsstring>
+        <name>address</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam::address</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="534" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="534" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam_1a320e6f9bfd94fae1061ac7de773e761a" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam::uuid</definition>
+        <argsstring></argsstring>
+        <name>uuid</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam::uuid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="535" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="535" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>address</edgelabel>
+          <edgelabel>uuid</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="532" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="533" bodyend="536"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam_1ad2951a928a92b3cce033a59025edb95a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam</scope><name>address</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1PlayCoverParam_1a320e6f9bfd94fae1061ac7de773e761a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::PlayCoverParam</scope><name>uuid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

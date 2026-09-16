@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1afffab007e9b48fba8e25d2a019425936" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="135" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a3ade8a7c25fcddc8b599a7339fdc4285" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="136" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1af86e28cd879bd89aaff3764a7d847dde" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="137" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a00afe8c826897af03fc10c9ab2b8fd87" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::entry</definition>
+        <argsstring></argsstring>
+        <name>entry</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::entry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="138" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a978bbdbf48ac4b15e9f37326a4426839" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::default_check</definition>
+        <argsstring></argsstring>
+        <name>default_check</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::default_check</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="139" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1ad7b42d7c69bdeb0a3b9340954682e41c" prot="public" static="no" mutable="no">
+        <type>json::object</type>
+        <definition>json::object MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::pipeline_override</definition>
+        <argsstring></argsstring>
+        <name>pipeline_override</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::pipeline_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="140" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a5c329e7bbff243676293ba6a8d85c86b" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::option</definition>
+        <argsstring></argsstring>
+        <name>option</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::option</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="141" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1aaba89dd0ed3f08565054aa0a122dc194" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::resource</definition>
+        <argsstring></argsstring>
+        <name>resource</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::resource</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="142" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a252e0887f4e9ef4f6cc3d5fa475b5768" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::controller</definition>
+        <argsstring></argsstring>
+        <name>controller</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::controller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="143" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a150420c9971c4285111067870e1017fa" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::group</definition>
+        <argsstring></argsstring>
+        <name>group</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task::group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="144" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="144" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>description</edgelabel>
+          <edgelabel>entry</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>controller</edgelabel>
+          <edgelabel>group</edgelabel>
+          <edgelabel>option</edgelabel>
+          <edgelabel>resource</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; std::string &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="133" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="134" bodyend="157"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a252e0887f4e9ef4f6cc3d5fa475b5768" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>controller</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a978bbdbf48ac4b15e9f37326a4426839" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>default_check</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1af86e28cd879bd89aaff3764a7d847dde" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a00afe8c826897af03fc10c9ab2b8fd87" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>entry</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a150420c9971c4285111067870e1017fa" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>group</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a3ade8a7c25fcddc8b599a7339fdc4285" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>label</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1afffab007e9b48fba8e25d2a019425936" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1a5c329e7bbff243676293ba6a8d85c86b" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>option</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1ad7b42d7c69bdeb0a3b9340954682e41c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>pipeline_override</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1aaba89dd0ed3f08565054aa0a122dc194" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</scope><name>resource</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

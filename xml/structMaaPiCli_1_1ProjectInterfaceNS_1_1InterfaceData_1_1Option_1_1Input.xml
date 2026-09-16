@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>PipelineType</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::PipelineType</qualifiedname>
+        <enumvalue id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260a27118326006d3829667a400ad23d5d98" prot="public">
+          <name>String</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260a1686a6c336b71b36d77354cea19a8b52" prot="public">
+          <name>Int</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260ac26f15e86e3de4c398a8273272aba034" prot="public">
+          <name>Bool</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="182" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="183" bodyend="187"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ac306016883c66b7d20d17170e34fb803" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="189" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1aeb33851a5b84b6956058526ee20fd5dd" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="190" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a660f42d93db6d9f8854245edb99470ae" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="191" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a712f0589637c8ba9a353d2b921dcb3ee" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::default_</definition>
+        <argsstring></argsstring>
+        <name>default_</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::default_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="192" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a941ace931858b6249675cd25e5f41ff5" prot="public" static="no" mutable="no">
+        <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260" kindref="member">PipelineType</ref></type>
+        <definition>PipelineType MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::pipeline_type</definition>
+        <argsstring></argsstring>
+        <name>pipeline_type</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::pipeline_type</qualifiedname>
+        <initializer>= <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260a27118326006d3829667a400ad23d5d98" kindref="member">PipelineType::String</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="193" column="26" bodyfile="include/ProjectInterface/Types.h" bodystart="193" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1ab25feedee049d4e105b73b1cf91e54" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::verify</definition>
+        <argsstring></argsstring>
+        <name>verify</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::verify</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="194" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1e0d29ef50001245b9195eb858222b39" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::pattern_msg</definition>
+        <argsstring></argsstring>
+        <name>pattern_msg</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::pattern_msg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="195" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a0d50ca890e329a192038835d8809f9b0" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::password</definition>
+        <argsstring></argsstring>
+        <name>password</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::password</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="196" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="196" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>default_</edgelabel>
+          <edgelabel>description</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
+          <edgelabel>pattern_msg</edgelabel>
+          <edgelabel>verify</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="180" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="181" bodyend="207"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a712f0589637c8ba9a353d2b921dcb3ee" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>default_</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a660f42d93db6d9f8854245edb99470ae" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1aeb33851a5b84b6956058526ee20fd5dd" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>label</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ac306016883c66b7d20d17170e34fb803" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a0d50ca890e329a192038835d8809f9b0" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>password</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1e0d29ef50001245b9195eb858222b39" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>pattern_msg</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a941ace931858b6249675cd25e5f41ff5" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>pipeline_type</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>PipelineType</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1ab25feedee049d4e105b73b1cf91e54" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</scope><name>verify</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

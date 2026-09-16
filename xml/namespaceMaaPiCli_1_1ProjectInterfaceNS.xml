@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="namespaceMaaPiCli_1_1ProjectInterfaceNS" kind="namespace" language="C++">
+    <compoundname>MaaPiCli::ProjectInterfaceNS</compoundname>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" prot="public">MaaPiCli::ProjectInterfaceNS::Configuration</innerclass>
+    <innerclass refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" prot="public">MaaPiCli::ProjectInterfaceNS::Configurator</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData" prot="public">MaaPiCli::ProjectInterfaceNS::ImportData</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" prot="public">MaaPiCli::ProjectInterfaceNS::InterfaceData</innerclass>
+    <innerclass refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser" prot="public">MaaPiCli::ProjectInterfaceNS::Parser</innerclass>
+    <innerclass refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner" prot="public">MaaPiCli::ProjectInterfaceNS::Runner</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam" prot="public">MaaPiCli::ProjectInterfaceNS::RuntimeParam</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/Configurator.h" line="12" column="1"/>
+  </compounddef>
+</doxygen>

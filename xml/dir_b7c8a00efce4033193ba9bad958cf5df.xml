@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="dir_b7c8a00efce4033193ba9bad958cf5df" kind="dir">
+    <compoundname>include/ProjectInterface</compoundname>
+    <innerfile refid="Conf_8h">Conf.h</innerfile>
+    <innerfile refid="Configurator_8h">Configurator.h</innerfile>
+    <innerfile refid="Parser_8h">Parser.h</innerfile>
+    <innerfile refid="Runner_8h">Runner.h</innerfile>
+    <innerfile refid="Types_8h">Types.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/ProjectInterface/"/>
+  </compounddef>
+</doxygen>
