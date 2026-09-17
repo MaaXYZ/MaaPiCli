@@ -57,6 +57,8 @@ private:
 
     bool ensure_pretask_options();
 
+    bool ensure_runtime_options();
+
     bool ensure_pretask_option_tree(
         const std::string& option_name,
         const std::string& pretask_display_name,

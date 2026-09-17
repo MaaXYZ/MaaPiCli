@@ -104,6 +104,32 @@ int main()
             "valid controller options should be retained while checkbox constraints are cleaned up");
     }
 
+    {
+        InterfaceData data;
+        data.interface_version = 2;
+        data.resource.emplace_back().name = "default-resource";
+        data.controller.emplace_back().name = "default-controller";
+        auto& checkbox = data.option["duplicate-checkbox"];
+        checkbox.type = InterfaceData::Option::Type::Checkbox;
+        checkbox.cases.emplace_back().name = "one";
+        checkbox.cases.emplace_back().name = "two";
+        checkbox.min_count = 1;
+        checkbox.max_count = 2;
+
+        Configuration config;
+        config.resource = "default-resource";
+        config.controller.name = "default-controller";
+        config.controller.type = InterfaceData::Controller::Type::Adb;
+        config.controller_option = { Configuration::Option { .name = "duplicate-checkbox", .values = { "one", "one" } } };
+
+        require(!Parser::check_configuration(data, config), "duplicate checkbox selections should mark the configuration as changed");
+        require(config.controller_option.size() == 1, "a duplicated valid checkbox selection should be retained");
+        require(
+            config.controller_option.front().values == std::vector<std::string> { "one" },
+            "checkbox selections should be normalized to unique names");
+        require(Parser::check_configuration(data, config), "normalized checkbox selections should be valid");
+    }
+
     auto interface = Parser::parse_interface(fixture_dir / "interface.json");
     require(interface.has_value(), "valid interface with imports should parse");
     if (interface) {
@@ -180,6 +206,25 @@ int main()
     require(
         !Parser::parse_interface(fixture_dir / "invalid_option_defaults.json").has_value(),
         "checkbox defaults outside min/max count should be rejected");
+
+    auto zero_max_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": [{ "name": "default-controller", "type": "Adb" }],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }],
+            "agent": [{ "child_exec": "agent-server" }],
+            "option": {
+                "empty-checkbox": {
+                    "type": "checkbox",
+                    "cases": [{ "name": "one" }],
+                    "max_count": 0
+                }
+            }
+        })json");
+    require(zero_max_json.has_value(), "zero checkbox maximum fixture should parse as JSON");
+    require(
+        zero_max_json && Parser::parse_interface(*zero_max_json).has_value(),
+        "max_count zero should accept an empty checkbox selection");
 
     auto linux_interface_json = json::parse(
         R"json({

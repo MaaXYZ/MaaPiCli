@@ -22,15 +22,33 @@ std::optional<InterfaceData> deserialize_interface(const json::value& json)
     return json.as<InterfaceData>();
 }
 
+std::vector<std::string> unique_values(const std::vector<std::string>& values)
+{
+    std::unordered_set<std::string> seen;
+    std::vector<std::string> unique;
+    for (const auto& value : values) {
+        if (seen.insert(value).second) {
+            unique.emplace_back(value);
+        }
+    }
+    return unique;
+}
+
+size_t valid_unique_checkbox_count(const InterfaceData::Option& option, const std::vector<std::string>& values)
+{
+    std::unordered_set<std::string> seen;
+    for (const auto& value : values) {
+        if (std::ranges::find(option.cases, value, std::mem_fn(&InterfaceData::Option::Case::name)) != option.cases.end()) {
+            seen.insert(value);
+        }
+    }
+    return seen.size();
+}
+
 bool checkbox_selection_is_valid(const InterfaceData::Option& option, const std::vector<std::string>& values)
 {
-    if (option.min_count && values.size() < *option.min_count) {
-        return false;
-    }
-    if (option.max_count && values.size() > *option.max_count) {
-        return false;
-    }
-    return true;
+    const auto selection_count = valid_unique_checkbox_count(option, values);
+    return (!option.min_count || selection_count >= *option.min_count) && (!option.max_count || selection_count <= *option.max_count);
 }
 
 bool validate_checkbox_definition(const InterfaceData::Option& option)
@@ -353,9 +371,18 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
                 }
             } break;
             case InterfaceData::Option::Type::Checkbox: {
+                auto deduped_values = unique_values(it->values);
+                if (deduped_values.size() != it->values.size()) {
+                    LogWarn << "Duplicate checkbox selections, removing duplicates" << VAR(it->name) << VAR(it->values.size())
+                            << VAR(deduped_values.size());
+                    it->values = std::move(deduped_values);
+                    erased = true;
+                }
+
                 const bool count_valid = checkbox_selection_is_valid(data_option, it->values);
                 if (!count_valid) {
-                    LogWarn << "Checkbox selection count is invalid, removing from config" << VAR(it->name) << VAR(it->values.size());
+                    LogWarn << "Checkbox selection count is invalid, removing from config" << VAR(it->name)
+                            << VAR(valid_unique_checkbox_count(data_option, it->values));
                 }
 
                 for (const auto& val : it->values) {

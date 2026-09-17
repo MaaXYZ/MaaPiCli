@@ -15,6 +15,12 @@
             "cases": [ { "name": "one" }, { "name": "two" } ],
             "default_case": [ "one", "two" ],
             "max_count": 1
+        },
+        "invalid-normalized-defaults": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" }, { "name": "two" } ],
+            "default_case": [ "one", "one", "nonexistent" ],
+            "min_count": 2
         }
     }
 }
