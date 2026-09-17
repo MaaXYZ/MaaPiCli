@@ -1,6 +1,7 @@
 #include "interactor.h"
 
 #include <algorithm>
+#include <charconv>
 #include <format>
 #include <fstream>
 #include <functional>
@@ -42,9 +43,9 @@ static constexpr bool kGamepadSupported = false;
 #endif
 
 #if defined(__linux__)
-static constexpr bool kWlRootsSupported = true;
+static constexpr bool kLinuxSupported = true;
 #else
-static constexpr bool kWlRootsSupported = false;
+static constexpr bool kLinuxSupported = false;
 #endif
 
 std::optional<std::string> read_hidden_line()
@@ -363,13 +364,19 @@ void Interactor::print_config() const
             std::cout << "\t\t(Gamepad is only available on Windows)\n";
         }
     } break;
-    case InterfaceData::Controller::Type::WlRoots: {
-        const auto& wlr = config_.configuration().wlroots;
-        if (!wlr.wlr_socket_path.empty()) {
-            std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", wlr.wlr_socket_path));
+    case InterfaceData::Controller::Type::Linux: {
+        const auto& lnx = config_.configuration().lnx;
+        if (!lnx.wlr_socket_path.empty()) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", lnx.wlr_socket_path));
         }
-        if (!kWlRootsSupported) {
-            std::cout << "\t\t(WLRoots is only available on Linux)\n";
+        if (lnx.uinput_screen_width != 0 || lnx.uinput_screen_height != 0) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\tUInput: {}x{}\n", lnx.uinput_screen_width, lnx.uinput_screen_height));
+        }
+        if (!lnx.eis_socket_path.empty()) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\tEIS: {}\n", lnx.eis_socket_path));
+        }
+        if (!kLinuxSupported) {
+            std::cout << "\t\t(Linux is only available on Linux)\n";
         }
     } break;
     default:
@@ -667,13 +674,12 @@ bool Interactor::select_controller()
         }
         config_.configuration().controller.type = InterfaceData::Controller::Type::PlayCover;
         return select_playcover(controller.playcover);
-    case InterfaceData::Controller::Type::WlRoots:
-        if (!kWlRootsSupported) {
-            std::cout << "\nWlRoots controller is only available on Linux.\n";
+    case InterfaceData::Controller::Type::Linux:
+        if (!kLinuxSupported) {
+            std::cout << "\nLinux controller is only available on Linux.\n";
             // Check if there are other controllers available
-            bool has_other_controllers = std::ranges::any_of(all_controllers, [](const auto& ctrl) {
-                return ctrl.type != InterfaceData::Controller::Type::WlRoots;
-            });
+            bool has_other_controllers =
+                std::ranges::any_of(all_controllers, [](const auto& ctrl) { return ctrl.type != InterfaceData::Controller::Type::Linux; });
             if (has_other_controllers) {
                 std::cout << "Please select another controller.\n\n";
                 return mpause() && select_controller();
@@ -683,8 +689,8 @@ bool Interactor::select_controller()
                 return mpause();
             }
         }
-        config_.configuration().controller.type = InterfaceData::Controller::Type::WlRoots;
-        return select_wlroots();
+        config_.configuration().controller.type = InterfaceData::Controller::Type::Linux;
+        return select_linux(controller.lnx);
     case InterfaceData::Controller::Type::Gamepad:
         if (!kGamepadSupported) {
             std::cout << "\nGamepad controller is only available on Windows.\n";
@@ -1122,6 +1128,81 @@ bool Interactor::select_macos(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Con
     return true;
 }
 
+bool Interactor::select_linux(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::LinuxConfig& linux_config)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    std::cout << "### Configure Linux Controller ###\n\n";
+
+    auto& lnx = config_.configuration().lnx;
+
+    const std::string screencap = linux_config.screencap.empty() ? "Wlr" : linux_config.screencap;
+    const std::string input = linux_config.input.empty() ? "Wlr" : linux_config.input;
+
+    if (screencap == "Wlr" || input == "Wlr") {
+        if (!select_wlroots()) {
+            return false;
+        }
+    }
+
+    if (input == "Libei") {
+        const std::string default_eis = lnx.eis_socket_path;
+        auto socket_path = read_line(std::format("EIS socket path (e.g. /run/user/1000/gamescope-0-ei) [{}]: ", default_eis));
+        if (!socket_path) {
+            input_aborted_ = true;
+            return false;
+        }
+
+        lnx.eis_socket_path = socket_path->empty() ? default_eis : *socket_path;
+        std::cout << "\n";
+    }
+
+    if (input == "UInput") {
+        return input_uinput_width_height();
+    }
+
+    return true;
+}
+
+bool Interactor::input_uinput_width_height()
+{
+    auto& lnx = config_.configuration().lnx;
+
+    auto read_dimension = [&](const std::string& label, int& value) -> bool {
+        auto buffer = read_line(std::format("Screen {} [{}]: ", label, value));
+        if (!buffer) {
+            input_aborted_ = true;
+            return false;
+        }
+
+        if (buffer->empty()) {
+            return true;
+        }
+
+        int parsed = 0;
+        const auto* first = buffer->data();
+        const auto* last = first + buffer->size();
+        const bool digits_only = std::ranges::all_of(*buffer, [](unsigned char c) { return c >= '0' && c <= '9'; });
+        if (digits_only) {
+            auto [ptr, ec] = std::from_chars(first, last, parsed);
+            if (ec == std::errc { } && ptr == last) {
+                value = parsed;
+                return true;
+            }
+        }
+
+        std::cout << "Invalid screen " << label << ", keeping the previous value.\n";
+        return true;
+    };
+
+    if (!read_dimension("width", lnx.uinput_screen_width) || !read_dimension("height", lnx.uinput_screen_height)) {
+        return false;
+    }
+
+    std::cout << "\n";
+    return true;
+}
+
 bool Interactor::select_wlroots()
 {
     std::cout << "### Select Wayland Socket ###\n\n";
@@ -1181,7 +1262,7 @@ bool Interactor::select_wlroots_auto_detect()
         return false;
     }
     const size_t index = static_cast<size_t>(*selected - 1);
-    auto& wlr_config = config_.configuration().wlroots;
+    auto& wlr_config = config_.configuration().lnx;
 
     auto compositor = MaaToolkitDesktopWindowListAt(list_handle, index);
 
@@ -1197,7 +1278,7 @@ bool Interactor::select_wlroots_manual_input()
         input_aborted_ = true;
         return false;
     }
-    config_.configuration().wlroots.wlr_socket_path = *socket_path;
+    config_.configuration().lnx.wlr_socket_path = *socket_path;
     std::cout << "\n";
 
     return true;
@@ -1599,6 +1680,10 @@ bool Interactor::process_option(
             return false;
         }
 
+        auto selection_count_valid = [&opt](const std::vector<std::string>& values) {
+            return (!opt.min_count || values.size() >= *opt.min_count) && (!opt.max_count || values.size() <= *opt.max_count);
+        };
+
         // 与 select/switch 一致：default_case 只作为「初始选中值」解析成预选编号（1-based），
         // 交互流程中列出 cases（预选标 [x]，回车即保持预选）；仅自动补全流程直接采用。
         std::vector<int> default_indexes;
@@ -1621,6 +1706,10 @@ bool Interactor::process_option(
             for (const int index : default_indexes) {
                 config_opt.values.emplace_back(opt.cases[static_cast<size_t>(index) - 1].name);
             }
+            if (!selection_count_valid(config_opt.values)) {
+                LogError << "Default checkbox selection count is invalid" << VAR(option_name);
+                return false;
+            }
         }
         else {
             std::cout << MAA_NS::utf8_to_crt(
@@ -1642,19 +1731,41 @@ bool Interactor::process_option(
             if (!default_indexes.empty()) {
                 std::cout << MAA_NS::utf8_to_crt("\t(empty input keeps the default selection)\n");
             }
+            std::string constraint_text;
+            if (opt.min_count) {
+                constraint_text += std::format("at least {}", *opt.min_count);
+            }
+            if (opt.max_count) {
+                if (!constraint_text.empty()) {
+                    constraint_text += ", ";
+                }
+                constraint_text += std::format("at most {}", *opt.max_count);
+            }
+            if (!constraint_text.empty()) {
+                std::cout << MAA_NS::utf8_to_crt(std::format("\tSelect {} item(s)\n", constraint_text));
+            }
             std::cout << "\n";
 
-            auto indexes = input_multi(opt.cases.size(), "Please input multiple", default_indexes);
-            if (!indexes) {
-                input_aborted_ = true;
-                return false;
-            }
-            for (int idx : *indexes) {
-                if (idx < 1 || static_cast<size_t>(idx) > opt.cases.size()) {
-                    LogError << "Invalid selection" << VAR(option_name) << VAR(idx);
+            while (true) {
+                auto indexes = input_multi(opt.cases.size(), "Please input multiple", default_indexes);
+                if (!indexes) {
+                    input_aborted_ = true;
                     return false;
                 }
-                config_opt.values.emplace_back(opt.cases[static_cast<size_t>(idx) - 1].name);
+
+                config_opt.values.clear();
+                for (int idx : *indexes) {
+                    if (idx < 1 || static_cast<size_t>(idx) > opt.cases.size()) {
+                        LogError << "Invalid selection" << VAR(option_name) << VAR(idx);
+                        return false;
+                    }
+                    config_opt.values.emplace_back(opt.cases[static_cast<size_t>(idx) - 1].name);
+                }
+
+                if (selection_count_valid(config_opt.values)) {
+                    break;
+                }
+                std::cout << MAA_NS::utf8_to_crt("Invalid selection count, please retry.\n");
             }
         }
 
@@ -1973,6 +2084,31 @@ bool Interactor::check_validity()
 
             select_macos(controller_iter->macos);
             return mac.window_id != 0;
+        }
+    }
+
+    if (config_.configuration().controller.type == InterfaceData::Controller::Type::Linux) {
+        if (!kLinuxSupported) {
+            LogError << "Linux controller is only available on Linux";
+            return false;
+        }
+
+        const auto* controller = find_current_controller();
+        if (!controller) {
+            LogError << "Controller not found" << VAR(config_.configuration().controller.name);
+            return false;
+        }
+
+        const auto& lnx = config_.configuration().lnx;
+        const auto& controller_lnx = controller->lnx;
+        const bool needs_wlr_socket = lnx.wlr_socket_path.empty()
+                                      && (controller_lnx.screencap.empty() || controller_lnx.screencap == "Wlr"
+                                          || controller_lnx.input.empty() || controller_lnx.input == "Wlr");
+        const bool needs_eis_socket = lnx.eis_socket_path.empty() && controller_lnx.input == "Libei";
+        const bool needs_uinput_dimensions =
+            controller_lnx.input == "UInput" && (lnx.uinput_screen_width <= 0 || lnx.uinput_screen_height <= 0);
+        if (needs_wlr_socket || needs_eis_socket || needs_uinput_dimensions) {
+            return select_linux(controller_lnx);
         }
     }
 

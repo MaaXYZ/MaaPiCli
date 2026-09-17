@@ -22,6 +22,36 @@ std::optional<InterfaceData> deserialize_interface(const json::value& json)
     return json.as<InterfaceData>();
 }
 
+bool checkbox_selection_is_valid(const InterfaceData::Option& option, const std::vector<std::string>& values)
+{
+    if (option.min_count && values.size() < *option.min_count) {
+        return false;
+    }
+    if (option.max_count && values.size() > *option.max_count) {
+        return false;
+    }
+    return true;
+}
+
+bool validate_checkbox_definition(const InterfaceData::Option& option)
+{
+    if (option.min_count && *option.min_count > option.cases.size()) {
+        return false;
+    }
+    if (option.max_count && *option.max_count > option.cases.size()) {
+        return false;
+    }
+    if (option.min_count && option.max_count && *option.min_count > *option.max_count) {
+        return false;
+    }
+
+    if (auto* defaults = std::get_if<std::vector<std::string>>(&option.default_case)) {
+        return checkbox_selection_is_valid(option, *defaults);
+    }
+
+    return true;
+}
+
 bool validate_interface(const InterfaceData& data)
 {
     // check interface version
@@ -71,6 +101,13 @@ bool validate_interface(const InterfaceData& data)
             return false;
         }
         if (!check_option_refs(pretask.option)) {
+            return false;
+        }
+    }
+
+    for (const auto& [name, option] : data.option) {
+        if (!validate_checkbox_definition(option)) {
+            LogError << "Invalid checkbox count constraint" << VAR(name);
             return false;
         }
     }
@@ -316,6 +353,11 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
                 }
             } break;
             case InterfaceData::Option::Type::Checkbox: {
+                const bool count_valid = checkbox_selection_is_valid(data_option, it->values);
+                if (!count_valid) {
+                    LogWarn << "Checkbox selection count is invalid, removing from config" << VAR(it->name) << VAR(it->values.size());
+                }
+
                 for (const auto& val : it->values) {
                     auto case_iter = std::ranges::find(data_option.cases, val, std::mem_fn(&InterfaceData::Option::Case::name));
                     if (case_iter == data_option.cases.end()) {
@@ -324,6 +366,7 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
                         break;
                     }
                 }
+                valid = valid && count_valid;
             } break;
             case InterfaceData::Option::Type::Input:
                 for (auto input_it = it->inputs.begin(); input_it != it->inputs.end();) {
@@ -404,6 +447,11 @@ bool Parser::check_task(const InterfaceData& data, Configuration::Task& config_t
             }
         } break;
         case InterfaceData::Option::Type::Checkbox: {
+            if (!checkbox_selection_is_valid(data_option, config_option.values)) {
+                LogWarn << "Checkbox selection count is invalid" << VAR(config_task.name) << VAR(config_option.name);
+                return false;
+            }
+
             for (const auto& val : config_option.values) {
                 auto case_iter = std::ranges::find(data_option.cases, val, std::mem_fn(&InterfaceData::Option::Case::name));
                 if (case_iter == data_option.cases.end()) {

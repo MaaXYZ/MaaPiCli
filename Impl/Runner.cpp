@@ -401,6 +401,75 @@ RuntimeParam::AdbParam reconfig_adb(const RuntimeParam::AdbParam& raw)
     return raw;
 }
 
+std::string reconfig_linux(const RuntimeParam::LinuxParam& raw)
+{
+    json::object obj {
+        { "screencap_method", raw.screencap },
+        { "input_method", raw.input },
+        { "use_win32_vk_code", raw.use_win32_vk_code },
+    };
+
+    if (raw.screencap == MaaLinuxScreencapMethod_Wlr || raw.input == MaaLinuxInputMethod_Wlr) {
+        obj["wlr_socket_path"] = raw.wlr_socket_path;
+    }
+
+    if (raw.screencap == MaaLinuxScreencapMethod_PipeWire) {
+        if (raw.pipewire_source == "Gamescope") {
+            auto instance_list = MaaToolkitGamescopeInstanceListCreate();
+            OnScopeLeave([&]() { MaaToolkitGamescopeInstanceListDestroy(instance_list); });
+
+            if (!MaaToolkitGamescopeInstanceFindAll(instance_list)) {
+                LogError << "Failed to find gamescope instances";
+                return "";
+            }
+
+            uint32_t pw_node_id = 0;
+            for (MaaSize i = 0; i < MaaToolkitGamescopeInstanceListSize(instance_list); ++i) {
+                auto instance = MaaToolkitGamescopeInstanceListAt(instance_list, i);
+                if (uint32_t node_id = MaaToolkitGamescopeInstanceGetPipeWireNodeId(instance); node_id != 0) {
+                    pw_node_id = node_id;
+                    break;
+                }
+            }
+
+            if (pw_node_id == 0) {
+                LogError << "No gamescope PipeWire node found";
+                return "";
+            }
+
+            obj["pw_node_id"] = pw_node_id;
+        }
+        else {
+            auto helper_handle = MaaToolkitPortalHelperCreate();
+            if (!helper_handle) {
+                LogError << "Failed to create portal helper";
+                return "";
+            }
+
+            if (!MaaToolkitPortalHelperOpenStream(helper_handle)) {
+                LogError << "Failed to open PipeWire stream";
+                MaaToolkitPortalHelperDestroy(helper_handle);
+                return "";
+            }
+
+            obj["pw_socket_fd"] = MaaToolkitPortalHelperGetPipeWireFD(helper_handle);
+            obj["pw_node_id"] = MaaToolkitPortalHelperGetPipeWireNodeID(helper_handle);
+            MaaToolkitPortalHelperDestroy(helper_handle);
+        }
+    }
+
+    if (raw.input == MaaLinuxInputMethod_UInput) {
+        obj["uinput_screen_width"] = raw.uinput_screen_width;
+        obj["uinput_screen_height"] = raw.uinput_screen_height;
+    }
+
+    if (raw.input == MaaLinuxInputMethod_Libei) {
+        obj["eis_socket_path"] = raw.eis_socket_path;
+    }
+
+    return obj.dumps();
+}
+
 bool Runner::run(const RuntimeParam& param)
 {
     if (!run_pretasks(param.pretask)) {
@@ -451,12 +520,17 @@ bool Runner::run(const RuntimeParam& param)
         return false;
 #endif
     }
-    else if (const auto* p_wlroots_param = std::get_if<RuntimeParam::WlRootsParam>(&param.controller_param)) {
+    else if (const auto* p_linux_param = std::get_if<RuntimeParam::LinuxParam>(&param.controller_param)) {
 #if defined(__linux__)
-        controller_handle = MaaWlRootsControllerCreate(p_wlroots_param->wlr_socket_path.c_str(), p_wlroots_param->use_win32_vk_code);
+        auto config_json = reconfig_linux(*p_linux_param);
+        if (config_json.empty()) {
+            LogError << "Failed to build Linux controller config";
+            return false;
+        }
+        controller_handle = MaaLinuxControllerCreate(config_json.c_str());
 #else
-        std::ignore = p_wlroots_param;
-        LogError << "WlRoots controller is only supported on Linux";
+        std::ignore = p_linux_param;
+        LogError << "Linux controller is only supported on Linux";
         return false;
 #endif
     }
@@ -477,6 +551,10 @@ bool Runner::run(const RuntimeParam& param)
     if (param.display_config.raw) {
         MaaBool raw = true;
         MaaControllerSetOption(controller_handle, MaaCtrlOption_ScreenshotUseRawSize, &raw, sizeof(raw));
+    }
+    else if (param.display_config.expand.has_value()) {
+        int32_t expand[2] = { param.display_config.expand->at(0), param.display_config.expand->at(1) };
+        MaaControllerSetOption(controller_handle, MaaCtrlOption_ScreenshotTargetExpand, expand, sizeof(expand));
     }
     else if (param.display_config.long_side.has_value()) {
         int long_side = param.display_config.long_side.value();

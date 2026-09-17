@@ -14,7 +14,7 @@ inputs:
     maadeps-version:
         description: MaaDeps release tag used to build Linux OpenSSL
         required: false
-        default: v2.12.2
+        default: v2.12.6
 
 outputs:
     install-prefix:

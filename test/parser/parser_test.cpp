@@ -59,6 +59,13 @@ int main()
         data.resource.emplace_back().name = "default-resource";
         data.controller.emplace_back().name = "default-controller";
         data.option["valid-option"].cases.emplace_back().name = "fast";
+        auto& checkbox = data.option["valid-checkbox"];
+        checkbox.type = InterfaceData::Option::Type::Checkbox;
+        checkbox.cases.emplace_back().name = "one";
+        checkbox.cases.emplace_back().name = "two";
+        checkbox.min_count = 1;
+        checkbox.max_count = 1;
+        checkbox.default_case = std::vector<std::string> { "one" };
         data.option["valid-input"].type = InterfaceData::Option::Type::Input;
         data.option["valid-input"].inputs.emplace_back().name = "current";
         data.pretask = std::vector<InterfaceData::Pretask> {
@@ -68,6 +75,11 @@ int main()
         Configuration config;
         config.resource = "default-resource";
         config.controller.name = "default-controller";
+        config.controller.type = InterfaceData::Controller::Type::Adb;
+        config.controller_option = {
+            Configuration::Option { .name = "valid-checkbox", .values = { "stale-case", "one" } },
+            Configuration::Option { .name = "valid-option", .value = "fast" },
+        };
         config.pretask.emplace_back();
         config.pretask.front().name = "ordered-first";
         config.pretask.front().option = { Configuration::Option { .name = "stale-option" },
@@ -81,6 +93,15 @@ int main()
         require(
             config.pretask.front().option.back().inputs.size() == 1 && config.pretask.front().option.back().inputs.contains("current"),
             "a stale input should be removed while current inputs are retained");
+
+        config.controller_option.insert(
+            config.controller_option.begin(),
+            Configuration::Option { .name = "valid-checkbox", .values = { "stale-case", "one" } });
+        require(!Parser::check_configuration(data, config), "an invalid checkbox count should mark the configuration as changed");
+        require(config.controller_option.size() == 1, "an invalid checkbox option should be removed");
+        require(
+            config.controller_option.front().name == "valid-option" && config.controller_option.front().value == "fast",
+            "valid controller options should be retained while checkbox constraints are cleaned up");
     }
 
     auto interface = Parser::parse_interface(fixture_dir / "interface.json");
@@ -128,6 +149,12 @@ int main()
                 && password_option->second.inputs.front().password && !password_option->second.inputs.back().password,
             "input fields should parse the password flag");
 
+        auto constrained_option = interface->option.find("checkbox-constrained");
+        require(
+            constrained_option != interface->option.end() && constrained_option->second.min_count == 1u
+                && constrained_option->second.max_count == 2u,
+            "checkbox count constraints should parse");
+
         require(interface->pretask.has_value(), "merged pretask should be present");
         if (interface->pretask) {
             const auto* pretasks = std::get_if<std::vector<InterfaceData::Pretask>>(&*interface->pretask);
@@ -147,6 +174,70 @@ int main()
     require(
         !Parser::parse_interface(fixture_dir / "invalid_group.json").has_value(),
         "a missing merged group reference should be rejected");
+    require(
+        !Parser::parse_interface(fixture_dir / "invalid_option_constraints.json").has_value(),
+        "invalid checkbox bounds should be rejected");
+    require(
+        !Parser::parse_interface(fixture_dir / "invalid_option_defaults.json").has_value(),
+        "checkbox defaults outside min/max count should be rejected");
+
+    auto linux_interface_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": [{
+                "name": "linux-controller",
+                "type": "linux",
+                "display_expand": [1280, 720],
+                "linux": {
+                    "screencap": "PipeWire",
+                    "input": "UInput",
+                    "pipewire_source": "Portal",
+                    "use_win32_vk_code": true
+                }
+            }],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }],
+            "agent": [{ "child_exec": "agent-server" }]
+        })json");
+    require(linux_interface_json.has_value(), "Linux interface fixture should parse as JSON");
+    auto linux_interface = linux_interface_json ? Parser::parse_interface(*linux_interface_json) : std::nullopt;
+    require(linux_interface.has_value(), "Linux interface fields should parse");
+    if (linux_interface) {
+        const auto& linux_controller = linux_interface->controller.front();
+        require(linux_controller.type == InterfaceData::Controller::Type::Linux, "Linux controller type should parse");
+        require(
+            linux_controller.lnx.screencap == "PipeWire" && linux_controller.lnx.input == "UInput"
+                && linux_controller.lnx.pipewire_source == "Portal" && linux_controller.lnx.use_win32_vk_code,
+            "Linux controller settings should use the linux JSON key");
+        require(
+            linux_controller.display_expand.has_value() && (*linux_controller.display_expand)[0] == 1280
+                && (*linux_controller.display_expand)[1] == 720,
+            "display_expand should parse");
+    }
+
+    auto linux_config_json = json::parse(
+        R"json({
+            "controller": { "name": "linux-controller", "type": "linux" },
+            "resource": "",
+            "task": [],
+            "linux": {
+                "wlr_socket_path": "/run/user/1000/wayland-0",
+                "uinput_screen_width": 1280,
+                "uinput_screen_height": 720,
+                "eis_socket_path": "/run/user/1000/gamescope-0-ei"
+            }
+        })json");
+    require(linux_config_json.has_value(), "Linux configuration fixture should parse as JSON");
+    auto linux_config = linux_config_json ? Parser::parse_config(*linux_config_json) : std::nullopt;
+    require(linux_config.has_value(), "Linux configuration fields should parse");
+    if (linux_config) {
+        require(
+            linux_config->lnx.wlr_socket_path == "/run/user/1000/wayland-0" && linux_config->lnx.uinput_screen_width == 1280
+                && linux_config->lnx.uinput_screen_height == 720 && linux_config->lnx.eis_socket_path == "/run/user/1000/gamescope-0-ei",
+            "Linux user configuration should use the linux JSON key");
+
+        auto roundtrip = linux_config->to_json();
+        require(roundtrip.contains("linux"), "Linux user configuration should serialize as linux");
+    }
 
     if (failures != 0) {
         std::cerr << failures << " parser test assertion(s) failed\n";

@@ -38,6 +38,13 @@
                 { "name": "api-key", "default": "default-key", "password": true },
                 { "name": "note", "default": "visible" }
             ]
+        },
+        "checkbox-constrained": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" }, { "name": "two" }, { "name": "three" } ],
+            "default_case": [ "one", "three" ],
+            "min_count": 1,
+            "max_count": 2
         }
     },
     "global_option": [ "first-global", "shared-global" ],

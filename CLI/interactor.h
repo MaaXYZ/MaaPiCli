@@ -36,9 +36,11 @@ private:
     bool select_macos(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::MacOSConfig& macos_config);
     bool select_playcover(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::PlayCoverConfig& playcover_config);
     bool select_gamepad(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::GamepadConfig& gamepad_config);
+    bool select_linux(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::LinuxConfig& linux_config);
     bool select_wlroots();
     bool select_wlroots_auto_detect();
     bool select_wlroots_manual_input();
+    bool input_uinput_width_height();
 
     bool select_resource();
     bool add_task();

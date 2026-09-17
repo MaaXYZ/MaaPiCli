@@ -1,0 +1,14 @@
+{
+    "interface_version": 2,
+    "controller": [ { "name": "default-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "agent": [ { "child_exec": "agent-server" } ],
+    "option": {
+        "invalid-bounds": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" } ],
+            "min_count": 2,
+            "max_count": 1
+        }
+    }
+}

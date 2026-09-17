@@ -1,0 +1,20 @@
+{
+    "interface_version": 2,
+    "controller": [ { "name": "default-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "agent": [ { "child_exec": "agent-server" } ],
+    "option": {
+        "too-few-defaults": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" }, { "name": "two" } ],
+            "default_case": [],
+            "min_count": 1
+        },
+        "too-many-defaults": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" }, { "name": "two" } ],
+            "default_case": [ "one", "two" ],
+            "max_count": 1
+        }
+    }
+}
