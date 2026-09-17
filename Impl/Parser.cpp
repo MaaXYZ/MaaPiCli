@@ -321,9 +321,11 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
     bool erased = false;
 
     for (auto iter = config.task.begin(); iter != config.task.end();) {
-        bool checked = check_task(data, *iter);
+        bool task_changed = false;
+        bool checked = check_task(data, *iter, task_changed);
         if (checked) {
             ++iter;
+            erased = erased || task_changed;
         }
         else {
             iter = config.task.erase(iter);
@@ -447,7 +449,7 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
     return !erased;
 }
 
-bool Parser::check_task(const InterfaceData& data, Configuration::Task& config_task)
+bool Parser::check_task(const InterfaceData& data, Configuration::Task& config_task, bool& changed)
 {
     auto data_iter = std::ranges::find(data.task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
     if (data_iter == data.task.end()) {
@@ -474,6 +476,14 @@ bool Parser::check_task(const InterfaceData& data, Configuration::Task& config_t
             }
         } break;
         case InterfaceData::Option::Type::Checkbox: {
+            auto deduped_values = unique_values(config_option.values);
+            if (deduped_values.size() != config_option.values.size()) {
+                LogWarn << "Duplicate checkbox selections, removing duplicates" << VAR(config_task.name) << VAR(config_option.name)
+                        << VAR(config_option.values.size()) << VAR(deduped_values.size());
+                config_option.values = std::move(deduped_values);
+                changed = true;
+            }
+
             if (!checkbox_selection_is_valid(data_option, config_option.values)) {
                 LogWarn << "Checkbox selection count is invalid" << VAR(config_task.name) << VAR(config_option.name);
                 return false;

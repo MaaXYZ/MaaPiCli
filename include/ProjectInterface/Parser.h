@@ -30,7 +30,7 @@ public:
     static std::optional<ImportData> parse_import_data(const json::value& json);
 
 private:
-    static bool check_task(const InterfaceData& data, Configuration::Task& config_task);
+    static bool check_task(const InterfaceData& data, Configuration::Task& config_task, bool& changed);
 };
 
 MAA_PROJECT_INTERFACE_NS_END

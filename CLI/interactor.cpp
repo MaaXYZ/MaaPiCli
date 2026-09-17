@@ -2465,7 +2465,13 @@ bool Interactor::apply_preset()
         preset_tasks.emplace_back(std::move(config_task));
     }
 
-    config_.configuration().task = std::move(preset_tasks);
+    Configuration preset_config;
+    preset_config.resource = config_.configuration().resource;
+    preset_config.controller = config_.configuration().controller;
+    preset_config.task = std::move(preset_tasks);
+    Parser::check_configuration(config_.interface_data(), preset_config);
+
+    config_.configuration().task = std::move(preset_config.task);
     std::string preset_display = get_display_name(preset.name, preset.label);
     std::cout << "Applied preset: " << MAA_NS::utf8_to_crt(preset_display) << "\n\n";
 

@@ -115,18 +115,26 @@ int main()
         checkbox.cases.emplace_back().name = "two";
         checkbox.min_count = 1;
         checkbox.max_count = 2;
+        data.task.emplace_back().name = "preset-task";
 
         Configuration config;
         config.resource = "default-resource";
         config.controller.name = "default-controller";
         config.controller.type = InterfaceData::Controller::Type::Adb;
         config.controller_option = { Configuration::Option { .name = "duplicate-checkbox", .values = { "one", "one" } } };
+        config.task = { Configuration::Task {
+            .name = "preset-task",
+            .option = { Configuration::Option { .name = "duplicate-checkbox", .values = { "two", "two" } } } } };
 
         require(!Parser::check_configuration(data, config), "duplicate checkbox selections should mark the configuration as changed");
         require(config.controller_option.size() == 1, "a duplicated valid checkbox selection should be retained");
         require(
             config.controller_option.front().values == std::vector<std::string> { "one" },
             "checkbox selections should be normalized to unique names");
+        require(config.task.size() == 1, "a duplicated valid task checkbox selection should be retained");
+        require(
+            config.task.front().option.size() == 1 && config.task.front().option.front().values == std::vector<std::string> { "two" },
+            "task checkbox selections should be normalized to unique names");
         require(Parser::check_configuration(data, config), "normalized checkbox selections should be valid");
     }
 
