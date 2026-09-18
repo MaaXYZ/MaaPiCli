@@ -59,10 +59,18 @@ private:
 
     bool ensure_runtime_options();
 
-    bool ensure_pretask_option_tree(
+    bool ensure_task_options();
+
+    bool ensure_declared_option_tree(
+        const std::vector<std::string>& option_names,
+        const std::string& context_display_name,
+        std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+        bool auto_accept_default);
+
+    bool select_runtime_option_cases(
         const std::string& option_name,
-        const std::string& pretask_display_name,
-        MAA_PROJECT_INTERFACE_NS::Configuration::Pretask& config_pretask);
+        const std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+        std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Option::Case*>& selected_cases) const;
 
     // Process option and its nested sub-options recursively
     // Returns false if option processing failed (e.g., option not found, invalid configuration)

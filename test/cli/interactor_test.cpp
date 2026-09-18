@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -80,6 +81,146 @@ int main()
         "EOF during first-time setup should not create a configuration");
 
     std::filesystem::remove_all(user_dir);
+
+    {
+        const auto resource_dir = unique_temp_directory();
+        const auto user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        std::filesystem::create_directories(user_dir / "config");
+
+        {
+            std::ofstream interface_stream(resource_dir / "interface.json");
+            interface_stream << R"json(
+{
+    "interface_version": 2,
+    "controller": [ { "name": "adb-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "global_option": [ "runtime-parent", "runtime-second", "inactive-global-option" ],
+    "option": {
+        "runtime-parent": {
+            "type": "select",
+            "default_case": "on",
+            "cases": [ { "name": "on", "option": [ "runtime-child" ] } ]
+        },
+        "runtime-child": { "type": "input" },
+        "runtime-second": { "type": "input" },
+        "inactive-global-option": { "type": "input", "controller": [ "Win32" ] },
+        "stale-resource-option": { "type": "input" },
+        "stale-runtime-child": { "type": "input" }
+    }
+}
+)json";
+        }
+
+        {
+            std::ofstream config_stream(user_dir / "config" / "maa_pi_config.json");
+            config_stream << R"json(
+{
+    "controller": { "name": "adb-controller" },
+    "resource": "default-resource",
+    "resource_option": [ { "name": "stale-resource-option" } ],
+    "global_option": [
+        { "name": "runtime-parent", "value": "on" },
+        { "name": "runtime-second" },
+        { "name": "inactive-global-option" },
+        { "name": "stale-runtime-child" }
+    ]
+}
+)json";
+        }
+
+        {
+            StreamRedirector redirector;
+            Interactor interactor(user_dir);
+            require(interactor.load(resource_dir), "the runtime completion fixture should load");
+            // A taskless interface intentionally fails runtime generation after ensure_runtime_options saves the config.
+            require(!interactor.run(), "taskless runtime generation should fail after completing options");
+        }
+
+        const auto saved_config = MAA_PROJECT_INTERFACE_NS::Parser::parse_config(user_dir / "config" / "maa_pi_config.json");
+        require(saved_config.has_value(), "the completed runtime configuration should be saved");
+        if (saved_config) {
+            const auto names_of = [](const auto& options) {
+                std::vector<std::string> names;
+                names.reserve(options.size());
+                for (const auto& option : options) {
+                    names.emplace_back(option.name);
+                }
+                return names;
+            };
+            require(
+                names_of(saved_config->global_option) == std::vector<std::string> { "runtime-parent", "runtime-child", "runtime-second" },
+                "a missing nested runtime option should be completed without changing sibling order");
+            require(saved_config->resource_option.empty(), "an empty runtime option declaration list should be cleaned");
+        }
+
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(user_dir);
+    }
+
+    {
+        const auto resource_dir = unique_temp_directory();
+        const auto user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        std::filesystem::create_directories(user_dir / "config");
+
+        {
+            std::ofstream interface_stream(resource_dir / "interface.json");
+            interface_stream << R"json(
+{
+    "interface_version": 2,
+    "controller": [ { "name": "adb-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [] } ],
+    "task": [ { "name": "direct-task", "entry": "DirectTask", "option": [ "direct-option", "later-option" ] } ],
+    "option": {
+        "direct-option": {
+            "type": "select",
+            "default_case": "on",
+            "cases": [ { "name": "on", "option": [ "direct-child" ] }, { "name": "off" } ]
+        }
+        ,
+        "direct-child": { "type": "input" },
+        "later-option": { "type": "input" }
+    }
+}
+)json";
+        }
+
+        {
+            std::ofstream config_stream(user_dir / "config" / "maa_pi_config.json");
+            config_stream << R"json(
+{
+    "controller": { "name": "adb-controller" },
+    "resource": "default-resource",
+    "task": [
+        {
+            "name": "direct-task",
+            "option": [ { "name": "direct-option", "value": "on" }, { "name": "later-option" } ]
+        }
+    ]
+}
+)json";
+        }
+
+        {
+            StreamRedirector redirector;
+            Interactor interactor(user_dir);
+            require(interactor.load(resource_dir), "the direct task completion fixture should load");
+            // Runtime generation can still fail without a real resource; option completion must happen first without input.
+            require(!interactor.run(), "direct execution after task completion should fail without a real runtime");
+        }
+
+        const auto saved_config = MAA_PROJECT_INTERFACE_NS::Parser::parse_config(user_dir / "config" / "maa_pi_config.json");
+        require(saved_config.has_value(), "the direct-task configuration should be saved");
+        require(
+            saved_config && saved_config->task.size() == 1 && saved_config->task.front().option.size() == 3
+                && saved_config->task.front().option.at(0).value == "on" && saved_config->task.front().option.at(1).name == "direct-child"
+                && saved_config->task.front().option.at(2).name == "later-option",
+            "a missing direct-task subtree should be completed automatically in declaration order");
+
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(user_dir);
+    }
 
     if (failures != 0) {
         std::cerr << failures << " interactor test assertion(s) failed\n";

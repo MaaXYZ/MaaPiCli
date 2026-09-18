@@ -306,6 +306,10 @@ bool Interactor::run()
         return false;
     }
 
+    if (!ensure_task_options()) {
+        return false;
+    }
+
     if (!ensure_pretask_options()) {
         return false;
     }
@@ -1156,8 +1160,10 @@ bool Interactor::select_linux(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Con
     const std::string input = normalize_linux_input_method(linux_config.input);
 
     if (screencap == "Wlr" || input == "Wlr") {
-        if (!select_wlroots()) {
-            return false;
+        if (lnx.wlr_socket_path.empty()) {
+            if (!select_wlroots()) {
+                return false;
+            }
         }
     }
 
@@ -1710,6 +1716,7 @@ bool Interactor::process_option(
         auto selection_count_valid = [&opt](const std::vector<std::string>& values) {
             return (!opt.min_count || values.size() >= *opt.min_count) && (!opt.max_count || values.size() <= *opt.max_count);
         };
+        const bool allows_empty_selection = !opt.min_count || *opt.min_count == 0;
 
         // 与 select/switch 一致：default_case 只作为「初始选中值」解析成预选编号（1-based），
         // 交互流程中列出 cases（预选标 [x]，回车即保持预选）；仅自动补全流程直接采用。
@@ -1759,7 +1766,12 @@ bool Interactor::process_option(
                 }
             }
             if (!default_indexes.empty()) {
-                std::cout << MAA_NS::utf8_to_crt("\t(empty input keeps the default selection)\n");
+                std::string default_hint = "\t(empty input keeps the default selection";
+                if (allows_empty_selection) {
+                    default_hint += "; 0 clears the selection";
+                }
+                default_hint += ")\n";
+                std::cout << MAA_NS::utf8_to_crt(default_hint);
             }
             std::string constraint_text;
             if (opt.min_count) {
@@ -1777,7 +1789,8 @@ bool Interactor::process_option(
             std::cout << "\n";
 
             while (true) {
-                auto indexes = input_multi(opt.cases.size(), "Please input multiple", default_indexes);
+                auto indexes =
+                    input_multi(opt.cases.size(), "Please input multiple", default_indexes, std::cin, std::cout, allows_empty_selection);
                 if (!indexes) {
                     input_aborted_ = true;
                     return false;
@@ -2206,36 +2219,252 @@ bool Interactor::ensure_runtime_options()
     using namespace MAA_PROJECT_INTERFACE_NS;
 
     auto& config = config_.configuration();
-    auto has_option = [](const std::vector<Configuration::Option>& options, const std::string& name) {
-        return std::ranges::any_of(options, [&](const auto& option) { return option.name == name; });
+
+    auto cleanup_runtime_options = [&](std::vector<Configuration::Option>& config_options,
+                                       const std::vector<std::string>& option_names,
+                                       const std::string& level_label) {
+        std::unordered_set<std::string> active_options;
+
+        auto option_is_applicable = [&](const InterfaceData::Option& data_option) {
+            if (!data_option.controller.empty()
+                && std::ranges::find(data_option.controller, config.controller.name) == data_option.controller.end()) {
+                return false;
+            }
+            if (!data_option.resource.empty() && std::ranges::find(data_option.resource, config.resource) == data_option.resource.end()) {
+                return false;
+            }
+            return true;
+        };
+
+        std::function<bool(const std::string&)> collect_active_options = [&](const std::string& option_name) {
+            auto data_option_iter = config_.interface_data().option.find(option_name);
+            if (data_option_iter == config_.interface_data().option.end()) {
+                return true;
+            }
+
+            const auto& data_option = data_option_iter->second;
+            if (!option_is_applicable(data_option)) {
+                return true;
+            }
+
+            if (!active_options.insert(option_name).second) {
+                return true;
+            }
+
+            auto config_option_iter =
+                std::ranges::find_if(config_options, [&](const auto& config_option) { return config_option.name == option_name; });
+            if (config_option_iter == config_options.end()) {
+                return true;
+            }
+
+            std::vector<const InterfaceData::Option::Case*> selected_cases;
+            if (!select_runtime_option_cases(option_name, config_options, selected_cases)) {
+                return false;
+            }
+
+            for (const auto* selected_case : selected_cases) {
+                for (const auto& child_option : selected_case->option) {
+                    if (!collect_active_options(child_option)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        };
+
+        for (const auto& option_name : option_names) {
+            if (!collect_active_options(option_name)) {
+                return false;
+            }
+        }
+
+        for (auto iter = config_options.begin(); iter != config_options.end();) {
+            if (!active_options.contains(iter->name)) {
+                LogWarn << "Inactive runtime option found, removing it" << VAR(level_label) << VAR(iter->name);
+                iter = config_options.erase(iter);
+                continue;
+            }
+
+            ++iter;
+        }
+
+        return true;
     };
 
-    for (const auto& option_name : config_.interface_data().global_option) {
-        if (!has_option(config.global_option, option_name)
-            && !process_option(option_name, "Global", config.global_option, /*auto_accept_default=*/true)) {
-            return false;
-        }
+    if (!cleanup_runtime_options(config.global_option, config_.interface_data().global_option, "Global")) {
+        return false;
+    }
+
+    if (!ensure_declared_option_tree(
+            config_.interface_data().global_option,
+            "Global",
+            config.global_option,
+            /*auto_accept_default=*/true)) {
+        return false;
     }
 
     const auto resource_iter =
         std::ranges::find(config_.interface_data().resource, config.resource, std::mem_fn(&InterfaceData::Resource::name));
     if (resource_iter != config_.interface_data().resource.end()) {
-        for (const auto& option_name : resource_iter->option) {
-            if (!has_option(config.resource_option, option_name)
-                && !process_option(option_name, "Resource", config.resource_option, /*auto_accept_default=*/true)) {
-                return false;
-            }
+        if (!cleanup_runtime_options(config.resource_option, resource_iter->option, "Resource")) {
+            return false;
+        }
+        if (!ensure_declared_option_tree(resource_iter->option, "Resource", config.resource_option, /*auto_accept_default=*/true)) {
+            return false;
         }
     }
 
     const auto controller_iter =
         std::ranges::find(config_.interface_data().controller, config.controller.name, std::mem_fn(&InterfaceData::Controller::name));
     if (controller_iter != config_.interface_data().controller.end()) {
-        for (const auto& option_name : controller_iter->option) {
-            if (!has_option(config.controller_option, option_name)
-                && !process_option(option_name, "Controller", config.controller_option, /*auto_accept_default=*/true)) {
+        if (!cleanup_runtime_options(config.controller_option, controller_iter->option, "Controller")) {
+            return false;
+        }
+        if (!ensure_declared_option_tree(controller_iter->option, "Controller", config.controller_option, /*auto_accept_default=*/true)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Interactor::select_runtime_option_cases(
+    const std::string& option_name,
+    const std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Option::Case*>& selected_cases) const
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto data_option_iter = config_.interface_data().option.find(option_name);
+    if (data_option_iter == config_.interface_data().option.end()) {
+        LogError << "Option not found" << VAR(option_name);
+        return false;
+    }
+
+    const auto& data_option = data_option_iter->second;
+    if (!data_option.controller.empty()
+        && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
+        return true;
+    }
+    if (!data_option.resource.empty()
+        && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
+        return true;
+    }
+
+    auto config_option_iter =
+        std::ranges::find_if(config_options, [&](const auto& config_option) { return config_option.name == option_name; });
+    if (config_option_iter == config_options.end()) {
+        return false;
+    }
+
+    switch (data_option.type) {
+    case InterfaceData::Option::Type::Select:
+    case InterfaceData::Option::Type::Switch: {
+        auto case_iter =
+            std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == config_option_iter->value; });
+        if (case_iter == data_option.cases.end()) {
+            LogError << "Option case not found" << VAR(option_name) << VAR(config_option_iter->value);
+            return false;
+        }
+        selected_cases.emplace_back(&*case_iter);
+    } break;
+
+    case InterfaceData::Option::Type::Checkbox: {
+        for (const auto& value : config_option_iter->values) {
+            auto case_iter = std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == value; });
+            if (case_iter == data_option.cases.end()) {
+                LogError << "Option case not found" << VAR(option_name) << VAR(value);
                 return false;
             }
+            selected_cases.emplace_back(&*case_iter);
+        }
+    } break;
+
+    case InterfaceData::Option::Type::Input:
+        break;
+    }
+
+    return true;
+}
+
+bool Interactor::ensure_declared_option_tree(
+    const std::vector<std::string>& option_names,
+    const std::string& context_display_name,
+    std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+    bool auto_accept_default)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    std::vector<Configuration::Option> existing_options = std::move(config_options);
+    config_options.clear();
+
+    std::function<bool(const std::string&)> ensure_option = [&](const std::string& option_name) -> bool {
+        auto data_option_iter = config_.interface_data().option.find(option_name);
+        if (data_option_iter == config_.interface_data().option.end()) {
+            LogError << "Option not found" << VAR(option_name);
+            return false;
+        }
+
+        const auto& data_option = data_option_iter->second;
+        if (!data_option.controller.empty()
+            && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
+            return true;
+        }
+        if (!data_option.resource.empty()
+            && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
+            return true;
+        }
+
+        auto existing_option_iter =
+            std::ranges::find_if(existing_options, [&](const auto& config_option) { return config_option.name == option_name; });
+        if (existing_option_iter == existing_options.end()) {
+            // Interface changes may add a required option; automatic completion must not interrupt runtime setup.
+            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+        }
+
+        config_options.push_back(*existing_option_iter);
+        std::vector<const InterfaceData::Option::Case*> selected_cases;
+        if (!select_runtime_option_cases(option_name, config_options, selected_cases)) {
+            return false;
+        }
+
+        for (const auto* selected_case : selected_cases) {
+            for (const auto& active_option : selected_case->option) {
+                if (!ensure_option(active_option)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    for (const auto& option_name : option_names) {
+        if (!ensure_option(option_name)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Interactor::ensure_task_options()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& config = config_.configuration();
+
+    for (auto& config_task : config.task) {
+        const auto data_task_iter =
+            std::ranges::find(config_.interface_data().task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
+        if (data_task_iter == config_.interface_data().task.end()) {
+            continue;
+        }
+
+        const std::string task_display_name = get_display_name(data_task_iter->name, data_task_iter->label);
+        if (!ensure_declared_option_tree(data_task_iter->option, task_display_name, config_task.option, /*auto_accept_default=*/true)) {
+            return false;
         }
     }
 
@@ -2270,88 +2499,15 @@ bool Interactor::ensure_pretask_options()
         if (config_pretask_iter == config_pretasks.end()) {
             Configuration::Pretask config_pretask;
             config_pretask.name = identifier;
-            for (const auto& option_name : data_pretask.option) {
-                if (!process_option(option_name, display_name, config_pretask.option, /*auto_accept_default=*/true)) {
-                    return false;
-                }
+            if (!ensure_declared_option_tree(data_pretask.option, display_name, config_pretask.option, /*auto_accept_default=*/true)) {
+                return false;
             }
             config_pretasks.emplace_back(std::move(config_pretask));
             continue;
         }
 
-        for (const auto& option_name : data_pretask.option) {
-            if (!ensure_pretask_option_tree(option_name, display_name, *config_pretask_iter)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool Interactor::ensure_pretask_option_tree(
-    const std::string& option_name,
-    const std::string& pretask_display_name,
-    MAA_PROJECT_INTERFACE_NS::Configuration::Pretask& config_pretask)
-{
-    using namespace MAA_PROJECT_INTERFACE_NS;
-
-    auto config_option_iter =
-        std::ranges::find_if(config_pretask.option, [&](const auto& config_option) { return config_option.name == option_name; });
-    if (config_option_iter == config_pretask.option.end()) {
-        // pretask 选项树补全可能在 -d 直跑时触发，不阻塞：带 default_case 的 option 直接采用默认值
-        return process_option(option_name, pretask_display_name, config_pretask.option, /*auto_accept_default=*/true);
-    }
-
-    auto data_option_iter = config_.interface_data().option.find(option_name);
-    if (data_option_iter == config_.interface_data().option.end()) {
-        LogError << "Option not found" << VAR(option_name);
-        return false;
-    }
-
-    const auto& data_option = data_option_iter->second;
-    if (!data_option.controller.empty()
-        && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
-        return true;
-    }
-    if (!data_option.resource.empty()
-        && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
-        return true;
-    }
-
-    std::vector<std::vector<std::string>> active_option_groups;
-    switch (data_option.type) {
-    case InterfaceData::Option::Type::Select:
-    case InterfaceData::Option::Type::Switch: {
-        auto case_iter =
-            std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == config_option_iter->value; });
-        if (case_iter == data_option.cases.end()) {
-            LogError << "Option case not found" << VAR(option_name) << VAR(config_option_iter->value);
+        if (!ensure_declared_option_tree(data_pretask.option, display_name, config_pretask_iter->option, /*auto_accept_default=*/true)) {
             return false;
-        }
-        active_option_groups.emplace_back(case_iter->option);
-    } break;
-
-    case InterfaceData::Option::Type::Checkbox: {
-        for (const auto& value : config_option_iter->values) {
-            auto case_iter = std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == value; });
-            if (case_iter == data_option.cases.end()) {
-                LogError << "Option case not found" << VAR(option_name) << VAR(value);
-                return false;
-            }
-            active_option_groups.emplace_back(case_iter->option);
-        }
-    } break;
-
-    case InterfaceData::Option::Type::Input:
-        break;
-    }
-
-    for (const auto& active_options : active_option_groups) {
-        for (const auto& active_option : active_options) {
-            if (!ensure_pretask_option_tree(active_option, pretask_display_name, config_pretask)) {
-                return false;
-            }
         }
     }
 

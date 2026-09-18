@@ -476,8 +476,6 @@ bool Runner::run(const RuntimeParam& param)
         return false;
     }
 
-    MaaTasker* tasker_handle = MaaTaskerCreate();
-
     MaaController* controller_handle = nullptr;
     if (const auto* p_adb_param = std::get_if<RuntimeParam::AdbParam>(&param.controller_param)) {
         RuntimeParam::AdbParam adb_param = reconfig_adb(*p_adb_param);
@@ -539,6 +537,7 @@ bool Runner::run(const RuntimeParam& param)
         return false;
     }
 
+    MaaTasker* tasker_handle = MaaTaskerCreate();
     MaaResource* resource_handle = MaaResourceCreate();
 
     OnScopeLeave([&]() {
