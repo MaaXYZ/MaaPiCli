@@ -171,7 +171,10 @@ int main()
     "interface_version": 2,
     "controller": [ { "name": "adb-controller", "type": "Adb" } ],
     "resource": [ { "name": "default-resource", "path": [] } ],
-    "task": [ { "name": "direct-task", "entry": "DirectTask", "option": [ "direct-option", "later-option" ] } ],
+    "task": [
+        { "name": "direct-task", "entry": "DirectTask", "option": [ "direct-option", "later-option" ] },
+        { "name": "inactive-task", "entry": "InactiveTask", "controller": [ "other-controller" ], "option": [ "inactive-option" ] }
+    ],
     "option": {
         "direct-option": {
             "type": "select",
@@ -180,7 +183,8 @@ int main()
         }
         ,
         "direct-child": { "type": "input" },
-        "later-option": { "type": "input" }
+        "later-option": { "type": "input" },
+        "inactive-option": { "type": "input" }
     }
 }
 )json";
@@ -196,6 +200,9 @@ int main()
         {
             "name": "direct-task",
             "option": [ { "name": "direct-option", "value": "on" }, { "name": "later-option" } ]
+        },
+        {
+            "name": "inactive-task"
         }
     ]
 }
@@ -213,10 +220,14 @@ int main()
         const auto saved_config = MAA_PROJECT_INTERFACE_NS::Parser::parse_config(user_dir / "config" / "maa_pi_config.json");
         require(saved_config.has_value(), "the direct-task configuration should be saved");
         require(
-            saved_config && saved_config->task.size() == 1 && saved_config->task.front().option.size() == 3
+            saved_config && saved_config->task.size() == 2 && saved_config->task.front().option.size() == 3
                 && saved_config->task.front().option.at(0).value == "on" && saved_config->task.front().option.at(1).name == "direct-child"
                 && saved_config->task.front().option.at(2).name == "later-option",
             "a missing direct-task subtree should be completed automatically in declaration order");
+        require(
+            saved_config && saved_config->task.size() == 2 && saved_config->task.at(1).name == "inactive-task"
+                && saved_config->task.at(1).option.empty(),
+            "task option completion should preserve inactive tasks without generating their options");
 
         std::filesystem::remove_all(resource_dir);
         std::filesystem::remove_all(user_dir);

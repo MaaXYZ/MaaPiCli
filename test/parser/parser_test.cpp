@@ -227,6 +227,45 @@ int main()
         require(
             config.task.front().option.size() == 3 && config.task.front().option.at(1).name == "one-child",
             "a valid task checkbox subtree should be retained");
+
+        data.option["stale-child"].controller = { "other-controller" };
+        config_task.option = { Configuration::Option { .name = "task-checkbox", .values = { "one", "two" } },
+                               Configuration::Option { .name = "stale-child" },
+                               Configuration::Option { .name = "one-child" },
+                               Configuration::Option { .name = "valid-option", .value = "fast" } };
+        require(!Parser::check_configuration(data, config), "an inapplicable stale child should mark configuration changed");
+        require(
+            config.task.front().option.size() == 3 && config.task.front().option.at(0).name == "task-checkbox"
+                && config.task.front().option.at(1).name == "one-child" && config.task.front().option.at(2).name == "valid-option",
+            "an inapplicable stale child should be removed without discarding the valid parent subtree");
+    }
+
+    {
+        InterfaceData data;
+        data.interface_version = 2;
+        data.resource.emplace_back().name = "default-resource";
+        data.controller.emplace_back().name = "default-controller";
+        auto& inactive_task = data.task.emplace_back();
+        inactive_task.name = "inactive-task";
+        inactive_task.controller = { "other-controller" };
+        inactive_task.option = { "inactive-option" };
+        data.option["inactive-option"].type = InterfaceData::Option::Type::Checkbox;
+        data.option["inactive-option"].cases.emplace_back().name = "invalid-case";
+        data.option["inactive-option"].min_count = 1;
+
+        Configuration config;
+        config.resource = "default-resource";
+        config.controller.name = "default-controller";
+        config.controller.type = InterfaceData::Controller::Type::Adb;
+        config.task = { Configuration::Task {
+            .name = "inactive-task",
+            .option = { Configuration::Option { .name = "inactive-option", .values = { "stale-case" } } } } };
+
+        require(Parser::check_configuration(data, config), "an inactive task should not mark the configuration as changed");
+        require(
+            config.task.size() == 1 && config.task.front().option.size() == 1
+                && config.task.front().option.front().values == std::vector<std::string> { "stale-case" },
+            "an inactive task and its saved options should be preserved");
     }
 
     auto interface = Parser::parse_interface(fixture_dir / "interface.json");

@@ -1773,6 +1773,9 @@ bool Interactor::process_option(
                 default_hint += ")\n";
                 std::cout << MAA_NS::utf8_to_crt(default_hint);
             }
+            else if (allows_empty_selection) {
+                std::cout << MAA_NS::utf8_to_crt("\t(empty input or 0 selects none)\n");
+            }
             std::string constraint_text;
             if (opt.min_count) {
                 constraint_text += std::format("at least {}", *opt.min_count);
@@ -2459,6 +2462,14 @@ bool Interactor::ensure_task_options()
         const auto data_task_iter =
             std::ranges::find(config_.interface_data().task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
         if (data_task_iter == config_.interface_data().task.end()) {
+            continue;
+        }
+        if (!data_task_iter->controller.empty()
+            && std::ranges::find(data_task_iter->controller, config.controller.name) == data_task_iter->controller.end()) {
+            continue;
+        }
+        if (!data_task_iter->resource.empty()
+            && std::ranges::find(data_task_iter->resource, config.resource) == data_task_iter->resource.end()) {
             continue;
         }
 

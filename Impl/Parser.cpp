@@ -95,6 +95,17 @@ bool option_is_applicable(const InterfaceData::Option& option, const Configurati
     return true;
 }
 
+bool task_is_applicable(const InterfaceData::Task& task, const Configuration& config)
+{
+    if (!task.controller.empty() && std::ranges::find(task.controller, config.controller.name) == task.controller.end()) {
+        return false;
+    }
+    if (!task.resource.empty() && std::ranges::find(task.resource, config.resource) == task.resource.end()) {
+        return false;
+    }
+    return true;
+}
+
 bool validate_task_option_selection(
     const InterfaceData::Option& data_option,
     Configuration::Option& config_option,
@@ -671,6 +682,9 @@ bool Parser::check_task(const InterfaceData& data, const Configuration& config, 
         LogWarn << "Task not found" << VAR(config_task.name);
         return false;
     }
+    if (!task_is_applicable(*data_iter, config)) {
+        return true;
+    }
 
     auto is_top_level_option = [&](const std::string& name) {
         return std::ranges::find(data_iter->option, name) != data_iter->option.end();
@@ -683,6 +697,23 @@ bool Parser::check_task(const InterfaceData& data, const Configuration& config, 
         }
         return config_task.option.erase(invalid_iter, subtree_end);
     };
+
+    for (auto iter = config_task.option.begin(); iter != config_task.option.end();) {
+        if (is_top_level_option(iter->name)) {
+            ++iter;
+            continue;
+        }
+
+        auto option_iter = data.option.find(iter->name);
+        if (option_iter != data.option.end() && !option_is_applicable(option_iter->second, config)) {
+            LogWarn << "Inapplicable task option found, removing it" << VAR(config_task.name) << VAR(iter->name);
+            iter = config_task.option.erase(iter);
+            changed = true;
+            continue;
+        }
+
+        ++iter;
+    }
 
     for (auto config_option_iter = config_task.option.begin(); config_option_iter != config_task.option.end();) {
         auto& config_option = *config_option_iter;
