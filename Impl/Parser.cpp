@@ -210,6 +210,11 @@ bool validate_checkbox_definition(const InterfaceData::Option& option)
     }
 
     if (auto* defaults = std::get_if<std::vector<std::string>>(&option.default_case)) {
+        for (const auto& value : *defaults) {
+            if (std::ranges::find(option.cases, value, std::mem_fn(&InterfaceData::Option::Case::name)) == option.cases.end()) {
+                return false;
+            }
+        }
         return checkbox_selection_is_valid(option, *defaults);
     }
 

@@ -126,9 +126,11 @@ int main()
 {
     "controller": { "name": "adb-controller" },
     "resource": "default-resource",
+    "task": [],
     "resource_option": [ { "name": "stale-resource-option" } ],
     "global_option": [
-        { "name": "runtime-parent" },
+        { "name": "runtime-parent", "value": "on" },
+        { "name": "runtime-child", "inputs": { "child-value": "old-value" } },
         { "name": "runtime-second" },
         { "name": "inactive-global-option" },
         { "name": "stale-runtime-child" }
@@ -161,8 +163,9 @@ int main()
                 "a missing nested runtime option should be completed without changing sibling order");
             const auto& saved_child_inputs = saved_config->global_option.at(1).inputs;
             require(
-                saved_child_inputs.contains("child-secret") && saved_child_inputs.at("child-secret") != "child-secret",
-                "a missing password Input default should be stored encrypted");
+                saved_child_inputs.at("child-value") == "old-value" && saved_child_inputs.contains("child-secret")
+                    && saved_child_inputs.at("child-secret") != "child-secret",
+                "existing Input values should be preserved while missing password defaults are stored encrypted");
             require(
                 saved_config->global_option.at(2).inputs
                     == std::unordered_map<std::string, std::string> { { "second-value", "second-default" } },
@@ -172,8 +175,7 @@ int main()
             require(reloaded.load(resource_dir, user_dir), "the configuration with automatic Input defaults should reload");
             require(
                 reloaded.configuration().global_option.at(1).inputs
-                    == std::unordered_map<std::string, std::string> { { "child-value", "child-default" },
-                                                                      { "child-secret", "child-secret" } },
+                    == std::unordered_map<std::string, std::string> { { "child-value", "old-value" }, { "child-secret", "child-secret" } },
                 "missing Input fields should use declared defaults during automatic completion");
             require(saved_config->resource_option.empty(), "an empty runtime option declaration list should be cleaned");
         }

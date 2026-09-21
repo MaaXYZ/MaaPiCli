@@ -2423,7 +2423,6 @@ bool Interactor::ensure_declared_option_tree(
             LogError << "Option not found" << VAR(option_name);
             return false;
         }
-
         const auto& data_option = data_option_iter->second;
         if (!data_option.controller.empty()
             && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
@@ -2439,6 +2438,14 @@ bool Interactor::ensure_declared_option_tree(
         if (existing_option_iter == existing_options.end()) {
             // Interface changes may add a required option; automatic completion must not interrupt runtime setup.
             return process_option(option_name, context_display_name, config_options, auto_accept_default);
+        }
+
+        if (data_option.type == InterfaceData::Option::Type::Input) {
+            for (const auto& input_def : data_option.inputs) {
+                if (!existing_option_iter->inputs.contains(input_def.name)) {
+                    existing_option_iter->inputs.emplace(input_def.name, input_def.default_);
+                }
+            }
         }
 
         std::vector<const InterfaceData::Option::Case*> selected_cases;

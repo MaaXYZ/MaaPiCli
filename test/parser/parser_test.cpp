@@ -343,7 +343,7 @@ int main()
         "invalid checkbox bounds should be rejected");
     require(
         !Parser::parse_interface(fixture_dir / "invalid_option_defaults.json").has_value(),
-        "checkbox defaults outside min/max count should be rejected");
+        "invalid or unknown checkbox defaults should be rejected");
 
     auto zero_max_json = json::parse(
         R"json({

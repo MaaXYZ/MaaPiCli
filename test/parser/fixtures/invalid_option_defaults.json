@@ -21,6 +21,11 @@
             "cases": [ { "name": "one" }, { "name": "two" } ],
             "default_case": [ "one", "one", "nonexistent" ],
             "min_count": 2
+        },
+        "unknown-default": {
+            "type": "checkbox",
+            "cases": [ { "name": "one" }, { "name": "two" } ],
+            "default_case": [ "one", "nonexistent" ]
         }
     }
 }
