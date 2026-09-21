@@ -4,30 +4,14 @@ on:
     push:
         branches:
             - main
-        paths:
-            - '.clang-format'
-            - '.github/workflows/format.yml'
-            - 'CLI/**'
-            - 'Impl/**'
-            - 'include/**'
-            - 'test/**/*.cpp'
-            - 'test/**/*.h'
     pull_request:
-        paths:
-            - '.clang-format'
-            - '.github/workflows/format.yml'
-            - 'CLI/**'
-            - 'Impl/**'
-            - 'include/**'
-            - 'test/**/*.cpp'
-            - 'test/**/*.h'
     workflow_dispatch:
 
 permissions:
     contents: read
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+    group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
@@ -35,10 +19,6 @@ jobs:
         runs-on: macos-latest
         steps:
             - uses: actions/checkout@v7
-              with:
-                  repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-                  ref: ${{ github.event.pull_request.head.sha || github.ref }}
-                  fetch-depth: 1
 
             - name: Install clang-format
               run: |
