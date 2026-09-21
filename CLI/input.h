@@ -21,9 +21,11 @@
     std::istream& input_stream = std::cin,
     std::ostream& output_stream = std::cout);
 
+// When allow_empty_selection is true, a standalone 0 is an explicit empty selection.
 [[nodiscard]] std::optional<std::vector<int>> input_multi(
     size_t size,
     std::string_view prompt = "Please input multiple",
     std::span<const int> defaults = { },
     std::istream& input_stream = std::cin,
-    std::ostream& output_stream = std::cout);
+    std::ostream& output_stream = std::cout,
+    bool allow_empty_selection = false);

@@ -8,8 +8,12 @@
 
 namespace
 {
-std::optional<std::vector<int>> parse_multi_selection(const std::string& buffer, size_t size)
+std::optional<std::vector<int>> parse_multi_selection(const std::string& buffer, size_t size, bool allow_empty_selection)
 {
+    if (allow_empty_selection && buffer == "0") {
+        return std::vector<int> { };
+    }
+
     if (!std::ranges::all_of(buffer, [](unsigned char c) { return std::isdigit(c) || std::isspace(c); })) {
         return std::nullopt;
     }
@@ -45,6 +49,7 @@ std::optional<std::vector<int>> input_multi_impl(
     std::string_view prompt,
     std::span<const int> defaults,
     bool allow_multiple,
+    bool allow_empty_selection,
     std::istream& input_stream,
     std::ostream& output_stream)
 {
@@ -61,7 +66,12 @@ std::optional<std::vector<int>> input_multi_impl(
             return std::vector<int>(defaults.begin(), defaults.end());
         }
 
-        auto values = parse_multi_selection(*line, size);
+        if (line->empty() && allow_empty_selection) {
+            output_stream << '\n';
+            return std::vector<int> { };
+        }
+
+        auto values = parse_multi_selection(*line, size, allow_empty_selection);
         if (values && (allow_multiple || values->size() == 1)) {
             output_stream << '\n';
             return values;
@@ -91,9 +101,10 @@ std::optional<std::vector<int>> input_multi(
     std::string_view prompt,
     std::span<const int> defaults,
     std::istream& input_stream,
-    std::ostream& output_stream)
+    std::ostream& output_stream,
+    bool allow_empty_selection)
 {
-    return input_multi_impl(size, prompt, defaults, true, input_stream, output_stream);
+    return input_multi_impl(size, prompt, defaults, true, allow_empty_selection, input_stream, output_stream);
 }
 
 std::optional<int> input(size_t size, std::string_view prompt, int default_value, std::istream& input_stream, std::ostream& output_stream)
@@ -102,6 +113,6 @@ std::optional<int> input(size_t size, std::string_view prompt, int default_value
     const auto defaults =
         default_value >= 1 && static_cast<size_t>(default_value) <= size ? std::span<const int>(default_values) : std::span<const int> { };
 
-    auto values = input_multi_impl(size, prompt, defaults, false, input_stream, output_stream);
+    auto values = input_multi_impl(size, prompt, defaults, false, false, input_stream, output_stream);
     return values ? std::optional<int>(values->front()) : std::nullopt;
 }
