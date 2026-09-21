@@ -1,6 +1,7 @@
 #include "interactor.h"
 
 #include <algorithm>
+#include <charconv>
 #include <format>
 #include <fstream>
 #include <functional>
@@ -42,10 +43,22 @@ static constexpr bool kGamepadSupported = false;
 #endif
 
 #if defined(__linux__)
-static constexpr bool kWlRootsSupported = true;
+static constexpr bool kLinuxSupported = true;
 #else
-static constexpr bool kWlRootsSupported = false;
+static constexpr bool kLinuxSupported = false;
 #endif
+
+std::string normalize_linux_screencap_method(const std::string& method)
+{
+    static const std::unordered_set<std::string> known_methods = { "Wlr", "PipeWire" };
+    return method.empty() || !known_methods.contains(method) ? "Wlr" : method;
+}
+
+std::string normalize_linux_input_method(const std::string& method)
+{
+    static const std::unordered_set<std::string> known_methods = { "Wlr", "UInput", "Libei" };
+    return method.empty() || !known_methods.contains(method) ? "Wlr" : method;
+}
 
 std::optional<std::string> read_hidden_line()
 {
@@ -289,6 +302,14 @@ bool Interactor::run()
         return false;
     }
 
+    if (!ensure_runtime_options()) {
+        return false;
+    }
+
+    if (!ensure_task_options()) {
+        return false;
+    }
+
     if (!ensure_pretask_options()) {
         return false;
     }
@@ -363,13 +384,19 @@ void Interactor::print_config() const
             std::cout << "\t\t(Gamepad is only available on Windows)\n";
         }
     } break;
-    case InterfaceData::Controller::Type::WlRoots: {
-        const auto& wlr = config_.configuration().wlroots;
-        if (!wlr.wlr_socket_path.empty()) {
-            std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", wlr.wlr_socket_path));
+    case InterfaceData::Controller::Type::Linux: {
+        const auto& lnx = config_.configuration().lnx;
+        if (!lnx.wlr_socket_path.empty()) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", lnx.wlr_socket_path));
         }
-        if (!kWlRootsSupported) {
-            std::cout << "\t\t(WLRoots is only available on Linux)\n";
+        if (lnx.uinput_screen_width != 0 || lnx.uinput_screen_height != 0) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\tUInput: {}x{}\n", lnx.uinput_screen_width, lnx.uinput_screen_height));
+        }
+        if (!lnx.eis_socket_path.empty()) {
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t\tEIS: {}\n", lnx.eis_socket_path));
+        }
+        if (!kLinuxSupported) {
+            std::cout << "\t\t(Linux is only available on Linux)\n";
         }
     } break;
     default:
@@ -667,13 +694,12 @@ bool Interactor::select_controller()
         }
         config_.configuration().controller.type = InterfaceData::Controller::Type::PlayCover;
         return select_playcover(controller.playcover);
-    case InterfaceData::Controller::Type::WlRoots:
-        if (!kWlRootsSupported) {
-            std::cout << "\nWlRoots controller is only available on Linux.\n";
+    case InterfaceData::Controller::Type::Linux:
+        if (!kLinuxSupported) {
+            std::cout << "\nLinux controller is only available on Linux.\n";
             // Check if there are other controllers available
-            bool has_other_controllers = std::ranges::any_of(all_controllers, [](const auto& ctrl) {
-                return ctrl.type != InterfaceData::Controller::Type::WlRoots;
-            });
+            bool has_other_controllers =
+                std::ranges::any_of(all_controllers, [](const auto& ctrl) { return ctrl.type != InterfaceData::Controller::Type::Linux; });
             if (has_other_controllers) {
                 std::cout << "Please select another controller.\n\n";
                 return mpause() && select_controller();
@@ -683,8 +709,8 @@ bool Interactor::select_controller()
                 return mpause();
             }
         }
-        config_.configuration().controller.type = InterfaceData::Controller::Type::WlRoots;
-        return select_wlroots();
+        config_.configuration().controller.type = InterfaceData::Controller::Type::Linux;
+        return select_linux(controller.lnx);
     case InterfaceData::Controller::Type::Gamepad:
         if (!kGamepadSupported) {
             std::cout << "\nGamepad controller is only available on Windows.\n";
@@ -1122,6 +1148,94 @@ bool Interactor::select_macos(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Con
     return true;
 }
 
+bool Interactor::select_linux(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::LinuxConfig& linux_config)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    std::cout << "### Configure Linux Controller ###\n\n";
+
+    auto& lnx = config_.configuration().lnx;
+
+    const std::string screencap = normalize_linux_screencap_method(linux_config.screencap);
+    const std::string input = normalize_linux_input_method(linux_config.input);
+
+    if (screencap == "Wlr" || input == "Wlr") {
+        if (lnx.wlr_socket_path.empty()) {
+            if (!select_wlroots()) {
+                return false;
+            }
+        }
+    }
+
+    if (input == "Libei") {
+        const std::string default_eis = lnx.eis_socket_path;
+        while (true) {
+            auto socket_path = read_line(std::format("EIS socket path (e.g. /run/user/1000/gamescope-0-ei) [{}]: ", default_eis));
+            if (!socket_path) {
+                input_aborted_ = true;
+                return false;
+            }
+
+            if (!socket_path->empty()) {
+                lnx.eis_socket_path = std::move(*socket_path);
+                break;
+            }
+            if (!default_eis.empty()) {
+                lnx.eis_socket_path = default_eis;
+                break;
+            }
+            std::cout << "EIS socket path is required.\n";
+        }
+        std::cout << "\n";
+    }
+
+    if (input == "UInput") {
+        return input_uinput_width_height();
+    }
+
+    return true;
+}
+
+bool Interactor::input_uinput_width_height()
+{
+    auto& lnx = config_.configuration().lnx;
+
+    auto read_dimension = [&](const std::string& label, int& value) -> bool {
+        while (true) {
+            auto buffer = read_line(std::format("Screen {} [{}]: ", label, value));
+            if (!buffer) {
+                input_aborted_ = true;
+                return false;
+            }
+
+            if (buffer->empty() && value > 0) {
+                return true;
+            }
+
+            int parsed = 0;
+            const auto* first = buffer->data();
+            const auto* last = first + buffer->size();
+            const bool digits_only = std::ranges::all_of(*buffer, [](unsigned char c) { return c >= '0' && c <= '9'; });
+            if (digits_only) {
+                auto [ptr, ec] = std::from_chars(first, last, parsed);
+                if (ec == std::errc { } && ptr == last && parsed > 0) {
+                    value = parsed;
+                    return true;
+                }
+            }
+
+            std::cout << "Screen " << label << " must be a positive integer.\n";
+        }
+    };
+
+    if (!read_dimension("width", lnx.uinput_screen_width) || !read_dimension("height", lnx.uinput_screen_height)) {
+        return false;
+    }
+
+    std::cout << "\n";
+    return true;
+}
+
 bool Interactor::select_wlroots()
 {
     std::cout << "### Select Wayland Socket ###\n\n";
@@ -1181,7 +1295,7 @@ bool Interactor::select_wlroots_auto_detect()
         return false;
     }
     const size_t index = static_cast<size_t>(*selected - 1);
-    auto& wlr_config = config_.configuration().wlroots;
+    auto& wlr_config = config_.configuration().lnx;
 
     auto compositor = MaaToolkitDesktopWindowListAt(list_handle, index);
 
@@ -1197,7 +1311,7 @@ bool Interactor::select_wlroots_manual_input()
         input_aborted_ = true;
         return false;
     }
-    config_.configuration().wlroots.wlr_socket_path = *socket_path;
+    config_.configuration().lnx.wlr_socket_path = *socket_path;
     std::cout << "\n";
 
     return true;
@@ -1599,6 +1713,11 @@ bool Interactor::process_option(
             return false;
         }
 
+        auto selection_count_valid = [&opt](const std::vector<std::string>& values) {
+            return (!opt.min_count || values.size() >= *opt.min_count) && (!opt.max_count || values.size() <= *opt.max_count);
+        };
+        const bool allows_empty_selection = !opt.min_count || *opt.min_count == 0;
+
         // 与 select/switch 一致：default_case 只作为「初始选中值」解析成预选编号（1-based），
         // 交互流程中列出 cases（预选标 [x]，回车即保持预选）；仅自动补全流程直接采用。
         std::vector<int> default_indexes;
@@ -1617,9 +1736,16 @@ bool Interactor::process_option(
             default_indexes.erase(std::unique(default_indexes.begin(), default_indexes.end()), default_indexes.end());
         }
 
-        if (!default_indexes.empty() && auto_accept_default) {
+        if (opt.max_count == 0) {
+            config_opt.values.clear();
+        }
+        else if (!default_indexes.empty() && auto_accept_default) {
             for (const int index : default_indexes) {
                 config_opt.values.emplace_back(opt.cases[static_cast<size_t>(index) - 1].name);
+            }
+            if (!selection_count_valid(config_opt.values)) {
+                LogError << "Default checkbox selection count is invalid" << VAR(option_name);
+                return false;
             }
         }
         else {
@@ -1640,21 +1766,56 @@ bool Interactor::process_option(
                 }
             }
             if (!default_indexes.empty()) {
-                std::cout << MAA_NS::utf8_to_crt("\t(empty input keeps the default selection)\n");
+                std::string default_hint = "\t(empty input keeps the default selection";
+                if (allows_empty_selection) {
+                    default_hint += "; 0 clears the selection";
+                }
+                default_hint += ")\n";
+                std::cout << MAA_NS::utf8_to_crt(default_hint);
+            }
+            else if (allows_empty_selection) {
+                std::cout << MAA_NS::utf8_to_crt("\t(empty input or 0 selects none)\n");
+            }
+            std::string constraint_text;
+            if (opt.min_count) {
+                constraint_text += std::format("at least {}", *opt.min_count);
+            }
+            if (opt.max_count) {
+                if (!constraint_text.empty()) {
+                    constraint_text += ", ";
+                }
+                constraint_text += std::format("at most {}", *opt.max_count);
+            }
+            if (!constraint_text.empty()) {
+                std::cout << MAA_NS::utf8_to_crt(std::format("\tSelect {} item(s)\n", constraint_text));
             }
             std::cout << "\n";
 
-            auto indexes = input_multi(opt.cases.size(), "Please input multiple", default_indexes);
-            if (!indexes) {
-                input_aborted_ = true;
-                return false;
-            }
-            for (int idx : *indexes) {
-                if (idx < 1 || static_cast<size_t>(idx) > opt.cases.size()) {
-                    LogError << "Invalid selection" << VAR(option_name) << VAR(idx);
+            while (true) {
+                auto indexes =
+                    input_multi(opt.cases.size(), "Please input multiple", default_indexes, std::cin, std::cout, allows_empty_selection);
+                if (!indexes) {
+                    input_aborted_ = true;
                     return false;
                 }
-                config_opt.values.emplace_back(opt.cases[static_cast<size_t>(idx) - 1].name);
+
+                config_opt.values.clear();
+                std::unordered_set<int> selected_indexes;
+                for (int idx : *indexes) {
+                    if (idx < 1 || static_cast<size_t>(idx) > opt.cases.size()) {
+                        LogError << "Invalid selection" << VAR(option_name) << VAR(idx);
+                        return false;
+                    }
+                    if (!selected_indexes.insert(idx).second) {
+                        continue;
+                    }
+                    config_opt.values.emplace_back(opt.cases[static_cast<size_t>(idx) - 1].name);
+                }
+
+                if (selection_count_valid(config_opt.values)) {
+                    break;
+                }
+                std::cout << MAA_NS::utf8_to_crt("Invalid selection count, please retry.\n");
             }
         }
 
@@ -1674,6 +1835,11 @@ bool Interactor::process_option(
         }
 
         for (const auto& input_def : opt.inputs) {
+            if (auto_accept_default) {
+                config_opt.inputs[input_def.name] = input_def.default_;
+                continue;
+            }
+
             std::string default_val = input_def.default_;
             std::string input_display_name = get_display_name(input_def.name, input_def.label);
             if (!input_def.description.empty()) {
@@ -1976,6 +2142,41 @@ bool Interactor::check_validity()
         }
     }
 
+    if (config_.configuration().controller.type == InterfaceData::Controller::Type::Linux) {
+        if (!kLinuxSupported) {
+            LogError << "Linux controller is only available on Linux";
+            return false;
+        }
+
+        const auto* controller = find_current_controller();
+        if (!controller) {
+            LogError << "Controller not found" << VAR(config_.configuration().controller.name);
+            return false;
+        }
+
+        const auto& lnx = config_.configuration().lnx;
+        const auto& controller_lnx = controller->lnx;
+        const std::string screencap = normalize_linux_screencap_method(controller_lnx.screencap);
+        const std::string input = normalize_linux_input_method(controller_lnx.input);
+        const bool needs_wlr_socket = lnx.wlr_socket_path.empty() && (screencap == "Wlr" || input == "Wlr");
+        const bool needs_eis_socket = lnx.eis_socket_path.empty() && input == "Libei";
+        const bool needs_uinput_dimensions = input == "UInput" && (lnx.uinput_screen_width <= 0 || lnx.uinput_screen_height <= 0);
+        if (needs_wlr_socket || needs_eis_socket || needs_uinput_dimensions) {
+            if (!select_linux(controller_lnx)) {
+                return false;
+            }
+
+            const bool wlr_socket_missing = needs_wlr_socket && lnx.wlr_socket_path.empty();
+            const bool eis_socket_missing = needs_eis_socket && lnx.eis_socket_path.empty();
+            const bool uinput_dimensions_missing =
+                needs_uinput_dimensions && (lnx.uinput_screen_width <= 0 || lnx.uinput_screen_height <= 0);
+            if (wlr_socket_missing || eis_socket_missing || uinput_dimensions_missing) {
+                LogError << "Required Linux controller value is missing";
+                return false;
+            }
+        }
+    }
+
     if (config_.configuration().controller.type == InterfaceData::Controller::Type::PlayCover) {
         if (!kPlayCoverSupported) {
             LogError << "PlayCover controller is only available on macOS";
@@ -2021,6 +2222,290 @@ bool Interactor::check_validity()
     return true;
 }
 
+bool Interactor::ensure_runtime_options()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& config = config_.configuration();
+
+    auto cleanup_runtime_options = [&](std::vector<Configuration::Option>& config_options,
+                                       const std::vector<std::string>& option_names,
+                                       const std::string& level_label) {
+        std::unordered_set<std::string> active_options;
+
+        auto option_is_applicable = [&](const InterfaceData::Option& data_option) {
+            if (!data_option.controller.empty()
+                && std::ranges::find(data_option.controller, config.controller.name) == data_option.controller.end()) {
+                return false;
+            }
+            if (!data_option.resource.empty() && std::ranges::find(data_option.resource, config.resource) == data_option.resource.end()) {
+                return false;
+            }
+            return true;
+        };
+
+        std::function<bool(const std::string&)> collect_active_options = [&](const std::string& option_name) {
+            auto data_option_iter = config_.interface_data().option.find(option_name);
+            if (data_option_iter == config_.interface_data().option.end()) {
+                return true;
+            }
+
+            const auto& data_option = data_option_iter->second;
+            if (!option_is_applicable(data_option)) {
+                return true;
+            }
+
+            if (!active_options.insert(option_name).second) {
+                return true;
+            }
+
+            auto config_option_iter =
+                std::ranges::find_if(config_options, [&](const auto& config_option) { return config_option.name == option_name; });
+            if (config_option_iter == config_options.end()) {
+                return true;
+            }
+
+            std::vector<const InterfaceData::Option::Case*> selected_cases;
+            if (!select_runtime_option_cases(option_name, config_options, selected_cases)) {
+                LogWarn << "Invalid runtime option found, deferring recreation" << VAR(level_label) << VAR(option_name);
+                return true;
+            }
+
+            for (const auto* selected_case : selected_cases) {
+                for (const auto& child_option : selected_case->option) {
+                    if (!collect_active_options(child_option)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        };
+
+        for (const auto& option_name : option_names) {
+            if (!collect_active_options(option_name)) {
+                return false;
+            }
+        }
+
+        for (auto iter = config_options.begin(); iter != config_options.end();) {
+            if (!active_options.contains(iter->name)) {
+                LogWarn << "Inactive runtime option found, removing it" << VAR(level_label) << VAR(iter->name);
+                iter = config_options.erase(iter);
+                continue;
+            }
+
+            ++iter;
+        }
+
+        return true;
+    };
+
+    if (!cleanup_runtime_options(config.global_option, config_.interface_data().global_option, "Global")) {
+        return false;
+    }
+
+    if (!ensure_declared_option_tree(
+            config_.interface_data().global_option,
+            "Global",
+            config.global_option,
+            /*auto_accept_default=*/true)) {
+        return false;
+    }
+
+    const auto resource_iter =
+        std::ranges::find(config_.interface_data().resource, config.resource, std::mem_fn(&InterfaceData::Resource::name));
+    if (resource_iter != config_.interface_data().resource.end()) {
+        if (!cleanup_runtime_options(config.resource_option, resource_iter->option, "Resource")) {
+            return false;
+        }
+        if (!ensure_declared_option_tree(resource_iter->option, "Resource", config.resource_option, /*auto_accept_default=*/true)) {
+            return false;
+        }
+    }
+
+    const auto controller_iter =
+        std::ranges::find(config_.interface_data().controller, config.controller.name, std::mem_fn(&InterfaceData::Controller::name));
+    if (controller_iter != config_.interface_data().controller.end()) {
+        if (!cleanup_runtime_options(config.controller_option, controller_iter->option, "Controller")) {
+            return false;
+        }
+        if (!ensure_declared_option_tree(controller_iter->option, "Controller", config.controller_option, /*auto_accept_default=*/true)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Interactor::select_runtime_option_cases(
+    const std::string& option_name,
+    const std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Option::Case*>& selected_cases) const
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto data_option_iter = config_.interface_data().option.find(option_name);
+    if (data_option_iter == config_.interface_data().option.end()) {
+        LogError << "Option not found" << VAR(option_name);
+        return false;
+    }
+
+    const auto& data_option = data_option_iter->second;
+    if (!data_option.controller.empty()
+        && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
+        return true;
+    }
+    if (!data_option.resource.empty()
+        && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
+        return true;
+    }
+
+    auto config_option_iter =
+        std::ranges::find_if(config_options, [&](const auto& config_option) { return config_option.name == option_name; });
+    if (config_option_iter == config_options.end()) {
+        return false;
+    }
+
+    switch (data_option.type) {
+    case InterfaceData::Option::Type::Select:
+    case InterfaceData::Option::Type::Switch: {
+        auto case_iter =
+            std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == config_option_iter->value; });
+        if (case_iter == data_option.cases.end()) {
+            LogError << "Option case not found" << VAR(option_name) << VAR(config_option_iter->value);
+            return false;
+        }
+        selected_cases.emplace_back(&*case_iter);
+    } break;
+
+    case InterfaceData::Option::Type::Checkbox: {
+        for (const auto& value : config_option_iter->values) {
+            auto case_iter = std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == value; });
+            if (case_iter == data_option.cases.end()) {
+                LogError << "Option case not found" << VAR(option_name) << VAR(value);
+                return false;
+            }
+            selected_cases.emplace_back(&*case_iter);
+        }
+
+        const auto selection_count = selected_cases.size();
+        if ((!data_option.min_count || selection_count >= *data_option.min_count)
+            && (!data_option.max_count || selection_count <= *data_option.max_count)) {
+            break;
+        }
+
+        LogError << "Option selection count is invalid" << VAR(option_name) << VAR(selection_count);
+        return false;
+    } break;
+
+    case InterfaceData::Option::Type::Input:
+        break;
+    }
+
+    return true;
+}
+
+bool Interactor::ensure_declared_option_tree(
+    const std::vector<std::string>& option_names,
+    const std::string& context_display_name,
+    std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
+    bool auto_accept_default)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    std::vector<Configuration::Option> existing_options = std::move(config_options);
+    config_options.clear();
+
+    std::function<bool(const std::string&)> ensure_option = [&](const std::string& option_name) -> bool {
+        auto data_option_iter = config_.interface_data().option.find(option_name);
+        if (data_option_iter == config_.interface_data().option.end()) {
+            LogError << "Option not found" << VAR(option_name);
+            return false;
+        }
+        const auto& data_option = data_option_iter->second;
+        if (!data_option.controller.empty()
+            && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
+            return true;
+        }
+        if (!data_option.resource.empty()
+            && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
+            return true;
+        }
+
+        auto existing_option_iter =
+            std::ranges::find_if(existing_options, [&](const auto& config_option) { return config_option.name == option_name; });
+        if (existing_option_iter == existing_options.end()) {
+            // Interface changes may add a required option; automatic completion must not interrupt runtime setup.
+            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+        }
+
+        if (data_option.type == InterfaceData::Option::Type::Input) {
+            for (const auto& input_def : data_option.inputs) {
+                if (!existing_option_iter->inputs.contains(input_def.name)) {
+                    existing_option_iter->inputs.emplace(input_def.name, input_def.default_);
+                }
+            }
+        }
+
+        std::vector<const InterfaceData::Option::Case*> selected_cases;
+        if (!select_runtime_option_cases(option_name, existing_options, selected_cases)) {
+            LogWarn << "Invalid runtime option found, recreating it" << VAR(context_display_name) << VAR(option_name);
+            existing_options.erase(existing_option_iter);
+            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+        }
+
+        config_options.push_back(*existing_option_iter);
+        for (const auto* selected_case : selected_cases) {
+            for (const auto& active_option : selected_case->option) {
+                if (!ensure_option(active_option)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    for (const auto& option_name : option_names) {
+        if (!ensure_option(option_name)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Interactor::ensure_task_options()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& config = config_.configuration();
+
+    for (auto& config_task : config.task) {
+        const auto data_task_iter =
+            std::ranges::find(config_.interface_data().task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
+        if (data_task_iter == config_.interface_data().task.end()) {
+            continue;
+        }
+        if (!data_task_iter->controller.empty()
+            && std::ranges::find(data_task_iter->controller, config.controller.name) == data_task_iter->controller.end()) {
+            continue;
+        }
+        if (!data_task_iter->resource.empty()
+            && std::ranges::find(data_task_iter->resource, config.resource) == data_task_iter->resource.end()) {
+            continue;
+        }
+
+        const std::string task_display_name = get_display_name(data_task_iter->name, data_task_iter->label);
+        if (!ensure_declared_option_tree(data_task_iter->option, task_display_name, config_task.option, /*auto_accept_default=*/true)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool Interactor::ensure_pretask_options()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
@@ -2049,88 +2534,15 @@ bool Interactor::ensure_pretask_options()
         if (config_pretask_iter == config_pretasks.end()) {
             Configuration::Pretask config_pretask;
             config_pretask.name = identifier;
-            for (const auto& option_name : data_pretask.option) {
-                if (!process_option(option_name, display_name, config_pretask.option, /*auto_accept_default=*/true)) {
-                    return false;
-                }
+            if (!ensure_declared_option_tree(data_pretask.option, display_name, config_pretask.option, /*auto_accept_default=*/true)) {
+                return false;
             }
             config_pretasks.emplace_back(std::move(config_pretask));
             continue;
         }
 
-        for (const auto& option_name : data_pretask.option) {
-            if (!ensure_pretask_option_tree(option_name, display_name, *config_pretask_iter)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool Interactor::ensure_pretask_option_tree(
-    const std::string& option_name,
-    const std::string& pretask_display_name,
-    MAA_PROJECT_INTERFACE_NS::Configuration::Pretask& config_pretask)
-{
-    using namespace MAA_PROJECT_INTERFACE_NS;
-
-    auto config_option_iter =
-        std::ranges::find_if(config_pretask.option, [&](const auto& config_option) { return config_option.name == option_name; });
-    if (config_option_iter == config_pretask.option.end()) {
-        // pretask 选项树补全可能在 -d 直跑时触发，不阻塞：带 default_case 的 option 直接采用默认值
-        return process_option(option_name, pretask_display_name, config_pretask.option, /*auto_accept_default=*/true);
-    }
-
-    auto data_option_iter = config_.interface_data().option.find(option_name);
-    if (data_option_iter == config_.interface_data().option.end()) {
-        LogError << "Option not found" << VAR(option_name);
-        return false;
-    }
-
-    const auto& data_option = data_option_iter->second;
-    if (!data_option.controller.empty()
-        && std::ranges::find(data_option.controller, config_.configuration().controller.name) == data_option.controller.end()) {
-        return true;
-    }
-    if (!data_option.resource.empty()
-        && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end()) {
-        return true;
-    }
-
-    std::vector<std::vector<std::string>> active_option_groups;
-    switch (data_option.type) {
-    case InterfaceData::Option::Type::Select:
-    case InterfaceData::Option::Type::Switch: {
-        auto case_iter =
-            std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == config_option_iter->value; });
-        if (case_iter == data_option.cases.end()) {
-            LogError << "Option case not found" << VAR(option_name) << VAR(config_option_iter->value);
+        if (!ensure_declared_option_tree(data_pretask.option, display_name, config_pretask_iter->option, /*auto_accept_default=*/true)) {
             return false;
-        }
-        active_option_groups.emplace_back(case_iter->option);
-    } break;
-
-    case InterfaceData::Option::Type::Checkbox: {
-        for (const auto& value : config_option_iter->values) {
-            auto case_iter = std::ranges::find_if(data_option.cases, [&](const auto& data_case) { return data_case.name == value; });
-            if (case_iter == data_option.cases.end()) {
-                LogError << "Option case not found" << VAR(option_name) << VAR(value);
-                return false;
-            }
-            active_option_groups.emplace_back(case_iter->option);
-        }
-    } break;
-
-    case InterfaceData::Option::Type::Input:
-        break;
-    }
-
-    for (const auto& active_options : active_option_groups) {
-        for (const auto& active_option : active_options) {
-            if (!ensure_pretask_option_tree(active_option, pretask_display_name, config_pretask)) {
-                return false;
-            }
         }
     }
 
@@ -2244,7 +2656,13 @@ bool Interactor::apply_preset()
         preset_tasks.emplace_back(std::move(config_task));
     }
 
-    config_.configuration().task = std::move(preset_tasks);
+    Configuration preset_config;
+    preset_config.resource = config_.configuration().resource;
+    preset_config.controller = config_.configuration().controller;
+    preset_config.task = std::move(preset_tasks);
+    Parser::check_configuration(config_.interface_data(), preset_config);
+
+    config_.configuration().task = std::move(preset_config.task);
     std::string preset_display = get_display_name(preset.name, preset.label);
     std::cout << "Applied preset: " << MAA_NS::utf8_to_crt(preset_display) << "\n\n";
 

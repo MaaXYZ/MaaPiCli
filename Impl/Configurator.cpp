@@ -46,6 +46,7 @@ MaaWin32InputMethod parse_win32_input_method(const std::string& method)
         { "SendMessageWithWindowPos", MaaWin32InputMethod_SendMessageWithWindowPos },
         { "PostMessageWithWindowPos", MaaWin32InputMethod_PostMessageWithWindowPos },
         { "Interception", MaaWin32InputMethod_Interception },
+        { "AnchoredTouch", MaaWin32InputMethod_AnchoredTouch },
     };
 
     if (auto it = mapping.find(method); it != mapping.end()) {
@@ -91,6 +92,33 @@ MaaMacOSInputMethod parse_macos_input_method(const std::string& method)
         return it->second;
     }
     return MaaMacOSInputMethod_None;
+}
+
+MaaLinuxScreencapMethod parse_linux_screencap_method(const std::string& method)
+{
+    static const std::unordered_map<std::string, MaaLinuxScreencapMethod> mapping = {
+        { "Wlr", MaaLinuxScreencapMethod_Wlr },
+        { "PipeWire", MaaLinuxScreencapMethod_PipeWire },
+    };
+
+    if (auto it = mapping.find(method); it != mapping.end()) {
+        return it->second;
+    }
+    return MaaLinuxScreencapMethod_None;
+}
+
+MaaLinuxInputMethod parse_linux_input_method(const std::string& method)
+{
+    static const std::unordered_map<std::string, MaaLinuxInputMethod> mapping = {
+        { "Wlr", MaaLinuxInputMethod_Wlr },
+        { "UInput", MaaLinuxInputMethod_UInput },
+        { "Libei", MaaLinuxInputMethod_Libei },
+    };
+
+    if (auto it = mapping.find(method); it != mapping.end()) {
+        return it->second;
+    }
+    return MaaLinuxInputMethod_None;
 }
 
 std::string pretask_identifier(const InterfaceData::Pretask& pretask)
@@ -262,6 +290,11 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
     }
 
     for (const auto& config_task : config_.task) {
+        auto data_task_iter = std::ranges::find_if(data_.task, [&](const auto& data_task) { return data_task.name == config_task.name; });
+        if (data_task_iter != data_.task.end() && !is_task_applicable(*data_task_iter)) {
+            continue;
+        }
+
         auto task_opt = generate_runtime_task(config_task);
         if (!task_opt) {
             LogWarn << "failed to generate runtime, ignore" << VAR(config_task.name);
@@ -370,13 +403,32 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         runtime.controller_param = std::move(gamepad);
     } break;
 
-    case InterfaceData::Controller::Type::WlRoots: {
-        RuntimeParam::WlRootsParam wlroots;
+    case InterfaceData::Controller::Type::Linux: {
+        RuntimeParam::LinuxParam lnx;
 
-        wlroots.wlr_socket_path = config_.wlroots.wlr_socket_path;
-        wlroots.use_win32_vk_code = controller.wlroots.use_win32_vk_code;
+        lnx.use_win32_vk_code = controller.lnx.use_win32_vk_code;
+        lnx.pipewire_source = controller.lnx.pipewire_source.empty() ? "Gamescope" : controller.lnx.pipewire_source;
 
-        runtime.controller_param = std::move(wlroots);
+        if (!controller.lnx.screencap.empty()) {
+            lnx.screencap = parse_linux_screencap_method(controller.lnx.screencap);
+        }
+        if (lnx.screencap == MaaLinuxScreencapMethod_None) {
+            lnx.screencap = MaaLinuxScreencapMethod_Wlr;
+        }
+
+        if (!controller.lnx.input.empty()) {
+            lnx.input = parse_linux_input_method(controller.lnx.input);
+        }
+        if (lnx.input == MaaLinuxInputMethod_None) {
+            lnx.input = MaaLinuxInputMethod_Wlr;
+        }
+
+        lnx.wlr_socket_path = config_.lnx.wlr_socket_path;
+        lnx.uinput_screen_width = config_.lnx.uinput_screen_width;
+        lnx.uinput_screen_height = config_.lnx.uinput_screen_height;
+        lnx.eis_socket_path = config_.lnx.eis_socket_path;
+
+        runtime.controller_param = std::move(lnx);
     } break;
 
     default: {
@@ -388,6 +440,7 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
     // 设置分辨率配置
     runtime.display_config.short_side = controller.display_short_side;
     runtime.display_config.long_side = controller.display_long_side;
+    runtime.display_config.expand = controller.display_expand;
     runtime.display_config.raw = controller.display_raw;
 
     for (const auto& pretask_config : Parser::flatten_pretask(data_.pretask)) {
@@ -500,6 +553,17 @@ bool Configurator::is_option_applicable(const InterfaceData::Option& opt) const
         return false;
     }
     if (!opt.resource.empty() && std::ranges::find(opt.resource, config_.resource) == opt.resource.end()) {
+        return false;
+    }
+    return true;
+}
+
+bool Configurator::is_task_applicable(const InterfaceData::Task& task) const
+{
+    if (!task.controller.empty() && std::ranges::find(task.controller, config_.controller.name) == task.controller.end()) {
+        return false;
+    }
+    if (!task.resource.empty() && std::ranges::find(task.resource, config_.resource) == task.resource.end()) {
         return false;
     }
     return true;

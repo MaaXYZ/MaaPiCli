@@ -22,9 +22,9 @@ cmake --build build --config RelWithDebInfo -j 16
 
 ## PI 协议支持版本
 
-MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask` 和 v2.8.1 的 pretask 适用范围过滤。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
+MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入和 v2.10.1 的 `checkbox` 数量限制。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
 
-`maafw-version.txt` 当前锁定的 MaaFramework `v5.12.3` 文档定义到 PI v2.9.0；截至 2026-09-07，上游 MaaFramework main 文档已定义到 PI v2.10.0。下表同时列出这两部分协议能力，便于对照 MaaPiCli 的实际实现状态。
+`maafw-version.txt` 当前锁定的 MaaFramework `v5.13.0` 文档定义到 PI v2.10.1。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
 
 | PI 版本 | 协议新增/变更 | MaaPiCli 状态 |
 |---------|----------------|--------------|
@@ -42,8 +42,25 @@ MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask` 和 v
 | v2.9.1 | `focus` 模板对象的 `trace` 字段，按回调消息控制节点结果遥测 | ❌ 未实现；CLI 当前也未处理 focus 回调 |
 | v2.9.2 | `telemetry.sentry.failure_attachments_sample_rate` 失败诊断附件采样率 | ❌ 未实现 |
 | v2.10.0 | `input.inputs[].password` 标记密码/密钥输入；要求掩码显示、配置加密存储、日志/遥测脱敏、pretask 传参时内存中解密 | ✅ 支持：CLI 隐藏输入并掩码展示；Windows 使用 DPAPI、macOS 使用 Keychain、Linux 使用 AES-GCM 加密配置；pretask 与 pipeline 使用内存明文 |
+| v2.10.1 | `checkbox` 新增 `min_count` / `max_count`，限制可选和必选数量 | ✅ 支持：解析配置约束，在交互中阻止超出上限；已保存数量不足时要求补选，数量超限时清理选择 |
 
 由于 `interface_version` 仍为 `2`，包含 v2.6.0 及以后新增字段的配置通常仍可被解析并加载其既有功能；但这些新增字段不会被 MaaPiCli 启用。使用 `hotkey` option 的项目可能无法得到预期交互，应优先为 CLI 提供其他 option 类型。
+
+## Linux 控制器
+
+MaaFramework v5.13.0 新增 Linux 控制器。MaaPiCli 支持解析 ProjectInterface V2 的 `controller.linux` 配置，创建 `MaaLinuxControllerCreate` 控制器，并支持 `controller.display_expand` 截图缩放。
+
+CLI 可组合以下 Linux 截图和输入方式：
+
+| 能力 | 配置值 | 说明 |
+|------|--------|------|
+| 截图 | `Wlr` | 需要 Wayland socket 与合成器的 `wlr-screencopy-unstable-v1` 支持 |
+| 截图 | `PipeWire` | `pipewire_source: Gamescope` 自动发现 gamescope 节点；`Portal` 通过 xdg-desktop-portal 打开 ScreenCast 流 |
+| 输入 | `Wlr` | 需要 wlroots 虚拟键盘和虚拟指针协议，会提示输入 Wayland socket |
+| 输入 | `UInput` | 需要访问 `/dev/uinput`，会提示输入绝对坐标范围的宽度和高度 |
+| 输入 | `Libei` | 需要 EIS socket，会提示输入其路径；文本输入建议系统 libei >= 1.6.0 |
+
+`controller.linux.use_win32_vk_code` 可把 Win32 Virtual-Key 键码转换为 Linux evdev 键码。Linux 运行环境仍需按 MaaFramework 文档准备 Wayland、PipeWire、Portal、libei 或 uinput 相关权限和服务。
 
 ## CLI 局限性
 
