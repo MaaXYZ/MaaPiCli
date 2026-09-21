@@ -20,6 +20,10 @@ void normalize_legacy_wlroots(json::value& json)
     }
 
     auto rename_legacy_controller_key = [](json::value& controller) {
+        if (!controller.is_object()) {
+            return;
+        }
+
         if (controller.contains("wlroots") && !controller.contains("linux")) {
             controller["linux"] = controller["wlroots"];
         }
@@ -214,6 +218,11 @@ bool validate_checkbox_definition(const InterfaceData::Option& option)
 
 bool validate_display_options(const InterfaceData::Controller& controller)
 {
+    if (controller.display_expand.has_value() && ((*controller.display_expand)[0] <= 0 || (*controller.display_expand)[1] <= 0)) {
+        LogError << "Display expand dimensions must be positive" << VAR(controller.name);
+        return false;
+    }
+
     const auto selected_count = (controller.display_short_side.has_value() ? 1 : 0) + (controller.display_long_side.has_value() ? 1 : 0)
                                 + (controller.display_expand.has_value() ? 1 : 0) + (controller.display_raw ? 1 : 0);
     if (selected_count <= 1) {
@@ -237,13 +246,15 @@ bool validate_linux_options(const InterfaceData::Controller& controller)
         return false;
     }
 
-    const auto& pipewire_source = controller.lnx.pipewire_source;
-    if (pipewire_source == "Gamescope" || pipewire_source == "Portal") {
-        return true;
+    if (controller.lnx.screencap == "PipeWire") {
+        const auto& pipewire_source = controller.lnx.pipewire_source;
+        if (pipewire_source != "Gamescope" && pipewire_source != "Portal") {
+            LogError << "Invalid PipeWire source, expected Gamescope or Portal" << VAR(pipewire_source);
+            return false;
+        }
     }
 
-    LogError << "Invalid PipeWire source, expected Gamescope or Portal" << VAR(pipewire_source);
-    return false;
+    return true;
 }
 
 bool validate_interface(const InterfaceData& data)

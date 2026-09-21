@@ -451,6 +451,40 @@ int main()
         !(invalid_linux_input_json && Parser::parse_interface(*invalid_linux_input_json).has_value()),
         "an unknown Linux input method should be rejected");
 
+    auto wlr_with_pipewire_source_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": [{
+                "name": "linux-controller",
+                "type": "Linux",
+                "linux": {
+                    "screencap": "Wlr",
+                    "input": "UInput",
+                    "pipewire_source": "portal"
+                }
+            }],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }]
+        })json");
+    require(wlr_with_pipewire_source_json.has_value(), "Wlr controller with PipeWire source fixture should parse as JSON");
+    require(
+        wlr_with_pipewire_source_json && Parser::parse_interface(*wlr_with_pipewire_source_json).has_value(),
+        "PipeWire source should be ignored by a Wlr controller");
+
+    auto invalid_display_expand_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": [{
+                "name": "default-controller",
+                "type": "Adb",
+                "display_expand": [0, -1]
+            }],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }]
+        })json");
+    require(invalid_display_expand_json.has_value(), "invalid display expand fixture should parse as JSON");
+    require(
+        !(invalid_display_expand_json && Parser::parse_interface(*invalid_display_expand_json).has_value()),
+        "non-positive display expand dimensions should be rejected");
+
     auto conflicting_display_options_json = json::parse(
         R"json({
             "interface_version": 2,
@@ -501,6 +535,17 @@ int main()
             }],
             "resource": [{ "name": "default-resource", "path": ["resource"] }]
         })json");
+    auto non_object_controller_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": ["bad"],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }]
+        })json");
+    require(non_object_controller_json.has_value(), "non-object controller fixture should parse as JSON");
+    require(
+        !(non_object_controller_json && Parser::parse_interface(*non_object_controller_json).has_value()),
+        "a non-object controller entry should be rejected without throwing");
+
     require(legacy_wlroots_interface_json.has_value(), "legacy WlRoots interface fixture should parse as JSON");
     auto legacy_wlroots_interface = legacy_wlroots_interface_json ? Parser::parse_interface(*legacy_wlroots_interface_json) : std::nullopt;
     require(legacy_wlroots_interface.has_value(), "a legacy WlRoots interface should migrate");

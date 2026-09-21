@@ -537,6 +537,11 @@ bool Runner::run(const RuntimeParam& param)
         return false;
     }
 
+    if (!controller_handle) {
+        LogError << "Failed to create controller";
+        return false;
+    }
+
     MaaTasker* tasker_handle = MaaTaskerCreate();
     MaaResource* resource_handle = MaaResourceCreate();
 

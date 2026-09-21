@@ -1835,6 +1835,11 @@ bool Interactor::process_option(
         }
 
         for (const auto& input_def : opt.inputs) {
+            if (auto_accept_default) {
+                config_opt.inputs[input_def.name] = input_def.default_;
+                continue;
+            }
+
             std::string default_val = input_def.default_;
             std::string input_display_name = get_display_name(input_def.name, input_def.label);
             if (!input_def.description.empty()) {
@@ -2262,7 +2267,8 @@ bool Interactor::ensure_runtime_options()
 
             std::vector<const InterfaceData::Option::Case*> selected_cases;
             if (!select_runtime_option_cases(option_name, config_options, selected_cases)) {
-                return false;
+                LogWarn << "Invalid runtime option found, deferring recreation" << VAR(level_label) << VAR(option_name);
+                return true;
             }
 
             for (const auto* selected_case : selected_cases) {
@@ -2382,6 +2388,15 @@ bool Interactor::select_runtime_option_cases(
             }
             selected_cases.emplace_back(&*case_iter);
         }
+
+        const auto selection_count = selected_cases.size();
+        if ((!data_option.min_count || selection_count >= *data_option.min_count)
+            && (!data_option.max_count || selection_count <= *data_option.max_count)) {
+            break;
+        }
+
+        LogError << "Option selection count is invalid" << VAR(option_name) << VAR(selection_count);
+        return false;
     } break;
 
     case InterfaceData::Option::Type::Input:
@@ -2426,12 +2441,14 @@ bool Interactor::ensure_declared_option_tree(
             return process_option(option_name, context_display_name, config_options, auto_accept_default);
         }
 
-        config_options.push_back(*existing_option_iter);
         std::vector<const InterfaceData::Option::Case*> selected_cases;
-        if (!select_runtime_option_cases(option_name, config_options, selected_cases)) {
-            return false;
+        if (!select_runtime_option_cases(option_name, existing_options, selected_cases)) {
+            LogWarn << "Invalid runtime option found, recreating it" << VAR(context_display_name) << VAR(option_name);
+            existing_options.erase(existing_option_iter);
+            return process_option(option_name, context_display_name, config_options, auto_accept_default);
         }
 
+        config_options.push_back(*existing_option_iter);
         for (const auto* selected_case : selected_cases) {
             for (const auto& active_option : selected_case->option) {
                 if (!ensure_option(active_option)) {

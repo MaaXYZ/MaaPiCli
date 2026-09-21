@@ -290,6 +290,11 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
     }
 
     for (const auto& config_task : config_.task) {
+        auto data_task_iter = std::ranges::find_if(data_.task, [&](const auto& data_task) { return data_task.name == config_task.name; });
+        if (data_task_iter != data_.task.end() && !is_task_applicable(*data_task_iter)) {
+            continue;
+        }
+
         auto task_opt = generate_runtime_task(config_task);
         if (!task_opt) {
             LogWarn << "failed to generate runtime, ignore" << VAR(config_task.name);
@@ -548,6 +553,17 @@ bool Configurator::is_option_applicable(const InterfaceData::Option& opt) const
         return false;
     }
     if (!opt.resource.empty() && std::ranges::find(opt.resource, config_.resource) == opt.resource.end()) {
+        return false;
+    }
+    return true;
+}
+
+bool Configurator::is_task_applicable(const InterfaceData::Task& task) const
+{
+    if (!task.controller.empty() && std::ranges::find(task.controller, config_.controller.name) == task.controller.end()) {
+        return false;
+    }
+    if (!task.resource.empty() && std::ranges::find(task.resource, config_.resource) == task.resource.end()) {
         return false;
     }
     return true;
