@@ -4,30 +4,14 @@ on:
     push:
         branches:
             - main
-        paths:
-            - '.clang-format'
-            - '.github/workflows/format.yml'
-            - 'CLI/**'
-            - 'Impl/**'
-            - 'include/**'
-            - 'test/**/*.cpp'
-            - 'test/**/*.h'
     pull_request:
-        paths:
-            - '.clang-format'
-            - '.github/workflows/format.yml'
-            - 'CLI/**'
-            - 'Impl/**'
-            - 'include/**'
-            - 'test/**/*.cpp'
-            - 'test/**/*.h'
     workflow_dispatch:
 
 permissions:
     contents: read
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+    group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
@@ -35,19 +19,6 @@ jobs:
         runs-on: macos-latest
         steps:
             - uses: actions/checkout@v7
-              with:
-                  repository: ${{ github.event.pull_request.base.repo.full_name || github.repository }}
-                  ref: ${{ github.event.pull_request.base.ref || github.ref }}
-                  fetch-depth: 0
-
-            - name: Checkout pull request head
-              if: github.event_name == 'pull_request'
-              env:
-                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-                  PR_HEAD_REF: refs/pull/${{ github.event.pull_request.number }}/head
-              run: |
-                  git fetch origin "$PR_HEAD_REF"
-                  git checkout "$HEAD_SHA"
 
             - name: Install clang-format
               run: |
@@ -56,22 +27,12 @@ jobs:
 
             - name: Format sources
               id: format
-              env:
-                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
-                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
               run: |
                   patterns=(
                     '*.c' '*.cc' '*.cpp' '*.cppm' '*.cxx'
                     '*.h' '*.hh' '*.hpp' '*.hxx' '*.h++'
                   )
-                  if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-                      files="$(
-                        git diff --name-only --diff-filter=ACMRT \
-                          "${BASE_SHA}...${HEAD_SHA}" -- "${patterns[@]}"
-                      )"
-                  else
-                      files="$(git ls-files -- "${patterns[@]}")"
-                  fi
+                  files="$(git ls-files -- "${patterns[@]}")"
 
                   if [[ -z "$files" ]]; then
                       echo "changed=false" >> "$GITHUB_OUTPUT"
