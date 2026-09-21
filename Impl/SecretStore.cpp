@@ -19,7 +19,6 @@
 #include <wincrypt.h>
 #elif defined(__APPLE__)
 #include <CommonCrypto/CommonDigest.h>
-#include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
 #else
 #include <fcntl.h>
@@ -37,6 +36,7 @@ namespace
 constexpr std::string_view kWindowsPrefix = "dpapi:";
 constexpr std::string_view kKeychainPrefix = "keychain:";
 constexpr std::string_view kAesGcmPrefix = "gcm:";
+constexpr std::string_view kServiceName = "MaaPiCli";
 
 #if defined(_WIN32)
 constexpr std::string_view kCurrentPlatformPrefix = kWindowsPrefix;
@@ -198,61 +198,53 @@ std::string keychain_account(const std::string& context)
     return account;
 }
 
-CFStringRef service_name()
-{
-    static CFStringRef name = CFStringCreateWithCString(nullptr, "MaaPiCli", kCFStringEncodingUTF8);
-    return name;
-}
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-CFMutableDictionaryRef create_query(CFDataRef account, bool return_data)
-{
-    const auto query = CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    if (!query) {
-        return nullptr;
-    }
-
-    CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
-    CFDictionarySetValue(query, kSecAttrService, service_name());
-    CFDictionarySetValue(query, kSecAttrAccount, account);
-    if (return_data) {
-        CFDictionarySetValue(query, kSecReturnData, kCFBooleanTrue);
-    }
-    return query;
-}
-
+// SecItem does not reliably read file-backed keychains used by CI. The legacy
+// generic-password API explicitly addresses the current default keychain.
 bool keychain_store(const std::string& account, const std::vector<std::uint8_t>& value)
 {
-    const auto account_data = CFDataCreate(nullptr, reinterpret_cast<const UInt8*>(account.data()), account.size());
-    const auto value_data = CFDataCreate(nullptr, value.data(), value.size());
-    if (!account_data || !value_data) {
-        if (account_data) {
-            CFRelease(account_data);
-        }
-        if (value_data) {
-            CFRelease(value_data);
-        }
+    SecKeychainRef keychain = nullptr;
+    if (SecKeychainCopyDefault(&keychain) != errSecSuccess) {
         return false;
     }
 
-    const auto query = create_query(account_data, false);
-    const auto update = CFDictionaryCreateMutable(nullptr, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    if (update) {
-        CFDictionarySetValue(update, kSecValueData, value_data);
+    UInt32 length = 0;
+    void* data = nullptr;
+    SecKeychainItemRef item = nullptr;
+    OSStatus status = SecKeychainFindGenericPassword(
+        keychain,
+        kServiceName.size(),
+        kServiceName.data(),
+        account.size(),
+        account.data(),
+        &length,
+        &data,
+        &item);
+    if (status == errSecSuccess) {
+        status = SecKeychainItemModifyAttributesAndData(item, nullptr, static_cast<UInt32>(value.size()), value.data());
+        SecKeychainItemFreeContent(nullptr, data);
+    }
+    else if (status == errSecItemNotFound) {
+        status = SecKeychainAddGenericPassword(
+            keychain,
+            kServiceName.size(),
+            kServiceName.data(),
+            account.size(),
+            account.data(),
+            static_cast<UInt32>(value.size()),
+            value.data(),
+            &item);
     }
 
-    OSStatus status = query && update ? SecItemAdd(query, nullptr) : errSecAllocate;
-    if (status == errSecDuplicateItem) {
-        status = SecItemUpdate(query, update);
+    if (item) {
+        CFRelease(item);
     }
-
-    if (query) {
-        CFRelease(query);
+    CFRelease(keychain);
+    if (status != errSecSuccess) {
+        LogError << "Failed to store keychain item" << VAR(status);
     }
-    if (update) {
-        CFRelease(update);
-    }
-    CFRelease(account_data);
-    CFRelease(value_data);
     return status == errSecSuccess;
 }
 
@@ -262,27 +254,35 @@ std::optional<std::vector<std::uint8_t>> keychain_load(const std::string& accoun
         return std::nullopt;
     }
 
-    const auto account_data = CFDataCreate(nullptr, reinterpret_cast<const UInt8*>(account.data()), account.size());
-    if (!account_data) {
+    SecKeychainRef keychain = nullptr;
+    if (SecKeychainCopyDefault(&keychain) != errSecSuccess) {
         return std::nullopt;
     }
 
-    const auto query = create_query(account_data, true);
-    CFTypeRef result = nullptr;
-    const OSStatus status = query ? SecItemCopyMatching(query, &result) : errSecAllocate;
-    CFRelease(account_data);
-    if (query) {
-        CFRelease(query);
-    }
-    if (status != errSecSuccess || !result) {
+    UInt32 length = 0;
+    void* data = nullptr;
+    const OSStatus status = SecKeychainFindGenericPassword(
+        keychain,
+        kServiceName.size(),
+        kServiceName.data(),
+        account.size(),
+        account.data(),
+        &length,
+        &data,
+        nullptr);
+    CFRelease(keychain);
+    if (status != errSecSuccess || !data) {
+        LogError << "Failed to load keychain item" << VAR(status);
         return std::nullopt;
     }
 
-    const auto data = static_cast<CFDataRef>(result);
-    std::vector<std::uint8_t> bytes(CFDataGetBytePtr(data), CFDataGetBytePtr(data) + CFDataGetLength(data));
-    CFRelease(result);
-    return bytes;
+    const auto bytes = static_cast<const std::uint8_t*>(data);
+    std::vector<std::uint8_t> value(bytes, bytes + length);
+    SecKeychainItemFreeContent(nullptr, data);
+    return value;
 }
+
+#pragma clang diagnostic pop
 
 #else
 
