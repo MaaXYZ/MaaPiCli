@@ -6,6 +6,8 @@
 #include <ranges>
 #include <sstream>
 
+#include "MaaUtils/Platform.h"
+
 namespace
 {
 std::optional<std::vector<int>> parse_multi_selection(const std::string& buffer, size_t size, bool allow_empty_selection)
@@ -93,7 +95,8 @@ std::optional<std::string> read_line(std::string_view prompt, std::istream& inpu
     if (!input_stream) {
         return std::nullopt;
     }
-    return line;
+    //适配input选项的中文正则校验
+    return MAA_NS::crt_to_utf8(line);
 }
 
 std::optional<std::vector<int>> input_multi(
