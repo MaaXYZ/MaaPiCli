@@ -364,7 +364,7 @@ int main()
         }
 
         {
-            StreamRedirector redirector("2\n2\n6\n\n");
+            StreamRedirector redirector("2\n2\n7\n\n");
             Interactor interactor(user_dir);
             require(interactor.load(resource_dir), "the stale inactive task fixture should load");
             require(interactor.interact(), "switching resources should recover a stale inactive task option");
