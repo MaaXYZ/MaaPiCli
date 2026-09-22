@@ -554,19 +554,20 @@ Interactor::ActionStatus Interactor::interact_once()
     std::cout << "\t1. Switch controller\n";
     std::cout << "\t2. Switch resource\n";
     std::cout << "\t3. Add task\n";
-    std::cout << "\t4. Move task\n";
-    std::cout << "\t5. Delete task\n";
-    std::cout << "\t6. Run tasks\n";
+    std::cout << "\t4. Edit task\n";
+    std::cout << "\t5. Move task\n";
+    std::cout << "\t6. Delete task\n";
+    std::cout << "\t7. Run tasks\n";
     if (has_presets) {
-        std::cout << "\t7. Apply preset\n";
-        std::cout << "\t8. Exit\n";
+        std::cout << "\t8. Apply preset\n";
+        std::cout << "\t9. Exit\n";
     }
     else {
-        std::cout << "\t7. Exit\n";
+        std::cout << "\t8. Exit\n";
     }
     std::cout << "\n";
 
-    int max_action = has_presets ? 8 : 7;
+    int max_action = has_presets ? 9 : 8;
     auto selected_action = input(max_action);
     if (!selected_action) {
         input_aborted_ = true;
@@ -582,24 +583,27 @@ Interactor::ActionStatus Interactor::interact_once()
     case 3:
         return action_status(add_task());
     case 4:
-        return action_status(move_task());
+        edit_task();
+        return input_aborted_ ? ActionStatus::Aborted : ActionStatus::Complete;
     case 5:
+        return action_status(move_task());
+    case 6:
         return action_status(delete_task());
-    case 6: {
+    case 7: {
         const bool completed = run();
         if (!mpause()) {
             return ActionStatus::Aborted;
         }
         return completed ? ActionStatus::Complete : ActionStatus::Incomplete;
     }
-    case 7:
+    case 8:
         if (has_presets) {
             return action_status(apply_preset());
         }
         else {
             return ActionStatus::Exit;
         }
-    case 8:
+    case 9:
         if (has_presets) {
             return ActionStatus::Exit;
         }
@@ -2008,7 +2012,140 @@ bool Interactor::process_level_options(
 
 void Interactor::edit_task()
 {
-    // TODO
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& all_config_tasks = config_.configuration().task;
+    if (all_config_tasks.empty()) {
+        std::cout << "No tasks to edit.\n\n";
+        return;
+    }
+
+    // 列出所有已配置任务
+    std::cout << "### Edit task ###\n\n";
+    print_config_tasks(true); // 带序号
+
+    auto task_index = input(all_config_tasks.size(), "Select task");
+    if (!task_index) {
+        input_aborted_ = true;
+        return;
+    }
+    const size_t ti = static_cast<size_t>(*task_index - 1);
+    auto& config_task = all_config_tasks[ti];
+
+    // 从 interface 里查任务描述
+    auto data_task_iter = std::ranges::find(config_.interface_data().task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
+
+    std::string task_display = config_task.name;
+    std::string task_desc;
+
+    if (data_task_iter != config_.interface_data().task.end()) {
+        task_display = get_display_name(data_task_iter->name, data_task_iter->label);
+        if (!data_task_iter->description.empty()) {
+            task_desc = read_text_content(data_task_iter->description);
+        }
+    }
+
+    // 显示任务信息
+    std::cout << "\n### Task: " << MAA_NS::utf8_to_crt(task_display) << " ###\n\n";
+    if (!task_desc.empty()) {
+        std::cout << MAA_NS::utf8_to_crt(task_desc) << "\n\n";
+    }
+
+    if (config_task.option.empty()) {
+        // 任务定义里根本没有 option,不用补
+        if (data_task_iter == config_.interface_data().task.end() || data_task_iter->option.empty()) {
+            std::cout << "This task has no options.\n\n";
+            return;
+        }
+
+        // 交互式补全
+        std::cout << "This task has no configured options yet.\n";
+        std::cout << "Configure all " << data_task_iter->option.size() << " option(s) now:\n";
+
+        std::vector<Configuration::Option> config_options;
+        for (const auto& option_name : data_task_iter->option) {
+            if (!process_option(option_name, task_display, config_options, /*auto_accept_default=*/false)) {
+                LogError << "Failed to process option" << VAR(option_name);
+                std::cout << "Failed to configure option.\n\n";
+                return;
+            }
+        }
+        config_task.option = std::move(config_options);
+        std::cout << "\nTask configured with " << config_task.option.size() << " option(s).\n\n";
+        return;
+    }
+
+    // 列出该任务的所有已配置 option 及当前值
+    std::cout << "Options:\n\n";
+    for (size_t i = 0; i < config_task.option.size(); ++i) {
+        const auto& opt = config_task.option[i];
+
+        // 显示当前值
+        std::string val_str;
+        if (!opt.value.empty()) {
+            val_str = opt.value;
+        }
+        else if (!opt.values.empty()) {
+            val_str = "[";
+            for (size_t j = 0; j < opt.values.size(); ++j) {
+                if (j > 0) {
+                    val_str += ", ";
+                }
+                val_str += opt.values[j];
+            }
+            val_str += "]";
+        }
+        else if (!opt.inputs.empty()) {
+            val_str = "{";
+            bool first = true;
+            for (const auto& [k, v] : opt.inputs) {
+                if (!first) {
+                    val_str += ", ";
+                }
+                val_str += k;
+                val_str += "=";
+                val_str += display_input_value(opt.name, k, v);
+                first = false;
+            }
+            val_str += "}";
+        }
+        else {
+            val_str = "(empty)";
+        }
+
+        std::cout << MAA_NS::utf8_to_crt(std::format("\t{}. {} = {}\n", i + 1, opt.name, val_str));
+    }
+    std::cout << "\n";
+
+    // 选要编辑的 option
+    auto opt_index = input(config_task.option.size(), "Select option");
+    if (!opt_index) {
+        input_aborted_ = true;
+        return;
+    }
+    const size_t oi = static_cast<size_t>(*opt_index - 1);
+    const std::string edited_name = config_task.option[oi].name;
+
+    std::vector<Configuration::Option> edited_result;
+    bool ok = process_option(edited_name, task_display, edited_result, /*auto_accept_default=*/false);
+
+    if (!ok) {
+        LogError << "Failed to edit option" << VAR(edited_name);
+        std::cout << "Failed to edit option.\n\n";
+        return;
+    }
+
+    // 把新值写回 config_task.option[oi]
+    auto new_iter = std::ranges::find_if(edited_result, [&](const auto& o) { return o.name == edited_name; });
+
+    if (new_iter == edited_result.end()) {
+        LogError << "Edited option not produced" << VAR(edited_name);
+        return;
+    }
+
+    config_task.option[oi] = *new_iter;
+
+    std::cout << "Option \"" << MAA_NS::utf8_to_crt(edited_name) << "\" updated.\n\n";
 }
 
 void Interactor::print_config_tasks(bool with_index) const
