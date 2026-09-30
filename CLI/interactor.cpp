@@ -2175,7 +2175,7 @@ void Interactor::edit_task()
                 }
             }
 
-            std::cout << "\t0. Back to task selection\n\n";
+            std::cout << "0. Back to task selection\n\n";
 
             auto opt_line = read_line("Select option: ");
             if (!opt_line) {
@@ -2248,6 +2248,103 @@ void Interactor::edit_task()
             std::cout << "Option \"" << MAA_NS::utf8_to_crt(edited_name) << "\" updated.\n\n";
         }
     }
+}
+
+void Interactor::print_config_tasks(bool with_index) const
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& all_config_tasks = config_.configuration().task;
+    const auto& groups = config_.interface_data().group;
+
+    auto print_task_options = [&](const Configuration::Task& task) {
+        for (const auto& opt : task.option) {
+            if (!opt.value.empty()) {
+                std::cout << "\t\t- " << MAA_NS::utf8_to_crt(opt.name) << ": " << MAA_NS::utf8_to_crt(opt.value) << "\n";
+            }
+            else if (!opt.values.empty()) {
+                std::cout << "\t\t- " << MAA_NS::utf8_to_crt(opt.name) << ": [";
+                for (size_t j = 0; j < opt.values.size(); ++j) {
+                    if (j > 0) {
+                        std::cout << ", ";
+                    }
+                    std::cout << MAA_NS::utf8_to_crt(opt.values[j]);
+                }
+                std::cout << "]\n";
+            }
+            else if (!opt.inputs.empty()) {
+                std::cout << "\t\t- " << MAA_NS::utf8_to_crt(opt.name) << ":\n";
+                for (const auto& [key, val] : opt.inputs) {
+                    std::cout << "\t\t\t" << MAA_NS::utf8_to_crt(key) << ": "
+                              << MAA_NS::utf8_to_crt(display_input_value(opt.name, key, val)) << "\n";
+                }
+            }
+        }
+    };
+
+    // v2.4.0: display tasks grouped if groups are defined
+    if (!groups.empty() && !with_index) {
+        std::unordered_set<std::string> printed_tasks;
+
+        for (const auto& grp : groups) {
+            std::string grp_display = get_display_name(grp.name, grp.label);
+            bool has_task_in_group = false;
+            for (const auto& cfg_task : all_config_tasks) {
+                auto data_it = std::ranges::find(config_.interface_data().task, cfg_task.name, std::mem_fn(&InterfaceData::Task::name));
+                if (data_it == config_.interface_data().task.end()) {
+                    continue;
+                }
+                if (std::ranges::find(data_it->group, grp.name) == data_it->group.end()) {
+                    continue;
+                }
+                has_task_in_group = true;
+                break;
+            }
+            if (!has_task_in_group) {
+                continue;
+            }
+
+            std::cout << "  [" << MAA_NS::utf8_to_crt(grp_display) << "]\n";
+            for (const auto& cfg_task : all_config_tasks) {
+                auto data_it = std::ranges::find(config_.interface_data().task, cfg_task.name, std::mem_fn(&InterfaceData::Task::name));
+                if (data_it == config_.interface_data().task.end()) {
+                    continue;
+                }
+                if (std::ranges::find(data_it->group, grp.name) == data_it->group.end()) {
+                    continue;
+                }
+                std::cout << MAA_NS::utf8_to_crt(std::format("\t- {}\n", cfg_task.name));
+                print_task_options(cfg_task);
+                printed_tasks.insert(cfg_task.name);
+            }
+        }
+
+        bool has_ungrouped = false;
+        for (const auto& cfg_task : all_config_tasks) {
+            if (printed_tasks.contains(cfg_task.name)) {
+                continue;
+            }
+            if (!has_ungrouped) {
+                std::cout << "  [Other]\n";
+                has_ungrouped = true;
+            }
+            std::cout << MAA_NS::utf8_to_crt(std::format("\t- {}\n", cfg_task.name));
+            print_task_options(cfg_task);
+        }
+    }
+    else {
+        for (size_t i = 0; i < all_config_tasks.size(); ++i) {
+            const auto& task = all_config_tasks[i];
+            if (with_index) {
+                std::cout << MAA_NS::utf8_to_crt(std::format("\t{}. {}\n", i + 1, task.name));
+            }
+            else {
+                std::cout << MAA_NS::utf8_to_crt(std::format("\t- {}\n", task.name));
+            }
+            print_task_options(task);
+        }
+    }
+    std::cout << "\n";
 }
 
 bool Interactor::check_validity()
