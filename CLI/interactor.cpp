@@ -2614,6 +2614,19 @@ bool Interactor::apply_preset()
         Configuration::Task config_task;
         config_task.name = preset_task.name;
 
+        if (preset_task.option.empty() && !data_iter->option.empty()) {
+            std::string preset_task_display = get_display_name(data_iter->name, data_iter->label);
+            for (const auto& option_name : data_iter->option) {
+                if (!process_option(option_name, preset_task_display, config_task.option, /*auto_accept_default=*/true)) {
+                    LogError << "Failed to process option for preset task" << VAR(preset_task.name) << VAR(option_name);
+                    std::cout << "Failed to apply preset: cannot configure option \"" << MAA_NS::utf8_to_crt(option_name)
+                              << "\" for task \"" << MAA_NS::utf8_to_crt(preset_task.name) << "\".\n"
+                              << "Preset application aborted; existing configuration is unchanged.\n\n";
+                    return false;
+                }
+            }
+        }
+
         for (const auto& [opt_name, opt_value] : preset_task.option) {
             auto opt_iter = config_.interface_data().option.find(opt_name);
             if (opt_iter == config_.interface_data().option.end()) {
