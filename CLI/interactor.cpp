@@ -2613,7 +2613,7 @@ bool Interactor::apply_preset()
 
         Configuration::Task config_task;
         config_task.name = preset_task.name;
-        
+
         if (preset_task.option.empty() && !data_iter->option.empty()) {
             std::string preset_task_display = get_display_name(data_iter->name, data_iter->label);
             for (const auto& option_name : data_iter->option) {
@@ -2626,7 +2626,7 @@ bool Interactor::apply_preset()
                 }
             }
         }
-        
+
         for (const auto& [opt_name, opt_value] : preset_task.option) {
             auto opt_iter = config_.interface_data().option.find(opt_name);
             if (opt_iter == config_.interface_data().option.end()) {
