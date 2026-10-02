@@ -17,8 +17,12 @@ std::string code_page_to_utf8(std::string_view bytes, unsigned int code_page)
         return std::string(bytes);
     }
 
-    const int bytes_size = static_cast<int>(bytes.size());
-    const int wlen = MultiByteToWideChar(code_page, MB_ERR_INVALID_CHARS, bytes.data(), bytes_size, nullptr, 0);
+    DWORD flags = 0;
+    if (code_page == CP_UTF8 || code_page == 54936) {
+        flags = MB_ERR_INVALID_CHARS;
+    }
+
+    const int wlen = MultiByteToWideChar(code_page, flags, bytes.data(), bytes_size, nullptr, 0);
     if (wlen <= 0) {
         return std::string(bytes);
     }
