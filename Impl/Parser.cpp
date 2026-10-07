@@ -270,6 +270,12 @@ bool validate_interface(const InterfaceData& data)
         return false;
     }
 
+    if (data.welcome && std::holds_alternative<std::vector<std::string>>(*data.welcome)
+        && std::get<std::vector<std::string>>(*data.welcome).empty()) {
+        LogError << "Welcome array is empty";
+        return false;
+    }
+
     auto check_option_refs = [&](const std::vector<std::string>& options) {
         for (const auto& option : options) {
             if (!data.option.contains(option)) {
@@ -397,6 +403,26 @@ std::vector<InterfaceData::Pretask>
             }
         },
         *pretask);
+}
+
+std::vector<std::string> Parser::welcome_items(const std::optional<InterfaceData::Welcome>& welcome)
+{
+    if (!welcome) {
+        return { };
+    }
+
+    return std::visit(
+        [](const auto& value) -> std::vector<std::string> {
+            using value_t = std::decay_t<decltype(value)>;
+
+            if constexpr (std::is_same_v<value_t, std::string>) {
+                return { value };
+            }
+            else {
+                return value;
+            }
+        },
+        *welcome);
 }
 
 std::optional<InterfaceData> Parser::parse_interface(const std::filesystem::path& path)

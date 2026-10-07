@@ -8,7 +8,7 @@ public:
     explicit Interactor(std::filesystem::path user_path);
 
     bool load(const std::filesystem::path& resource_path);
-    void print_config() const;
+    void print_config();
     bool interact();
     bool run();
 
@@ -23,7 +23,8 @@ private:
 
     bool interact_for_first_time_use();
 
-    void welcome() const;
+    void welcome();
+    bool show_welcome_if_changed();
     ActionStatus interact_once();
     ActionStatus action_status(bool completed) const;
 

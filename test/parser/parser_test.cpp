@@ -364,6 +364,48 @@ int main()
         zero_max_json && Parser::parse_interface(*zero_max_json).has_value(),
         "max_count zero should accept an empty checkbox selection");
 
+    {
+        auto single_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": "welcome"
+            })json");
+        require(single_welcome_json.has_value(), "single welcome fixture should parse as JSON");
+        auto single_welcome = single_welcome_json ? Parser::parse_interface(*single_welcome_json) : std::nullopt;
+        require(single_welcome.has_value(), "a legacy string welcome should parse");
+        require(
+            single_welcome && Parser::welcome_items(single_welcome->welcome) == std::vector<std::string> { "welcome" },
+            "a legacy string welcome should flatten to one ordered item");
+
+        auto multiple_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": ["first", "second"]
+            })json");
+        require(multiple_welcome_json.has_value(), "multiple welcome fixture should parse as JSON");
+        auto multiple_welcome = multiple_welcome_json ? Parser::parse_interface(*multiple_welcome_json) : std::nullopt;
+        require(multiple_welcome.has_value(), "an ordered welcome array should parse");
+        require(
+            multiple_welcome && Parser::welcome_items(multiple_welcome->welcome) == std::vector<std::string> { "first", "second" },
+            "welcome items should retain declaration order");
+
+        auto empty_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": []
+            })json");
+        require(empty_welcome_json.has_value(), "empty welcome fixture should parse as JSON");
+        require(
+            !(empty_welcome_json && Parser::parse_interface(*empty_welcome_json).has_value()),
+            "an empty welcome array should be rejected");
+    }
+
     auto linux_interface_json = json::parse(
         R"json({
             "interface_version": 2,
@@ -555,6 +597,26 @@ int main()
         require(
             controller.lnx.screencap == "Wlr" && controller.lnx.input == "UInput",
             "legacy WlRoots controller settings should migrate to linux");
+    }
+
+    auto welcome_config_json = json::parse(
+        R"json({
+            "controller": { "name": "default-controller" },
+            "resource": "",
+            "task": [],
+            "last_welcome": ["first", "second"],
+            "last_resolved_welcome": ["First", "Second"]
+        })json");
+    require(welcome_config_json.has_value(), "welcome config fixture should parse as JSON");
+    auto welcome_config = welcome_config_json ? Parser::parse_config(*welcome_config_json) : std::nullopt;
+    require(welcome_config.has_value(), "ordered welcome snapshots should parse");
+    if (welcome_config) {
+        require(
+            welcome_config->last_welcome == std::vector<std::string> { "first", "second" }
+                && welcome_config->last_resolved_welcome == std::vector<std::string> { "First", "Second" },
+            "welcome snapshots should retain order");
+        auto roundtrip = welcome_config->to_json();
+        require(roundtrip.contains("last_welcome") && roundtrip.contains("last_resolved_welcome"), "welcome snapshots should serialize");
     }
 
     auto linux_config_json = json::parse(

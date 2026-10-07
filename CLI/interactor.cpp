@@ -335,7 +335,7 @@ bool Interactor::run()
     return ret;
 }
 
-void Interactor::print_config() const
+void Interactor::print_config()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
@@ -495,7 +495,7 @@ bool Interactor::interact_for_first_time_use()
     return true;
 }
 
-void Interactor::welcome() const
+void Interactor::welcome()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
@@ -516,11 +516,7 @@ void Interactor::welcome() const
         }
     }
 
-    // 显示欢迎信息
-    if (!data.welcome.empty()) {
-        std::string welcome_text = read_text_content(data.welcome);
-        std::cout << MAA_NS::utf8_to_crt(welcome_text) << "\n\n";
-    }
+    show_welcome_if_changed();
 
     // 显示项目描述
     if (!data.description.empty()) {
@@ -544,6 +540,38 @@ void Interactor::welcome() const
         std::string license_text = read_text_content(data.license);
         std::cout << "License: " << MAA_NS::utf8_to_crt(license_text) << "\n\n";
     }
+}
+
+bool Interactor::show_welcome_if_changed()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto declared_welcome = Parser::welcome_items(config_.interface_data().welcome);
+    if (declared_welcome.empty()) {
+        auto& config = config_.configuration();
+        config.last_welcome.reset();
+        config.last_resolved_welcome.reset();
+        return false;
+    }
+
+    std::vector<std::string> resolved_welcome;
+    resolved_welcome.reserve(declared_welcome.size());
+    for (const auto& item : declared_welcome) {
+        resolved_welcome.emplace_back(read_text_content(item));
+    }
+
+    const auto& config = config_.configuration();
+    if (config.last_welcome == declared_welcome && config.last_resolved_welcome == resolved_welcome) {
+        return false;
+    }
+
+    for (const auto& welcome_text : resolved_welcome) {
+        std::cout << MAA_NS::utf8_to_crt(welcome_text) << "\n\n";
+    }
+
+    config_.configuration().last_welcome = declared_welcome;
+    config_.configuration().last_resolved_welcome = resolved_welcome;
+    return true;
 }
 
 Interactor::ActionStatus Interactor::interact_once()

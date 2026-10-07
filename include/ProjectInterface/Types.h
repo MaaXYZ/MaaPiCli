@@ -17,6 +17,8 @@ MAA_PROJECT_INTERFACE_NS_BEGIN
 
 struct InterfaceData
 {
+    using Welcome = std::variant<std::string, std::vector<std::string>>;
+
     struct Controller
     {
         struct Win32Config
@@ -320,7 +322,7 @@ struct InterfaceData
     std::string label;
     std::string title;
     std::string version;
-    std::string welcome;
+    std::optional<Welcome> welcome; // v2.10.2: string or ordered non-empty string array
     std::string description;
     std::string contact;
     std::string license;
@@ -485,10 +487,12 @@ struct Configuration
     std::string resource;
     std::vector<Task> task;
 
-    std::vector<Option> global_option;     // v2.3.0
-    std::vector<Option> resource_option;   // v2.3.0
-    std::vector<Option> controller_option; // v2.3.0
+    std::vector<Option> global_option;                             // v2.3.0
+    std::vector<Option> resource_option;                           // v2.3.0
+    std::vector<Option> controller_option;                         // v2.3.0
     std::vector<Pretask> pretask;
+    std::optional<std::vector<std::string>> last_welcome;          // v2.10.2
+    std::optional<std::vector<std::string>> last_resolved_welcome; // v2.10.2
 
     MEO_JSONIZATION(
         controller,
@@ -503,7 +507,9 @@ struct Configuration
         MEO_OPT global_option,
         MEO_OPT resource_option,
         MEO_OPT controller_option,
-        MEO_OPT pretask);
+        MEO_OPT pretask,
+        MEO_OPT last_welcome,
+        MEO_OPT last_resolved_welcome);
 };
 
 struct RuntimeParam
