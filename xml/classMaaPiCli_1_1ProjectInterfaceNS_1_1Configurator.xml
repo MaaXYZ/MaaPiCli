@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="53" column="27" bodyfile="include/ProjectInterface/Configurator.h" bodystart="53" bodyend="-1"/>
+        <location file="include/ProjectInterface/Configurator.h" line="54" column="27" bodyfile="include/ProjectInterface/Configurator.h" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a079d5b3187f15dd1958662acf9701554" prot="private" static="no" mutable="no">
         <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref></type>
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="55" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="55" bodyend="-1"/>
+        <location file="include/ProjectInterface/Configurator.h" line="56" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="56" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a03ad2ec7a2c139d4560b401bdb01a328" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -77,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="56" column="10" bodyfile="include/ProjectInterface/Configurator.h" bodystart="56" bodyend="-1"/>
+        <location file="include/ProjectInterface/Configurator.h" line="57" column="10" bodyfile="include/ProjectInterface/Configurator.h" bodystart="57" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9d59264d120edfc24f1ccedad69dd50f" prot="private" static="no" mutable="no">
         <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref></type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="57" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="57" bodyend="-1"/>
+        <location file="include/ProjectInterface/Configurator.h" line="58" column="19" bodyfile="include/ProjectInterface/Configurator.h" bodystart="58" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abaf5301ad81b8d9b6c3d1d9186663a4e" prot="private" static="no" mutable="no">
         <type>std::unordered_map&lt; std::string, std::string &gt;</type>
@@ -105,7 +105,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="58" column="24" bodyfile="include/ProjectInterface/Configurator.h" bodystart="58" bodyend="-1"/>
+        <location file="include/ProjectInterface/Configurator.h" line="59" column="24" bodyfile="include/ProjectInterface/Configurator.h" bodystart="59" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -303,6 +303,24 @@
         </inbodydescription>
         <location file="include/ProjectInterface/Configurator.h" line="42" column="10"/>
       </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a7e476271182ce0cdea6977ebdf2a1825" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::is_task_applicable</definition>
+        <argsstring>(const InterfaceData::Task &amp;task) const</argsstring>
+        <name>is_task_applicable</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::is_task_applicable</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task" kindref="compound">InterfaceData::Task</ref> &amp;</type>
+          <declname>task</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Configurator.h" line="43" column="10"/>
+      </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</definition>
@@ -323,7 +341,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="43" column="10"/>
+        <location file="include/ProjectInterface/Configurator.h" line="44" column="10"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ad23d4eb868eb568e8f918cfcf6b33c13" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -353,7 +371,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="44" column="10"/>
+        <location file="include/ProjectInterface/Configurator.h" line="45" column="10"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5599e23f7350c742fe0a36a4176cd8b4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -367,7 +385,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="50" column="10"/>
+        <location file="include/ProjectInterface/Configurator.h" line="51" column="10"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2eda943d3a032d2e96f32e63b2fab3d5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
@@ -381,14 +399,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Configurator.h" line="51" column="17"/>
+        <location file="include/ProjectInterface/Configurator.h" line="52" column="17"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Configurator.h" line="14" column="1" bodyfile="include/ProjectInterface/Configurator.h" bodystart="15" bodyend="59"/>
+    <location file="include/ProjectInterface/Configurator.h" line="14" column="1" bodyfile="include/ProjectInterface/Configurator.h" bodystart="15" bodyend="60"/>
     <listofallmembers>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ad23d4eb868eb568e8f918cfcf6b33c13" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>append_pretask_option</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>check_configuration</name></member>
@@ -403,6 +421,7 @@
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>interface_data</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>is_first_time_use</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9152587e17e4f652260cc004f1e6c1ca" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>is_option_applicable</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a7e476271182ce0cdea6977ebdf2a1825" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>is_task_applicable</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a15b75dd5e1e5de823dd0379056d0c6c2" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>kConfigPath</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac053d3b399c4ecd0aea20421a8558906" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>kInterfaceFilename</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>load</name></member>

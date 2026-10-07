@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.12.0" xml:lang="en-US">
+  <compounddef id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig" kind="struct" language="C++" prot="public">
+    <compoundname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</compoundname>
+    <includes refid="Types_8h" local="no">Types.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a35bea10e121367df3b2b932d8aa851b6" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::wlr_socket_path</definition>
+        <argsstring></argsstring>
+        <name>wlr_socket_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::wlr_socket_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="454" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="454" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::uinput_screen_width</definition>
+        <argsstring></argsstring>
+        <name>uinput_screen_width</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::uinput_screen_width</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="455" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="455" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::uinput_screen_height</definition>
+        <argsstring></argsstring>
+        <name>uinput_screen_height</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::uinput_screen_height</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="456" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="456" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::eis_socket_path</definition>
+        <argsstring></argsstring>
+        <name>eis_socket_path</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::eis_socket_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="457" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="457" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>eis_socket_path</edgelabel>
+          <edgelabel>wlr_socket_path</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ProjectInterface/Types.h" line="452" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="453" bodyend="460"/>
+    <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>eis_socket_path</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>uinput_screen_height</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>uinput_screen_width</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a35bea10e121367df3b2b932d8aa851b6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>wlr_socket_path</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

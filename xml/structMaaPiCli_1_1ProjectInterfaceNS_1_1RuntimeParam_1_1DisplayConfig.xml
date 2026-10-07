@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="501" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="501" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="520" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="520" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" static="no" mutable="no">
         <type>std::optional&lt; int &gt;</type>
@@ -30,7 +30,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="502" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="502" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="521" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="521" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1aaa219e2f720ce05fc73de6c774a0f02a" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; std::array&lt; int, 2 &gt; &gt;</type>
+        <definition>std::optional&lt;std::array&lt;int, 2&gt; &gt; MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::expand</definition>
+        <argsstring></argsstring>
+        <name>expand</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig::expand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="522" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="522" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -45,15 +59,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="503" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="503" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="523" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="523" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Types.h" line="499" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="500" bodyend="504"/>
+    <location file="include/ProjectInterface/Types.h" line="518" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="519" bodyend="524"/>
     <listofallmembers>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1aaa219e2f720ce05fc73de6c774a0f02a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>expand</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>long_side</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>raw</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1ac4d331818373557a146c48e6e49b1bec" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>short_side</name></member>

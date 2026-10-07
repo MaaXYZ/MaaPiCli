@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="519" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="519" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="539" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="539" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a0e4b5c5a289bf64044e83c4f1e521996" prot="public" static="no" mutable="no">
         <type>MaaWin32ScreencapMethod</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="520" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="520" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="540" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="540" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ae42e22c30738dbe532f9e1c6a77526f4" prot="public" static="no" mutable="no">
         <type>MaaWin32InputMethod</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="521" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="521" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="541" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="541" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ade7ec03c10d2a8402cb9ea8a3be74749" prot="public" static="no" mutable="no">
         <type>MaaWin32InputMethod</type>
@@ -62,14 +62,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="522" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="522" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="542" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="542" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Types.h" line="517" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="518" bodyend="523"/>
+    <location file="include/ProjectInterface/Types.h" line="537" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="538" bodyend="543"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a586a084f5467442e7a771086714fe4d3" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>hwnd</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ade7ec03c10d2a8402cb9ea8a3be74749" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Win32Param</scope><name>keyboard</name></member>

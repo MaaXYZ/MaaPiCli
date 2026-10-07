@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="43" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="43" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="46" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig_1add50ed995a6a7fe77c4bf14a57b1b010" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="44" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="44" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="47" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="47" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -55,7 +55,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="41" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="42" bodyend="47"/>
+    <location file="include/ProjectInterface/Types.h" line="44" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="45" bodyend="50"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig_1a5633c40b0bbb8b15aa6720abab8cc9f8" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::PlayCoverConfig</scope><name>address</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig_1add50ed995a6a7fe77c4bf14a57b1b010" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::PlayCoverConfig</scope><name>uuid</name></member>

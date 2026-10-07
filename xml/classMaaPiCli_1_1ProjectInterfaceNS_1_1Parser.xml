@@ -22,6 +22,24 @@
         </inbodydescription>
         <location file="include/ProjectInterface/Parser.h" line="20" column="9"/>
       </memberdef>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a69793ad364794b8f5671ad68d00730e9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>static std::vector&lt; std::string &gt; MaaPiCli::ProjectInterfaceNS::Parser::welcome_items</definition>
+        <argsstring>(const std::optional&lt; InterfaceData::Welcome &gt; &amp;welcome)</argsstring>
+        <name>welcome_items</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::welcome_items</qualifiedname>
+        <param>
+          <type>const std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a68db0a2021704430f506b51a63882ffc" kindref="member">InterfaceData::Welcome</ref> &gt; &amp;</type>
+          <declname>welcome</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Parser.h" line="22" column="24"/>
+      </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1ae77f21f4de589d2fd2410e24adca5810" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &gt;</type>
         <definition>static std::optional&lt; InterfaceData &gt; MaaPiCli::ProjectInterfaceNS::Parser::parse_interface</definition>
@@ -38,7 +56,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="22" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="24" column="26"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1abe6932f5e3695e0e62b5b8bbcdf4d38c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref> &gt;</type>
@@ -56,7 +74,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="23" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="25" column="26"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9062c100cb4e22c75ef55695535acd5f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &gt;</type>
@@ -74,7 +92,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="24" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="26" column="26"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9108bfd0733fdb1e61e7262a90813628" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &gt;</type>
@@ -92,7 +110,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="25" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="27" column="26"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9c6a5d62e475716e0be26ba728123b15" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -114,7 +132,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="27" column="17"/>
+        <location file="include/ProjectInterface/Parser.h" line="29" column="17"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a7836fad1a6651ecf3bfd034a434e2814" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData" kindref="compound">ImportData</ref> &gt;</type>
@@ -132,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="29" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="31" column="26"/>
       </memberdef>
       <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af516bf5275f379cc415286b9a567f022" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::optional&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData" kindref="compound">ImportData</ref> &gt;</type>
@@ -150,14 +168,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="30" column="26"/>
+        <location file="include/ProjectInterface/Parser.h" line="32" column="26"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-static-func">
-      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a39d40a828884877092f64ea935c9d2ec" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af9455dca49d7740ffce0f014605d4e73" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
         <definition>static bool MaaPiCli::ProjectInterfaceNS::Parser::check_task</definition>
-        <argsstring>(const InterfaceData &amp;data, Configuration::Task &amp;config_task)</argsstring>
+        <argsstring>(const InterfaceData &amp;data, const Configuration &amp;config, Configuration::Task &amp;config_task, bool &amp;changed)</argsstring>
         <name>check_task</name>
         <qualifiedname>MaaPiCli::ProjectInterfaceNS::Parser::check_task</qualifiedname>
         <param>
@@ -165,8 +183,16 @@
           <declname>data</declname>
         </param>
         <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
           <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kindref="compound">Configuration::Task</ref> &amp;</type>
           <declname>config_task</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>changed</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -174,17 +200,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Parser.h" line="33" column="17"/>
+        <location file="include/ProjectInterface/Parser.h" line="35" column="17"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Parser.h" line="16" column="1" bodyfile="include/ProjectInterface/Parser.h" bodystart="17" bodyend="34"/>
+    <location file="include/ProjectInterface/Parser.h" line="16" column="1" bodyfile="include/ProjectInterface/Parser.h" bodystart="17" bodyend="36"/>
     <listofallmembers>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9c6a5d62e475716e0be26ba728123b15" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>check_configuration</name></member>
-      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a39d40a828884877092f64ea935c9d2ec" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>check_task</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af9455dca49d7740ffce0f014605d4e73" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>check_task</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a029ba3a9089ef28ec80bc37c2d96abf7" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>flatten_pretask</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9062c100cb4e22c75ef55695535acd5f" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_config</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9108bfd0733fdb1e61e7262a90813628" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_config</name></member>
@@ -192,6 +218,7 @@
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af516bf5275f379cc415286b9a567f022" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_import_data</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1ae77f21f4de589d2fd2410e24adca5810" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_interface</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1abe6932f5e3695e0e62b5b8bbcdf4d38c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>parse_interface</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a69793ad364794b8f5671ad68d00730e9" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Parser</scope><name>welcome_items</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

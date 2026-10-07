@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.13.0</span>
+   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.13.1</span>
    </div>
    <div id="projectbrief">Command-line ProjectInterface client for MaaFramework</div>
   </td>
@@ -136,26 +136,27 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::optional&lt;RuntimeParam::Task&gt; generate_runtime_task(<span class="keyword">const</span> <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task.html">Configuration::Task</a>&amp; config_task) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">bool</span> is_option_applicable(<span class="keyword">const</span> <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option.html">InterfaceData::Option</a>&amp; opt) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">void</span> merge_option_overrides(<a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">RuntimeParam::Task</a>&amp; runtime_task, <span class="keyword">const</span> std::vector&lt;Configuration::Option&gt;&amp; config_options) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> append_pretask_option(</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">const</span> std::string&amp; option_name,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">Configuration::Pretask</a>&amp; config_pretask,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        json::object&amp; options,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        std::unordered_set&lt;std::string&gt;&amp; expanding) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> load_translations();</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    std::string detect_system_language() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    std::filesystem::path resource_dir_;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">InterfaceData</a> data_;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">bool</span> first_time_use_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> config_;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::unordered_map&lt;std::string, std::string&gt; translations_; <span class="comment">// 翻译表</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">bool</span> is_task_applicable(<span class="keyword">const</span> <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task.html">InterfaceData::Task</a>&amp; task) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">void</span> merge_option_overrides(<a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">RuntimeParam::Task</a>&amp; runtime_task, <span class="keyword">const</span> std::vector&lt;Configuration::Option&gt;&amp; config_options) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">bool</span> append_pretask_option(</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">const</span> std::string&amp; option_name,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">Configuration::Pretask</a>&amp; config_pretask,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        json::object&amp; options,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        std::unordered_set&lt;std::string&gt;&amp; expanding) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> load_translations();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    std::string detect_system_language() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    std::filesystem::path resource_dir_;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">InterfaceData</a> data_;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">bool</span> first_time_use_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> config_;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::unordered_map&lt;std::string, std::string&gt; translations_; <span class="comment">// 翻译表</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>};</div>
 </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><a class="code hl_define" href="Conf_8h.html#ad36fabf2cb6e023566cc44c41e8f8a3c">MAA_PROJECT_INTERFACE_NS_END</a></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><a class="code hl_define" href="Conf_8h.html#ad36fabf2cb6e023566cc44c41e8f8a3c">MAA_PROJECT_INTERFACE_NS_END</a></div>
 </div>
 <div class="ttc" id="aConf_8h_html"><div class="ttname"><a href="Conf_8h.html">Conf.h</a></div></div>
 <div class="ttc" id="aConf_8h_html_a1ad05088b35493ae047bc81861829b9d"><div class="ttname"><a href="Conf_8h.html#a1ad05088b35493ae047bc81861829b9d">MAA_PROJECT_INTERFACE_NS_BEGIN</a></div><div class="ttdeci">#define MAA_PROJECT_INTERFACE_NS_BEGIN</div><div class="ttdef"><b>Definition</b> Conf.h:6</div></div>
@@ -172,12 +173,13 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_abe05986adf8b5ad6fc5f05085ec82a23"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#abe05986adf8b5ad6fc5f05085ec82a23">MaaPiCli::ProjectInterfaceNS::Configurator::check_configuration</a></div><div class="ttdeci">bool check_configuration()</div></div>
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_ac06c2c1f3765dbc38cf1f67103b22fed"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#ac06c2c1f3765dbc38cf1f67103b22fed">MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir</a></div><div class="ttdeci">const auto &amp; resource_dir() const</div><div class="ttdef"><b>Definition</b> Configurator.h:34</div></div>
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_af6da949c79a372a934a3ef2a6fe367e2"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#af6da949c79a372a934a3ef2a6fe367e2">MaaPiCli::ProjectInterfaceNS::Configurator::configuration</a></div><div class="ttdeci">auto &amp; configuration()</div><div class="ttdef"><b>Definition</b> Configurator.h:30</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</a></div><div class="ttdef"><b>Definition</b> Types.h:375</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task.html">MaaPiCli::ProjectInterfaceNS::Configuration::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:458</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">MaaPiCli::ProjectInterfaceNS::Configuration</a></div><div class="ttdef"><b>Definition</b> Types.h:371</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option.html">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</a></div><div class="ttdef"><b>Definition</b> Types.h:160</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">MaaPiCli::ProjectInterfaceNS::InterfaceData</a></div><div class="ttdef"><b>Definition</b> Types.h:18</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:552</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</a></div><div class="ttdef"><b>Definition</b> Types.h:387</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task.html">MaaPiCli::ProjectInterfaceNS::Configuration::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:473</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">MaaPiCli::ProjectInterfaceNS::Configuration</a></div><div class="ttdef"><b>Definition</b> Types.h:383</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option.html">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</a></div><div class="ttdef"><b>Definition</b> Types.h:168</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task.html">MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:142</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">MaaPiCli::ProjectInterfaceNS::InterfaceData</a></div><div class="ttdef"><b>Definition</b> Types.h:19</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:578</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

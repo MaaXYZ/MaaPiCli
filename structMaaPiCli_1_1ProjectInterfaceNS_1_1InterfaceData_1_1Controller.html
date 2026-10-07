@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.13.0</span>
+   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.13.1</span>
    </div>
    <div id="projectbrief">Command-line ProjectInterface client for MaaFramework</div>
   </td>
@@ -104,13 +104,13 @@ $(function(){ initResizable(false); });
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1GamepadConfig.html">GamepadConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig.html">LinuxConfig</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1MacOSConfig.html">MacOSConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig.html">PlayCoverConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config.html">Win32Config</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig.html">WlRootsConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -123,7 +123,7 @@ Public Types</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="#ac94c85a98579e573f3d7a3774b6b7b19a95b02e9709f1b0222c97a98da50bd3f8">PlayCover</a>
 , <a class="el" href="#ac94c85a98579e573f3d7a3774b6b7b19a221f6781b4faa2d321ca0d928f518d6e">Gamepad</a>
-, <a class="el" href="#ac94c85a98579e573f3d7a3774b6b7b19aa977d570b1d22aad86057c6b3758fe41">WlRoots</a>
+, <a class="el" href="#ac94c85a98579e573f3d7a3774b6b7b19aedc9f0a5a5d57797bf68e37364743831">Linux</a>
 <br />
  }</td></tr>
 <tr class="separator:ac94c85a98579e573f3d7a3774b6b7b19"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +144,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a15ee8c9b6b3790cb36ee9bd81d8d3a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cb39da39c8828817b59538f1d5d312b" id="r_a9cb39da39c8828817b59538f1d5d312b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cb39da39c8828817b59538f1d5d312b">display_long_side</a></td></tr>
 <tr class="separator:a9cb39da39c8828817b59538f1d5d312b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae95484828926935483b8a6a6d666ae41" id="r_ae95484828926935483b8a6a6d666ae41"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::array&lt; int, 2 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae95484828926935483b8a6a6d666ae41">display_expand</a></td></tr>
+<tr class="separator:ae95484828926935483b8a6a6d666ae41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2ba053780c907b8d102a6ba5beada30" id="r_aa2ba053780c907b8d102a6ba5beada30"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2ba053780c907b8d102a6ba5beada30">display_raw</a> = false</td></tr>
 <tr class="separator:aa2ba053780c907b8d102a6ba5beada30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a051da379edb2ad110b8c015ee2fe9eee" id="r_a051da379edb2ad110b8c015ee2fe9eee"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a051da379edb2ad110b8c015ee2fe9eee">attach_resource_path</a></td></tr>
@@ -158,8 +160,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a3cc7c88c7b3f0b174e92dbcfe8fa2142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b13388c2834df1629081b5d7c99e4cf" id="r_a2b13388c2834df1629081b5d7c99e4cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1GamepadConfig.html">GamepadConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b13388c2834df1629081b5d7c99e4cf">gamepad</a></td></tr>
 <tr class="separator:a2b13388c2834df1629081b5d7c99e4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab89819451841561a2a64ba768f602cec" id="r_ab89819451841561a2a64ba768f602cec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig.html">WlRootsConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab89819451841561a2a64ba768f602cec">wlroots</a></td></tr>
-<tr class="separator:ab89819451841561a2a64ba768f602cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ff17e14b7ffb0b607737276c5e024a6" id="r_a9ff17e14b7ffb0b607737276c5e024a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig.html">LinuxConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ff17e14b7ffb0b607737276c5e024a6">lnx</a></td></tr>
+<tr class="separator:a9ff17e14b7ffb0b607737276c5e024a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ac94c85a98579e573f3d7a3774b6b7b19" name="ac94c85a98579e573f3d7a3774b6b7b19"></a>
@@ -188,7 +190,7 @@ Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="ac94c85a98579e573f3d7a3774b6b7b19a0a5b7edb55b772c60bfa8af868b679cf" name="ac94c85a98579e573f3d7a3774b6b7b19a0a5b7edb55b772c60bfa8af868b679cf"></a>MacOS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac94c85a98579e573f3d7a3774b6b7b19a95b02e9709f1b0222c97a98da50bd3f8" name="ac94c85a98579e573f3d7a3774b6b7b19a95b02e9709f1b0222c97a98da50bd3f8"></a>PlayCover&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac94c85a98579e573f3d7a3774b6b7b19a221f6781b4faa2d321ca0d928f518d6e" name="ac94c85a98579e573f3d7a3774b6b7b19a221f6781b4faa2d321ca0d928f518d6e"></a>Gamepad&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ac94c85a98579e573f3d7a3774b6b7b19aa977d570b1d22aad86057c6b3758fe41" name="ac94c85a98579e573f3d7a3774b6b7b19aa977d570b1d22aad86057c6b3758fe41"></a>WlRoots&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac94c85a98579e573f3d7a3774b6b7b19aedc9f0a5a5d57797bf68e37364743831" name="ac94c85a98579e573f3d7a3774b6b7b19aedc9f0a5a5d57797bf68e37364743831"></a>Linux&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -286,6 +288,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt;int&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::display_long_side</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae95484828926935483b8a6a6d666ae41" name="ae95484828926935483b8a6a6d666ae41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae95484828926935483b8a6a6d666ae41">&#9670;&#160;</a></span>display_expand</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::array&lt;int, 2&gt; &gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::display_expand</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -390,14 +406,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab89819451841561a2a64ba768f602cec" name="ab89819451841561a2a64ba768f602cec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab89819451841561a2a64ba768f602cec">&#9670;&#160;</a></span>wlroots</h2>
+<a id="a9ff17e14b7ffb0b607737276c5e024a6" name="a9ff17e14b7ffb0b607737276c5e024a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ff17e14b7ffb0b607737276c5e024a6">&#9670;&#160;</a></span>lnx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig.html">WlRootsConfig</a> MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::wlroots</td>
+          <td class="memname"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig.html">LinuxConfig</a> MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::lnx</td>
         </tr>
       </table>
 </div><div class="memdoc">

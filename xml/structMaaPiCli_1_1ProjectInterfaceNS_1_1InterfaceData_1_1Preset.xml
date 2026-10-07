@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="298" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="298" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="310" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="310" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a0d82aa9832c11c16ba9413395d224c25" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="299" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="299" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="311" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="311" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a147e5f89bee06df3326dac0d3b02d777" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="300" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="300" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="312" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="312" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a9253c6b262e32b2b42d49222074df785" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="301" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="301" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="313" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="313" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a78387ea11a7fb52e218e8a3bd171f62f" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask" kindref="compound">PresetTask</ref> &gt;</type>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="302" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="302" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="314" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="314" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -116,7 +116,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="287" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="288" bodyend="305"/>
+    <location file="include/ProjectInterface/Types.h" line="299" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="300" bodyend="317"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a147e5f89bee06df3326dac0d3b02d777" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>description</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a9253c6b262e32b2b42d49222074df785" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</scope><name>icon</name></member>

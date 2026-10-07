@@ -40,13 +40,15 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a5a81a5ff72ed8f2ffdc139fa65162072" kind="variable"><name>macos</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a009abe147ae6109a551629d93e9ceb24" kind="variable"><name>playcover</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1ac27717b5062a027c538e1edece185699" kind="variable"><name>gamepad</name></member>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a597929921303a2dea112a5187274edfa" kind="variable"><name>wlroots</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a79d21897673d2626abe0528e8d1775e5" kind="variable"><name>lnx</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a313e08ccc3a4d7584dacc44bcd1a6018" kind="variable"><name>resource</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a5a3670be62cf9c99fa80904ed06a3c50" kind="variable"><name>task</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a1776d2649a5fdebdd988ebd1a09ca0dd" kind="variable"><name>global_option</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a08f4c8ff9566fbf805c9e1f801c523da" kind="variable"><name>resource_option</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a659f473deae03f97db27d78253a0c147" kind="variable"><name>controller_option</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a84b453403ed4eb225a99cb97496f9af8" kind="variable"><name>pretask</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1aeeab695e0973d55484ecbe1052f067eb" kind="variable"><name>last_welcome</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a9f406e8825412bb554b04af5ebc54f36" kind="variable"><name>last_resolved_welcome</name></member>
   </compound>
   <compound refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" kind="class"><name>MaaPiCli::ProjectInterfaceNS::Configurator</name>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac053d3b399c4ecd0aea20421a8558906" kind="variable"><name>kInterfaceFilename</name></member>
@@ -68,6 +70,7 @@
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" kind="function"><name>translate</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a2827311de4f89db9ccdfd9b588764cba" kind="function"><name>generate_runtime_task</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9152587e17e4f652260cc004f1e6c1ca" kind="function"><name>is_option_applicable</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a7e476271182ce0cdea6977ebdf2a1825" kind="function"><name>is_task_applicable</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" kind="function"><name>merge_option_overrides</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ad23d4eb868eb568e8f918cfcf6b33c13" kind="function"><name>append_pretask_option</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5599e23f7350c742fe0a36a4176cd8b4" kind="function"><name>load_translations</name></member>
@@ -85,7 +88,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19a0a5b7edb55b772c60bfa8af868b679cf" kind="enumvalue"><name>MacOS</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19a95b02e9709f1b0222c97a98da50bd3f8" kind="enumvalue"><name>PlayCover</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19a221f6781b4faa2d321ca0d928f518d6e" kind="enumvalue"><name>Gamepad</name></member>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19aa977d570b1d22aad86057c6b3758fe41" kind="enumvalue"><name>WlRoots</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19aedc9f0a5a5d57797bf68e37364743831" kind="enumvalue"><name>Linux</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a76f73ad5021c6a1a3199520036b3b3a4" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a1d34b51b847a2c13258dad6089c3541a" kind="variable"><name>label</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1abbc2a95410c9203d8588cd065469bed5" kind="variable"><name>description</name></member>
@@ -93,6 +96,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1add2f092049154ae042a884473eb2c709" kind="variable"><name>permission_required</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a15ee8c9b6b3790cb36ee9bd81d8d3a4d" kind="variable"><name>display_short_side</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a9cb39da39c8828817b59538f1d5d312b" kind="variable"><name>display_long_side</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ae95484828926935483b8a6a6d666ae41" kind="variable"><name>display_expand</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1aa2ba053780c907b8d102a6ba5beada30" kind="variable"><name>display_raw</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a051da379edb2ad110b8c015ee2fe9eee" kind="variable"><name>attach_resource_path</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a3da1b9083cc58993e4f2e172e284dec5" kind="variable"><name>option</name></member>
@@ -100,11 +104,12 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a67d9bb00de44225be31a282e07d31f59" kind="variable"><name>macos</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a3cc7c88c7b3f0b174e92dbcfe8fa2142" kind="variable"><name>playcover</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a2b13388c2834df1629081b5d7c99e4cf" kind="variable"><name>gamepad</name></member>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ab89819451841561a2a64ba768f602cec" kind="variable"><name>wlroots</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1a9ff17e14b7ffb0b607737276c5e024a6" kind="variable"><name>lnx</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1ac4d331818373557a146c48e6e49b1bec" kind="variable"><name>short_side</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" kind="variable"><name>long_side</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1aaa219e2f720ce05fc73de6c774a0f02a" kind="variable"><name>expand</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" kind="variable"><name>raw</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</name>
@@ -156,13 +161,14 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a0d50ca890e329a192038835d8809f9b0" kind="variable"><name>password</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a68db0a2021704430f506b51a63882ffc" kind="typedef"><name>Welcome</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a3165777da8e2cebeb947d16789ebad99" kind="variable"><name>interface_version</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1ab103502f501066ce4210fc29c5e9d324" kind="variable"><name>languages</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a2131679db7b519e57410b7274814db5c" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a28b74817ba9487d80a0ddd7b006a2f8f" kind="variable"><name>label</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a7994dbc9fe1490c1e2fec837fbf3f1c7" kind="variable"><name>title</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a75c13e9b2f72db5a52135a7a0de2707d" kind="variable"><name>version</name></member>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1af3bd6910ed184238f8edfc26f036c3b6" kind="variable"><name>welcome</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1aaf4865a7414d37ea4d705757e2e809ab" kind="variable"><name>welcome</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1aa5500f40f76526fe2ea099909c33173b" kind="variable"><name>description</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1ade067580acbbb049cad2ebba49bd59b1" kind="variable"><name>contact</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1adae6a90046563b3f54ac91033a76b320" kind="variable"><name>license</name></member>
@@ -178,6 +184,28 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a2ba1762c9c80e5a3d0bf28a39c0e7c06" kind="variable"><name>preset</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1ae0a69b67625113304d945f8f08224748" kind="variable"><name>setting</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1a0996a3d1580056268509e0888af913c7" kind="variable"><name>import_</name></member>
+  </compound>
+  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a35bea10e121367df3b2b932d8aa851b6" kind="variable"><name>wlr_socket_path</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" kind="variable"><name>uinput_screen_width</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" kind="variable"><name>uinput_screen_height</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" kind="variable"><name>eis_socket_path</name></member>
+  </compound>
+  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::LinuxConfig</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig_1a1001afd7efb7bd558d60da62e8daf4c9" kind="variable"><name>screencap</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig_1a7c2951dd93af25dcc2b97f03aad5e3f0" kind="variable"><name>input</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig_1a67736bd5b8684b3d798d8ebc68a42adc" kind="variable"><name>use_win32_vk_code</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig_1af6a698b8a49016f4bf65e6e2bf9b68df" kind="variable"><name>pipewire_source</name></member>
+  </compound>
+  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::RuntimeParam::LinuxParam</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a07a9b3d5c3b0d381d5f90261d2b9a809" kind="variable"><name>screencap</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ae179fca20cf093a6251719e9ed186da1" kind="variable"><name>input</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ac017e707e0fa6670d95f1c6561c9701d" kind="variable"><name>pipewire_source</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a2a94fe991d2e1bf971c21422053dfc76" kind="variable"><name>wlr_socket_path</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a676598c1e276d8a13ca1c1a2cb626315" kind="variable"><name>uinput_screen_width</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ac357b7bceba794ec5cec03685cffb1bc" kind="variable"><name>uinput_screen_height</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a4790f1214ba621dbedf380573a8ffe49" kind="variable"><name>eis_socket_path</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a5d187e1f80c4754e91ff3009e1e4d67d" kind="variable"><name>use_win32_vk_code</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ac3aa50c4883e527f07515f5508b90245" kind="variable"><name>window_id</name></member>
@@ -216,9 +244,12 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1addeb8dacf8dba6ad34bac9d116059c02" kind="variable"><name>inputs</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a2947bae9e35d66f5e8145e1e2a2d7b3b" kind="variable"><name>pipeline_override</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1aba4ec8921a566781e9660fdf1c2a0eb5" kind="variable"><name>default_case</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a1ecda45c328febc3f730901e12c95130" kind="variable"><name>min_count</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a070b87364d6c2f9749dc59409b570c7d" kind="variable"><name>max_count</name></member>
   </compound>
   <compound refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser" kind="class"><name>MaaPiCli::ProjectInterfaceNS::Parser</name>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a029ba3a9089ef28ec80bc37c2d96abf7" kind="function"><name>flatten_pretask</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a69793ad364794b8f5671ad68d00730e9" kind="function"><name>welcome_items</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1ae77f21f4de589d2fd2410e24adca5810" kind="function"><name>parse_interface</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1abe6932f5e3695e0e62b5b8bbcdf4d38c" kind="function"><name>parse_interface</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9062c100cb4e22c75ef55695535acd5f" kind="function"><name>parse_config</name></member>
@@ -226,7 +257,7 @@
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a9c6a5d62e475716e0be26ba728123b15" kind="function"><name>check_configuration</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a7836fad1a6651ecf3bfd034a434e2814" kind="function"><name>parse_import_data</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af516bf5275f379cc415286b9a567f022" kind="function"><name>parse_import_data</name></member>
-    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1a39d40a828884877092f64ea935c9d2ec" kind="function"><name>check_task</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser_1af9455dca49d7740ffce0f014605d4e73" kind="function"><name>check_task</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::PlayCoverConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig_1ae5ff614997b8cdde6a6f6263c4603d53" kind="variable"><name>address</name></member>
@@ -287,7 +318,7 @@
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner_1a25d2d68fc9eee99160f54a8b3885b40c" kind="function"><name>run</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::RuntimeParam</name>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac572eac5ed9ea344f29c647ded27486d" kind="variable"><name>controller_param</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a2f165d86af0b9787f8c519099da5785c" kind="variable"><name>controller_param</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac2a3295d06337608d0190081896ba343" kind="variable"><name>resource_path</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a199fc1db60338e2a8df159bc6dd6dbc2" kind="variable"><name>primary_resource_count</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a83b52eaaea5e85ffbc5d4f52579a3fd2" kind="variable"><name>resource_hash</name></member>
@@ -343,16 +374,6 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1a0e4b5c5a289bf64044e83c4f1e521996" kind="variable"><name>screencap</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ae42e22c30738dbe532f9e1c6a77526f4" kind="variable"><name>mouse</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Win32Param_1ade7ec03c10d2a8402cb9ea8a3be74749" kind="variable"><name>keyboard</name></member>
-  </compound>
-  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::WlRootsConfig</name>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1WlRootsConfig_1a4dac19d00fdf04448d1990582b4ac745" kind="variable"><name>wlr_socket_path</name></member>
-  </compound>
-  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::WlRootsConfig</name>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1WlRootsConfig_1abfc7514913665bd9bd0eb3458df808be" kind="variable"><name>use_win32_vk_code</name></member>
-  </compound>
-  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::RuntimeParam::WlRootsParam</name>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam_1ae3d4cffe99ab2bb6c38c5d798798dbc4" kind="variable"><name>wlr_socket_path</name></member>
-    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1WlRootsParam_1a1ce1097e2de465e02de9cf3cc0c80e68" kind="variable"><name>use_win32_vk_code</name></member>
   </compound>
   <compound refid="namespaceMaaPiCli" kind="namespace"><name>MaaPiCli</name>
   </compound>
