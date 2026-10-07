@@ -549,8 +549,8 @@ bool Interactor::show_welcome_if_changed()
     const auto declared_welcome = Parser::welcome_items(config_.interface_data().welcome);
     if (declared_welcome.empty()) {
         auto& config = config_.configuration();
-        config.last_welcome.reset();
-        config.last_resolved_welcome.reset();
+        config.last_welcome.clear();
+        config.last_resolved_welcome.clear();
         return false;
     }
 
