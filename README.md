@@ -24,7 +24,7 @@ cmake --build build --config RelWithDebInfo -j 16
 
 MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入、v2.10.1 的 `checkbox` 数量限制和 v2.10.2 的多条 `welcome` 公告。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
 
-`maafw-version.txt` 当前锁定的 MaaFramework `v5.14.1` 文档定义到 PI v2.10.2。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
+`maafw-version.txt` 当前锁定的 MaaFramework `v5.14.2` 文档定义到 PI v2.10.2。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
 
 | PI 版本 | 协议新增/变更 | MaaPiCli 状态 |
 |---------|----------------|--------------|
