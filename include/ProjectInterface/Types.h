@@ -487,9 +487,9 @@ struct Configuration
     std::string resource;
     std::vector<Task> task;
 
-    std::vector<Option> global_option;                             // v2.3.0
-    std::vector<Option> resource_option;                           // v2.3.0
-    std::vector<Option> controller_option;                         // v2.3.0
+    std::vector<Option> global_option;              // v2.3.0
+    std::vector<Option> resource_option;            // v2.3.0
+    std::vector<Option> controller_option;          // v2.3.0
     std::vector<Pretask> pretask;
     std::vector<std::string> last_welcome;          // v2.10.2; empty means no snapshot
     std::vector<std::string> last_resolved_welcome; // v2.10.2; empty means no snapshot
