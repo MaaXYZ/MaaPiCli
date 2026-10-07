@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="404" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="404" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="408" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="408" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a326dc16b6e538935e146475e968a7d2b" prot="public" static="no" mutable="no">
         <type>std::wstring</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="405" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="405" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="409" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="409" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a252e467a3828086125ca59939996122c" prot="public" static="no" mutable="no">
         <type>std::wstring</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="406" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="406" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="410" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="410" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a0dafdf8ec863ae9db072c86c4e75e907" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -60,7 +60,26 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="408" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="408" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="412" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="412" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1ae96e3073c6cba15a4a41e7b415e5b54e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config::operator==</definition>
+        <argsstring>(const Win32Config &amp;) const =default</argsstring>
+        <name>operator==</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config" kindref="compound">Win32Config</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="414" column="14"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -85,11 +104,12 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="402" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="403" bodyend="411"/>
+    <location file="include/ProjectInterface/Types.h" line="406" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="407" bodyend="417"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a0dafdf8ec863ae9db072c86c4e75e907" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config</scope><name>_placeholder</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a326dc16b6e538935e146475e968a7d2b" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config</scope><name>class_name</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1af365d129cbf383a54de38ff43fd58c9f" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config</scope><name>hwnd</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1ae96e3073c6cba15a4a41e7b415e5b54e" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config</scope><name>operator==</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a252e467a3828086125ca59939996122c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Win32Config</scope><name>window_name</name></member>
     </listofallmembers>
   </compounddef>

@@ -33,6 +33,25 @@
         <location file="include/ProjectInterface/Types.h" line="389" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="389" bodyend="-1"/>
       </memberdef>
     </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1aba59dde83a0aded9a647c143ca99128b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configuration::Pretask::operator==</definition>
+        <argsstring>(const Pretask &amp;) const =default</argsstring>
+        <name>operator==</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::Pretask::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask" kindref="compound">Pretask</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="391" column="14"/>
+      </memberdef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -90,9 +109,10 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="386" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="387" bodyend="392"/>
+    <location file="include/ProjectInterface/Types.h" line="386" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="387" bodyend="394"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1a55d541d09036ee67c740d26f570047d2" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</scope><name>name</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1aba59dde83a0aded9a647c143ca99128b" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</scope><name>operator==</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1a4c3b682e8b4581022e81e79b98aeb9e3" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</scope><name>option</name></member>
     </listofallmembers>
   </compounddef>

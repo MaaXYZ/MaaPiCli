@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['welcome_5fitems_0',['welcome_items',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#a69793ad364794b8f5671ad68d00730e9',1,'MaaPiCli::ProjectInterfaceNS::Parser']]]
+  ['translate_0',['translate',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#a5c53d9bdec86ee71f49dbb10574dc2b9',1,'MaaPiCli::ProjectInterfaceNS::Configurator']]]
 ];

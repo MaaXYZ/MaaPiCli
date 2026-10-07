@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="586" column="31" bodyfile="include/ProjectInterface/Types.h" bodystart="586" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="606" column="31" bodyfile="include/ProjectInterface/Types.h" bodystart="606" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a5860912d3a55571c6fa83c38327bac72" prot="public" static="no" mutable="no">
         <type>std::vector&lt; std::string &gt;</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="587" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="587" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="607" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="607" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a764c66c13ceb77d17c3aca9465ea6a5b" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="588" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="588" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="608" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="608" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a60f3bc1818800f473ab6e11499a74c59" prot="public" static="no" mutable="no">
         <type>std::filesystem::path</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="589" column="31" bodyfile="include/ProjectInterface/Types.h" bodystart="589" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="609" column="31" bodyfile="include/ProjectInterface/Types.h" bodystart="609" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a740009594c93429e9b8fa76a90557fdd" prot="public" static="no" mutable="no">
         <type>std::unordered_map&lt; std::string, std::string &gt;</type>
@@ -72,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="590" column="28" bodyfile="include/ProjectInterface/Types.h" bodystart="590" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="610" column="28" bodyfile="include/ProjectInterface/Types.h" bodystart="610" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -115,7 +115,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="584" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="585" bodyend="591"/>
+    <location file="include/ProjectInterface/Types.h" line="604" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="605" bodyend="611"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a5860912d3a55571c6fa83c38327bac72" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Agent</scope><name>child_args</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent_1a650bcf0e5a9d4ec303c32108e4d39929" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::Agent</scope><name>child_exec</name></member>

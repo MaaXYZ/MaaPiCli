@@ -26,7 +26,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="601" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="601" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="621" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="621" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1ac2a3295d06337608d0190081896ba343" prot="public" static="no" mutable="no">
         <type>std::vector&lt; std::filesystem::path &gt;</type>
@@ -40,7 +40,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="602" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="602" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="622" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="622" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a199fc1db60338e2a8df159bc6dd6dbc2" prot="public" static="no" mutable="no">
         <type>size_t</type>
@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="603" column="12" bodyfile="include/ProjectInterface/Types.h" bodystart="603" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="623" column="12" bodyfile="include/ProjectInterface/Types.h" bodystart="623" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a83b52eaaea5e85ffbc5d4f52579a3fd2" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -69,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="604" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="604" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="624" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="624" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1afefb81975836aecf16b3999cbadf8f4e" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">Task</ref> &gt;</type>
@@ -83,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="606" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="606" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="626" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="626" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a8c8652ec16b160bdc60144e5203425d9" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Pretask" kindref="compound">Pretask</ref> &gt;</type>
@@ -97,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="607" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="607" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="627" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="627" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1aef682f5e1d4730e3128841625ec1b8f8" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Agent" kindref="compound">Agent</ref> &gt;</type>
@@ -111,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="609" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="609" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="629" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="629" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1abd6c44aca5c37f6c9a19aa5dce9decd4" prot="public" static="no" mutable="no">
         <type><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig" kindref="compound">DisplayConfig</ref></type>
@@ -125,7 +125,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="610" column="19" bodyfile="include/ProjectInterface/Types.h" bodystart="610" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="630" column="19" bodyfile="include/ProjectInterface/Types.h" bodystart="630" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -233,7 +233,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="515" column="1" bodyfile="include/ProjectInterface/Types.h" bodystart="516" bodyend="611"/>
+    <location file="include/ProjectInterface/Types.h" line="535" column="1" bodyfile="include/ProjectInterface/Types.h" bodystart="536" bodyend="631"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1aef682f5e1d4730e3128841625ec1b8f8" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>agent</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1a2f165d86af0b9787f8c519099da5785c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam</scope><name>controller_param</name></member>

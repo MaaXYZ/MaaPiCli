@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="442" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="442" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="454" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="454" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a4fe93609c6f6f90ccd52794682fb66c3" prot="public" static="no" mutable="no">
         <type>std::wstring</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="443" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="443" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="455" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="455" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a529d0ce4feb8d4c5c7bcc60937ae2dbf" prot="public" static="no" mutable="no">
         <type>std::wstring</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="444" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="444" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="456" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="456" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a1ea1d916321ba48068eb8e87aa4a506a" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="445" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="445" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="457" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="457" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a45eacf01b7d061ffe1df1e6527dd2dac" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -74,7 +74,26 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="447" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="447" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="459" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="459" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1ad7f9fbcbc02412e6d15a1d87b216a8e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig::operator==</definition>
+        <argsstring>(const GamepadConfig &amp;) const =default</argsstring>
+        <name>operator==</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig" kindref="compound">GamepadConfig</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="461" column="14"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -110,12 +129,13 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="440" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="441" bodyend="450"/>
+    <location file="include/ProjectInterface/Types.h" line="452" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="453" bodyend="464"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a45eacf01b7d061ffe1df1e6527dd2dac" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>_placeholder</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a4fe93609c6f6f90ccd52794682fb66c3" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>class_name</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a1ea1d916321ba48068eb8e87aa4a506a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>gamepad_type</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a3dd4427b8a211c7acede6cd4a1bc90cb" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>hwnd</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1ad7f9fbcbc02412e6d15a1d87b216a8e6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>operator==</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a529d0ce4feb8d4c5c7bcc60937ae2dbf" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::GamepadConfig</scope><name>window_name</name></member>
     </listofallmembers>
   </compounddef>

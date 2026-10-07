@@ -6,6 +6,7 @@
     <includes local="no">optional</includes>
     <includes local="no">string_view</includes>
     <includes local="no">unordered_set</includes>
+    <includes local="no">vector</includes>
     <includes refid="Types_8h" local="yes">Types.h</includes>
     <includes refid="Conf_8h" local="yes">ProjectInterface/Conf.h</includes>
     <incdepgraph>
@@ -28,25 +29,27 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
         <childnode refid="14" relation="include">
         </childnode>
       </node>
-      <node id="6">
+      <node id="7">
         <label>Types.h</label>
         <link refid="Types_8h"/>
-        <childnode refid="7" relation="include">
+        <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="2" relation="include">
         </childnode>
         <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
         <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
         </childnode>
         <childnode refid="12" relation="include">
         </childnode>
@@ -61,7 +64,7 @@
       <node id="15">
         <label>MaaUtils/Conf.h</label>
       </node>
-      <node id="7">
+      <node id="8">
         <label>array</label>
       </node>
       <node id="2">
@@ -73,22 +76,22 @@
       <node id="3">
         <label>optional</label>
       </node>
-      <node id="8">
+      <node id="9">
         <label>string</label>
       </node>
       <node id="4">
         <label>string_view</label>
       </node>
-      <node id="9">
+      <node id="10">
         <label>unordered_map</label>
       </node>
       <node id="5">
         <label>unordered_set</label>
       </node>
-      <node id="10">
+      <node id="11">
         <label>variant</label>
       </node>
-      <node id="11">
+      <node id="6">
         <label>vector</label>
       </node>
     </incdepgraph>
@@ -106,62 +109,68 @@
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;optional&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string_view&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;unordered_set&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight></codeline>
-<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Types_8h" kindref="compound">Types.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight></codeline>
-<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Conf_8h" kindref="compound">ProjectInterface/Conf.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="11"><highlight class="normal"></highlight></codeline>
-<codeline lineno="12" refid="namespaceMaaPiCli" refkind="compound"><highlight class="normal"><ref refid="Conf_8h_1a1ad05088b35493ae047bc81861829b9d" kindref="member">MAA_PROJECT_INTERFACE_NS_BEGIN</ref></highlight></codeline>
-<codeline lineno="13"><highlight class="normal"></highlight></codeline>
-<codeline lineno="14" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" kindref="compound">Configurator</ref></highlight></codeline>
-<codeline lineno="15"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::string_view<sp/>kInterfaceFilename<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;interface.json&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::string_view<sp/>kConfigPath<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;config/maa_pi_config.json&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"></highlight></codeline>
-<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="20" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" kindref="member">load</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>project_dir,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>user_dir);</highlight></codeline>
-<codeline lineno="21" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" kindref="member">check_configuration</ref>();</highlight></codeline>
-<codeline lineno="22" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" kindref="member">save</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>user_dir);</highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight></codeline>
-<codeline lineno="24" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;RuntimeParam&gt;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" kindref="member">generate_runtime</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight></codeline>
-<codeline lineno="26" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" kindref="member">interface_data</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>data_;<sp/>}</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight></codeline>
-<codeline lineno="28" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" kindref="member">configuration</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config_;<sp/>}</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="30" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" kindref="member">configuration</ref>()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config_;<sp/>}</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight></codeline>
-<codeline lineno="32" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" kindref="member">is_first_time_use</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>first_time_use_;<sp/>}</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight></codeline>
-<codeline lineno="34" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" kindref="member">resource_dir</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>resource_dir_;<sp/>}</highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>国际化文本翻译：如果文本以<sp/>$<sp/>开头，则从翻译表中查找</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="37" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" kindref="member">translate</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Types_8h" kindref="compound">Types.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Conf_8h" kindref="compound">ProjectInterface/Conf.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="namespaceMaaPiCli" refkind="compound"><highlight class="normal"><ref refid="Conf_8h_1a1ad05088b35493ae047bc81861829b9d" kindref="member">MAA_PROJECT_INTERFACE_NS_BEGIN</ref></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator" kindref="compound">Configurator</ref></highlight></codeline>
+<codeline lineno="16"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::string_view<sp/>kInterfaceFilename<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;interface.json&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::string_view<sp/>kConfigPath<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;config/maa_pi_config.json&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="21" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" kindref="member">load</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>project_dir,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>user_dir);</highlight></codeline>
+<codeline lineno="22" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" kindref="member">check_configuration</ref>();</highlight></codeline>
+<codeline lineno="23" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" kindref="member">save</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>user_dir);</highlight></codeline>
+<codeline lineno="24" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1acb365a63dd97c194bd254f4d8f5ba479" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;bool&gt;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1acb365a63dd97c194bd254f4d8f5ba479" kindref="member">update_welcome_snapshots</ref>(</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>user_dir,</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::string&gt;<sp/>declared,</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::string&gt;<sp/>resolved);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;RuntimeParam&gt;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" kindref="member">generate_runtime</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" kindref="member">interface_data</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>data_;<sp/>}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" kindref="member">configuration</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config_;<sp/>}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af6da949c79a372a934a3ef2a6fe367e2" kindref="member">configuration</ref>()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config_;<sp/>}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a6a8d3e108e503ba74da38e30aa9ab2f0" kindref="member">is_first_time_use</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>first_time_use_;<sp/>}</highlight></codeline>
 <codeline lineno="38"><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;RuntimeParam::Task&gt;<sp/>generate_runtime_task(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kindref="compound">Configuration::Task</ref>&amp;<sp/>config_task)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"></highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_option_applicable(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option" kindref="compound">InterfaceData::Option</ref>&amp;<sp/>opt)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_task_applicable(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task" kindref="compound">InterfaceData::Task</ref>&amp;<sp/>task)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>merge_option_overrides(<ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">RuntimeParam::Task</ref>&amp;<sp/>runtime_task,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Configuration::Option&gt;&amp;<sp/>config_options)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>append_pretask_option(</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>option_name,</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask" kindref="compound">Configuration::Pretask</ref>&amp;<sp/>config_pretask,</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>json::object&amp;<sp/>options,</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::unordered_set&lt;std::string&gt;&amp;<sp/>expanding)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"></highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>load_translations();</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/>detect_system_language()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"></highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>resource_dir_;</highlight></codeline>
+<codeline lineno="39" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" kindref="member">resource_dir</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>resource_dir_;<sp/>}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>国际化文本翻译：如果文本以<sp/>$<sp/>开头，则从翻译表中查找</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42" refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5c53d9bdec86ee71f49dbb10574dc2b9" kindref="member">translate</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>text)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;RuntimeParam::Task&gt;<sp/>generate_runtime_task(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kindref="compound">Configuration::Task</ref>&amp;<sp/>config_task)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_option_applicable(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option" kindref="compound">InterfaceData::Option</ref>&amp;<sp/>opt)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_task_applicable(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task" kindref="compound">InterfaceData::Task</ref>&amp;<sp/>task)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>merge_option_overrides(<ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task" kindref="compound">RuntimeParam::Task</ref>&amp;<sp/>runtime_task,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Configuration::Option&gt;&amp;<sp/>config_options)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>append_pretask_option(</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>option_name,</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask" kindref="compound">Configuration::Pretask</ref>&amp;<sp/>config_pretask,</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>json::object&amp;<sp/>options,</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::unordered_set&lt;std::string&gt;&amp;<sp/>expanding)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="55"><highlight class="normal"></highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref><sp/>data_;</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>first_time_use_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>config_;</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unordered_map&lt;std::string,<sp/>std::string&gt;<sp/>translations_;<sp/></highlight><highlight class="comment">//<sp/>翻译表</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="60"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"></highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><ref refid="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" kindref="member">MAA_PROJECT_INTERFACE_NS_END</ref></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>load_translations();</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/>detect_system_language()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>resource_dir_;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref><sp/>data_;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>first_time_use_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>config_;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>loaded_config_;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Decrypted<sp/>state<sp/>used<sp/>to<sp/>identify<sp/>local<sp/>edits.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unordered_map&lt;std::string,<sp/>std::string&gt;<sp/>translations_;<sp/></highlight><highlight class="comment">//<sp/>翻译表</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><ref refid="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" kindref="member">MAA_PROJECT_INTERFACE_NS_END</ref></highlight></codeline>
     </programlisting>
     <location file="include/ProjectInterface/Configurator.h"/>
   </compounddef>

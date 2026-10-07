@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="567" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="567" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="587" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="587" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ae179fca20cf093a6251719e9ed186da1" prot="public" static="no" mutable="no">
         <type>MaaLinuxInputMethod</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="568" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="568" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="588" column="29" bodyfile="include/ProjectInterface/Types.h" bodystart="588" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ac017e707e0fa6670d95f1c6561c9701d" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="569" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="569" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="589" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="589" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a2a94fe991d2e1bf971c21422053dfc76" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="570" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="570" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="590" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="590" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a676598c1e276d8a13ca1c1a2cb626315" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="571" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="571" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="591" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="591" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ac357b7bceba794ec5cec03685cffb1bc" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="572" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="572" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="592" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="592" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a4790f1214ba621dbedf380573a8ffe49" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -105,7 +105,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="573" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="573" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="593" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="593" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a5d187e1f80c4754e91ff3009e1e4d67d" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -120,7 +120,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="574" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="574" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="594" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="594" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -146,7 +146,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="565" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="566" bodyend="575"/>
+    <location file="include/ProjectInterface/Types.h" line="585" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="586" bodyend="595"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1a4790f1214ba621dbedf380573a8ffe49" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::LinuxParam</scope><name>eis_socket_path</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1LinuxParam_1ae179fca20cf093a6251719e9ed186da1" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::LinuxParam</scope><name>input</name></member>

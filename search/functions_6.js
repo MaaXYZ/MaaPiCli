@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['resource_5fdir_0',['resource_dir',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#ac06c2c1f3765dbc38cf1f67103b22fed',1,'MaaPiCli::ProjectInterfaceNS::Configurator']]],
-  ['run_1',['run',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner.html#a25d2d68fc9eee99160f54a8b3885b40c',1,'MaaPiCli::ProjectInterfaceNS::Runner']]],
-  ['run_5fpretasks_2',['run_pretasks',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Runner.html#ae963e0666560c18c05fea7fbe6424c85',1,'MaaPiCli::ProjectInterfaceNS::Runner']]]
+  ['parse_5fconfig_0',['parse_config',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#a9062c100cb4e22c75ef55695535acd5f',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_config(const std::filesystem::path &amp;path)'],['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#a9108bfd0733fdb1e61e7262a90813628',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_config(const json::value &amp;json)']]],
+  ['parse_5fimport_5fdata_1',['parse_import_data',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#a7836fad1a6651ecf3bfd034a434e2814',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data(const std::filesystem::path &amp;path)'],['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#af516bf5275f379cc415286b9a567f022',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_import_data(const json::value &amp;json)']]],
+  ['parse_5finterface_2',['parse_interface',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#ae77f21f4de589d2fd2410e24adca5810',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_interface(const std::filesystem::path &amp;path)'],['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Parser.html#abe6932f5e3695e0e62b5b8bbcdf4d38c',1,'MaaPiCli::ProjectInterfaceNS::Parser::parse_interface(const json::value &amp;json)']]]
 ];

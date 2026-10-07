@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="560" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="560" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="580" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="580" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a718ddfdd471af0528b77006fced05915" prot="public" static="no" mutable="no">
         <type>MaaGamepadType</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="561" column="24" bodyfile="include/ProjectInterface/Types.h" bodystart="561" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="581" column="24" bodyfile="include/ProjectInterface/Types.h" bodystart="581" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a88fad86216980dac1c0954c07b74f503" prot="public" static="no" mutable="no">
         <type>MaaWin32ScreencapMethod</type>
@@ -47,14 +47,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="562" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="562" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="582" column="33" bodyfile="include/ProjectInterface/Types.h" bodystart="582" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Types.h" line="558" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="559" bodyend="563"/>
+    <location file="include/ProjectInterface/Types.h" line="578" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="579" bodyend="583"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1a718ddfdd471af0528b77006fced05915" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</scope><name>gamepad_type</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1GamepadParam_1aae608c472a78a0caa6123a92f53c0316" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::GamepadParam</scope><name>hwnd</name></member>

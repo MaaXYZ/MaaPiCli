@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="454" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="454" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="468" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="468" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="455" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="455" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="469" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="469" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="456" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="456" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="470" column="13" bodyfile="include/ProjectInterface/Types.h" bodystart="470" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -60,7 +60,26 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="457" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="457" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="471" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="471" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1ab0166bfab2430c74c562e7e5b0da8c77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::operator==</definition>
+        <argsstring>(const LinuxConfig &amp;) const =default</argsstring>
+        <name>operator==</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig" kindref="compound">LinuxConfig</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="473" column="14"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -85,9 +104,10 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="452" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="453" bodyend="460"/>
+    <location file="include/ProjectInterface/Types.h" line="466" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="467" bodyend="476"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>eis_socket_path</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1ab0166bfab2430c74c562e7e5b0da8c77" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>operator==</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>uinput_screen_height</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>uinput_screen_width</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a35bea10e121367df3b2b932d8aa851b6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::LinuxConfig</scope><name>wlr_socket_path</name></member>

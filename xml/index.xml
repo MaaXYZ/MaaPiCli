@@ -4,6 +4,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1AdbConfig_1a1a65114490754c2d95206524f64154eb" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1AdbConfig_1a795c16329d109b8681c7b723132df206" kind="variable"><name>adb_path</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1AdbConfig_1a6ca59fb8f9cf40d0fcc9cf7084802948" kind="variable"><name>address</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1AdbConfig_1a7ae7f51254fda52dddf481379064078b" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::RuntimeParam::AdbParam</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1AdbParam_1abdaea3af8426599762bc3a804f42e54c" kind="variable"><name>name</name></member>
@@ -57,10 +58,12 @@
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a079d5b3187f15dd1958662acf9701554" kind="variable"><name>data_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a03ad2ec7a2c139d4560b401bdb01a328" kind="variable"><name>first_time_use_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9d59264d120edfc24f1ccedad69dd50f" kind="variable"><name>config_</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a04c08124db37d065b3212a348f8f1d16" kind="variable"><name>loaded_config_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abaf5301ad81b8d9b6c3d1d9186663a4e" kind="variable"><name>translations_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" kind="function"><name>load</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1abe05986adf8b5ad6fc5f05085ec82a23" kind="function"><name>check_configuration</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" kind="function"><name>save</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1acb365a63dd97c194bd254f4d8f5ba479" kind="function"><name>update_welcome_snapshots</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a71dfb803e572026fd99edc6695744982" kind="function"><name>generate_runtime</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3c5f975c2dff3afe31ff754276dac592" kind="function"><name>interface_data</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a3f5ce19d844f75417facac50569d59a6" kind="function"><name>configuration</name></member>
@@ -79,6 +82,7 @@
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::Controller</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a2aa9d53b552648f7576eb068f2d75204" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1a5e2fb493c1367785ef665c67bb303a1a" kind="variable"><name>type</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Controller_1aba248c365c11f8b2f80d5a9b5c696720" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1ac94c85a98579e573f3d7a3774b6b7b19" kind="enum"><name>Type</name></member>
@@ -118,6 +122,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a529d0ce4feb8d4c5c7bcc60937ae2dbf" kind="variable"><name>window_name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a1ea1d916321ba48068eb8e87aa4a506a" kind="variable"><name>gamepad_type</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1a45eacf01b7d061ffe1df1e6527dd2dac" kind="variable"><name>_placeholder</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1GamepadConfig_1ad7f9fbcbc02412e6d15a1d87b216a8e6" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1GamepadConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::GamepadConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1GamepadConfig_1ac5a223409df7f4558a5067570f7e3a47" kind="variable"><name>class_regex</name></member>
@@ -190,6 +195,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a3c35b727b96b40b28467c43741f71b29" kind="variable"><name>uinput_screen_width</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a561ad10abb736e9095a4dd2d1d51f489" kind="variable"><name>uinput_screen_height</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1a6509ea450207bdd30ed5325663dfa197" kind="variable"><name>eis_socket_path</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1LinuxConfig_1ab0166bfab2430c74c562e7e5b0da8c77" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::LinuxConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1LinuxConfig_1a1001afd7efb7bd558d60da62e8daf4c9" kind="variable"><name>screencap</name></member>
@@ -212,6 +218,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1a27fd02688b8af4af9f80ec2c13aa2548" kind="variable"><name>title</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ab8ae6428e400762f5e4db9366b072186" kind="variable"><name>screencap</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1affd5b272c2f874867f7a1a83f96ffa44" kind="variable"><name>input</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ae7315a051834590cdf1614fbad184803" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1MacOSConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::MacOSConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1MacOSConfig_1afa96b7fd6f4b454db3a081a74f416579" kind="variable"><name>title_regex</name></member>
@@ -228,6 +235,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1a54640e3dd53072e06f4a2b1291b305c3" kind="variable"><name>value</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ae494d616e7bc04df3de5f8951c9a0704" kind="variable"><name>values</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1aa6d4f9f738e99a356ee659d723e5d1ef" kind="variable"><name>inputs</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Option_1ad483463e9429335eeec4a6b13bf56174" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a4d98381f50d946de17ba15c3b47d3791" kind="enum"><name>Type</name></member>
@@ -262,6 +270,7 @@
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::PlayCoverConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig_1ae5ff614997b8cdde6a6f6263c4603d53" kind="variable"><name>address</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig_1abeb072930f4976c3375091d2e11be215" kind="variable"><name>uuid</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1PlayCoverConfig_1ae19a5d10838cc29877907175b469fb2c" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::PlayCoverConfig</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1PlayCoverConfig_1a5633c40b0bbb8b15aa6720abab8cc9f8" kind="variable"><name>address</name></member>
@@ -286,6 +295,7 @@
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1a55d541d09036ee67c740d26f570047d2" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1a4c3b682e8b4581022e81e79b98aeb9e3" kind="variable"><name>option</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_1aba59dde83a0aded9a647c143ca99128b" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Pretask</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask_1a6eba2898cab284d34b1773f5398ba3fd" kind="variable"><name>resource</name></member>
@@ -338,6 +348,7 @@
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::Configuration::Task</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_1a98d80aa0ba5f9cc290728ab8bfaded20" kind="variable"><name>name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_1a65aa8db6af0db66621f27f063bc539ea" kind="variable"><name>option</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_1a7d8facc74672ad23212d525db3c741bb" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_1afffab007e9b48fba8e25d2a019425936" kind="variable"><name>name</name></member>
@@ -361,6 +372,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a326dc16b6e538935e146475e968a7d2b" kind="variable"><name>class_name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a252e467a3828086125ca59939996122c" kind="variable"><name>window_name</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1a0dafdf8ec863ae9db072c86c4e75e907" kind="variable"><name>_placeholder</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Win32Config_1ae96e3073c6cba15a4a41e7b415e5b54e" kind="function"><name>operator==</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Win32Config</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1Win32Config_1af92340acebcc22d7ba17ec3ba4b0a641" kind="variable"><name>class_regex</name></member>
