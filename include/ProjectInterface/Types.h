@@ -298,6 +298,15 @@ struct InterfaceData
 
     struct Preset
     {
+        struct PresetPretask
+        {
+            std::string name;
+            bool enabled = true;
+            json::object option;
+
+            MEO_JSONIZATION(name, MEO_OPT enabled, MEO_OPT option);
+        };
+
         struct PresetTask
         {
             std::string name;
@@ -311,9 +320,10 @@ struct InterfaceData
         std::string label;
         std::string description;
         std::string icon;
+        std::optional<std::vector<PresetPretask>> pretask;
         std::vector<PresetTask> task;
 
-        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, task);
+        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, MEO_OPT pretask, task);
     };
 
     int interface_version = 2;
@@ -507,12 +517,13 @@ struct Configuration
     std::string resource;
     std::vector<Task> task;
 
-    std::vector<Option> global_option;              // v2.3.0
-    std::vector<Option> resource_option;            // v2.3.0
-    std::vector<Option> controller_option;          // v2.3.0
+    std::vector<Option> global_option;                       // v2.3.0
+    std::vector<Option> resource_option;                     // v2.3.0
+    std::vector<Option> controller_option;                   // v2.3.0
     std::vector<Pretask> pretask;
-    std::vector<std::string> last_welcome;          // v2.10.2; empty means no snapshot
-    std::vector<std::string> last_resolved_welcome; // v2.10.2; empty means no snapshot
+    std::optional<std::vector<std::string>> enabled_pretask; // v2.10.3: nullopt keeps legacy all-enabled behavior
+    std::vector<std::string> last_welcome;                   // v2.10.2; empty means no snapshot
+    std::vector<std::string> last_resolved_welcome;          // v2.10.2; empty means no snapshot
 
     MEO_JSONIZATION(
         controller,
@@ -528,6 +539,7 @@ struct Configuration
         MEO_OPT resource_option,
         MEO_OPT controller_option,
         MEO_OPT pretask,
+        MEO_OPT enabled_pretask,
         MEO_OPT last_welcome,
         MEO_OPT last_resolved_welcome);
 };

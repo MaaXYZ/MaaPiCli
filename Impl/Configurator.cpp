@@ -1444,6 +1444,7 @@ void merge_local_changes(const Configuration& baseline, const Configuration& loc
     merge_field(&Configuration::resource_option);
     merge_field(&Configuration::controller_option);
     merge_field(&Configuration::pretask);
+    merge_field(&Configuration::enabled_pretask);
 
     // Welcome snapshots have their own locked update path and are not ordinary
     // configuration edits.
@@ -1810,6 +1811,10 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
     runtime.display_config.raw = controller.display_raw;
 
     for (const auto& pretask_config : Parser::flatten_pretask(data_.pretask)) {
+        const auto pretask_name = pretask_identifier(pretask_config);
+        if (config_.enabled_pretask && std::ranges::find(*config_.enabled_pretask, pretask_name) == config_.enabled_pretask->end()) {
+            continue;
+        }
         if (!pretask_config.resource.empty()
             && std::ranges::find(pretask_config.resource, config_.resource) == pretask_config.resource.end()) {
             continue;
@@ -1820,7 +1825,7 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         }
 
         RuntimeParam::Pretask runtime_pretask;
-        runtime_pretask.name = pretask_identifier(pretask_config);
+        runtime_pretask.name = pretask_name;
         runtime_pretask.exec = MaaNS::path(pretask_config.exec);
         runtime_pretask.args = pretask_config.args;
         runtime_pretask.cwd = resource_dir_;

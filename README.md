@@ -22,9 +22,9 @@ cmake --build build --config RelWithDebInfo -j 16
 
 ## PI 协议支持版本
 
-MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入、v2.10.1 的 `checkbox` 数量限制和 v2.10.2 的多条 `welcome` 公告。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
+MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入、v2.10.1 的 `checkbox` 数量限制、v2.10.2 的多条 `welcome` 公告和 v2.10.3 的预设 pretask 配置。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
 
-`maafw-version.txt` 当前锁定的 MaaFramework `v5.14.3` 文档定义到 PI v2.10.2。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
+`maafw-version.txt` 当前锁定的 MaaFramework `v5.15.0-beta.1` 文档定义到 PI v2.10.3。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
 
 | PI 版本 | 协议新增/变更 | MaaPiCli 状态 |
 |---------|----------------|--------------|
@@ -44,12 +44,13 @@ MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.
 | v2.10.0 | `input.inputs[].password` 标记密码/密钥输入；要求掩码显示、配置加密存储、日志/遥测脱敏、pretask 传参时内存中解密 | ✅ 支持：CLI 隐藏输入并掩码展示；Windows 使用 DPAPI、macOS 使用 Keychain、Linux 使用 AES-GCM 加密配置；pretask 与 pipeline 使用内存明文 |
 | v2.10.1 | `checkbox` 新增 `min_count` / `max_count`，限制可选和必选数量 | ✅ 支持：解析配置约束，在交互中阻止超出上限；已保存数量不足时要求补选，数量超限时清理选择 |
 | v2.10.2 | `welcome` 新增非空字符串数组，按声明顺序展示多条公告，完整顺序或内容更新后重新展示 | ✅ 支持：兼容旧字符串写法；持久化公告声明与解析后的内容快照 |
+| v2.10.3 | `preset.pretask` 设置预任务勾选状态与选项值 | ✅ 支持：预设声明时按其列表重设勾选项与配置值；未声明时保留现有预任务设置 |
 
 由于 `interface_version` 仍为 `2`，包含尚未支持字段的配置通常仍可被解析并加载其既有功能；具体支持情况见上表。使用 `hotkey` option 的项目可能无法得到预期交互，应优先为 CLI 提供其他 option 类型。
 
 ## 推理运行环境
 
-MaaFramework v5.14.3 使用 MaaDeps v3.0.0，并新增 WebGPU 推理后端；官方依赖包不再提供 CoreML。MaaPiCli 使用框架默认的 `Auto` 后端选择：依次尝试 DirectML、WebGPU，最后回退 CPU。该顺序在 Windows 上同样适用。MaaDeps v3.0.0 的官方 Windows x86_64 / aarch64 依赖包编译启用了 DirectML 和 WebGPU；使用这些包时，`Auto` 优先选择 DirectML。macOS 和 Linux 可使用 WebGPU。
+MaaFramework v5.15.0-beta.1 使用 MaaDeps v3.0.0，并支持 WebGPU 推理后端；官方依赖包不再提供 CoreML。MaaPiCli 使用框架默认的 `Auto` 后端选择：依次尝试 DirectML、WebGPU，最后回退 CPU。该顺序在 Windows 上同样适用。MaaDeps v3.0.0 的官方 Windows x86_64 / aarch64 依赖包编译启用了 DirectML 和 WebGPU；使用这些包时，`Auto` 优先选择 DirectML。macOS 和 Linux 可使用 WebGPU。
 
 部署时请保留发行包中的 ONNX Runtime、WebGPU Dawn 及其他运行库。显式选择推理后端或设备的 CLI 配置目前尚未提供。
 

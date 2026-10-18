@@ -1,7 +1,9 @@
 #include "ProjectInterface/Parser.h"
 
+#include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -53,6 +55,43 @@ int main()
     using namespace MAA_PROJECT_INTERFACE_NS;
 
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
+    {
+        // Configuration saves must preserve the difference between legacy defaults,
+        // explicitly disabling all pretasks, and selecting named pretasks.
+        const std::vector<std::optional<std::vector<std::string>>> selections {
+            std::nullopt,
+            std::vector<std::string> { },
+            std::vector<std::string> { "prepare" },
+        };
+        for (const auto& selection : selections) {
+            Configuration config;
+            config.enabled_pretask = selection;
+            const auto serialized = json::parse(config.to_json().dumps());
+            require(serialized.has_value(), "serialized configuration should be valid JSON");
+            if (!serialized) {
+                continue;
+            }
+            try {
+                const auto restored = Parser::parse_config(*serialized);
+                require(restored.has_value(), "pretask selections should survive configuration serialization");
+                if (restored) {
+                    require(restored->enabled_pretask == selection, "configuration round-trip should preserve pretask selection state");
+                }
+            }
+            catch (const std::exception& error) {
+                require(false, std::string("configuration round-trip should not throw: ") + error.what());
+            }
+        }
+
+        auto legacy = Configuration().to_json();
+        legacy.erase("enabled_pretask");
+        const auto restored_legacy = Parser::parse_config(legacy);
+        require(restored_legacy && !restored_legacy->enabled_pretask, "legacy configurations should keep all pretasks enabled");
+
+        auto invalid = legacy;
+        invalid["enabled_pretask"] = "prepare";
+        require(!Parser::parse_config(invalid), "a non-array pretask selection should be rejected");
+    }
     {
         InterfaceData data;
         data.interface_version = 2;

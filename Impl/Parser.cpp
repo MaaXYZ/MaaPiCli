@@ -551,6 +551,12 @@ std::optional<Configuration> Parser::parse_config(const json::value& json)
     json::value normalized_json = json;
     normalize_legacy_wlroots(normalized_json);
 
+    // An unset selection serializes as null. Treat it as an absent override,
+    // preserving [] as the explicit selection that disables every pretask.
+    if (normalized_json.is_object() && normalized_json.contains("enabled_pretask") && normalized_json["enabled_pretask"].is_null()) {
+        normalized_json.erase("enabled_pretask");
+    }
+
     std::string error_key;
     if (!Configuration().check_json(normalized_json, error_key)) {
         LogError << "json is not a Configuration" << VAR(error_key) << VAR(json);
@@ -712,6 +718,25 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
         }
 
         ++pretask_iter;
+    }
+
+    if (config.enabled_pretask) {
+        const auto data_pretasks = Parser::flatten_pretask(data.pretask);
+        for (auto it = config.enabled_pretask->begin(); it != config.enabled_pretask->end();) {
+            if (std::ranges::none_of(data_pretasks, [&](const auto& pretask) { return pretask_identifier(pretask) == *it; })) {
+                LogWarn << "Enabled pretask not found in interface, removing from config" << VAR(*it);
+                it = config.enabled_pretask->erase(it);
+                erased = true;
+            }
+            else {
+                ++it;
+            }
+        }
+        auto enabled = unique_values(*config.enabled_pretask);
+        if (enabled.size() != config.enabled_pretask->size()) {
+            config.enabled_pretask = std::move(enabled);
+            erased = true;
+        }
     }
 
     return !erased;
