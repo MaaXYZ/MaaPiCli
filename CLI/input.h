@@ -29,3 +29,7 @@
     std::istream& input_stream = std::cin,
     std::ostream& output_stream = std::cout,
     bool allow_empty_selection = false);
+
+#ifdef _WIN32
+[[nodiscard]] std::string code_page_to_utf8(std::string_view bytes, unsigned int code_page);
+#endif

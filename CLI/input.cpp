@@ -10,6 +10,57 @@
 
 #include "MaaUtils/Platform.h"
 
+#ifdef _WIN32
+std::string code_page_to_utf8(std::string_view bytes, unsigned int code_page)
+{
+    if (code_page == CP_UTF8) {
+        return std::string(bytes);
+    }
+
+    if (bytes.empty()) {
+        return std::string();
+    }
+
+    const int bytes_size = static_cast<int>(bytes.size());
+
+    const DWORD flags = (code_page == 54936) ? MB_ERR_INVALID_CHARS : 0;
+
+    const int wlen = MultiByteToWideChar(code_page, flags, bytes.data(), bytes_size, nullptr, 0);
+    if (wlen <= 0) {
+        return std::string(bytes);
+    }
+
+    std::wstring wbuf(static_cast<size_t>(wlen), L'\0');
+    const int converted = MultiByteToWideChar(code_page, flags, bytes.data(), bytes_size, wbuf.data(), wlen);
+    if (converted <= 0) {
+        return std::string(bytes);
+    }
+
+    if (flags == 0) {
+        const bool best_fit = std::ranges::any_of(wbuf, [](wchar_t c) { return c == 0xFFFD || (c >= 0xE000 && c <= 0xF8FF); });
+        if (best_fit) {
+            return std::string(bytes);
+        }
+    }
+
+    const int wbuf_size = static_cast<int>(wbuf.size());
+
+    const int u8len = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wbuf.data(), wbuf_size, nullptr, 0, nullptr, nullptr);
+    if (u8len <= 0) {
+        return std::string(bytes);
+    }
+
+    std::string result(static_cast<size_t>(u8len), '\0');
+    const int converted8 =
+        WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wbuf.data(), wbuf_size, result.data(), u8len, nullptr, nullptr);
+    if (converted8 <= 0) {
+        return std::string(bytes);
+    }
+
+    return result;
+}
+#endif
+
 namespace
 {
 std::optional<std::vector<int>> parse_multi_selection(const std::string& buffer, size_t size, bool allow_empty_selection)
@@ -67,29 +118,7 @@ bool is_stdin_console()
 
 std::string console_input_to_utf8(std::string_view bytes)
 {
-    const UINT cp = GetConsoleCP();
-    if (cp == CP_UTF8) {
-        return std::string(bytes);
-    }
-
-    const int bytes_size = static_cast<int>(bytes.size());
-    const int wlen = MultiByteToWideChar(cp, 0, bytes.data(), bytes_size, nullptr, 0);
-    if (wlen <= 0) {
-        return std::string(bytes);
-    }
-
-    std::wstring wbuf(static_cast<size_t>(wlen), L'\0');
-    MultiByteToWideChar(cp, 0, bytes.data(), bytes_size, wbuf.data(), wlen);
-
-    const int wbuf_size = static_cast<int>(wbuf.size());
-    const int u8len = WideCharToMultiByte(CP_UTF8, 0, wbuf.data(), wbuf_size, nullptr, 0, nullptr, nullptr);
-    if (u8len <= 0) {
-        return std::string(bytes);
-    }
-
-    std::string result(static_cast<size_t>(u8len), '\0');
-    WideCharToMultiByte(CP_UTF8, 0, wbuf.data(), wbuf_size, result.data(), u8len, nullptr, nullptr);
-    return result;
+    return code_page_to_utf8(bytes, GetConsoleCP());
 }
 #endif
 
