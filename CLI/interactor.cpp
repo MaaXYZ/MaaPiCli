@@ -579,19 +579,20 @@ Interactor::ActionStatus Interactor::interact_once()
     std::cout << "\t1. Switch controller\n";
     std::cout << "\t2. Switch resource\n";
     std::cout << "\t3. Add task\n";
-    std::cout << "\t4. Move task\n";
-    std::cout << "\t5. Delete task\n";
-    std::cout << "\t6. Run tasks\n";
+    std::cout << "\t4. Edit task\n";
+    std::cout << "\t5. Move task\n";
+    std::cout << "\t6. Delete task\n";
+    std::cout << "\t7. Run tasks\n";
     if (has_presets) {
-        std::cout << "\t7. Apply preset\n";
-        std::cout << "\t8. Exit\n";
+        std::cout << "\t8. Apply preset\n";
+        std::cout << "\t9. Exit\n";
     }
     else {
-        std::cout << "\t7. Exit\n";
+        std::cout << "\t8. Exit\n";
     }
     std::cout << "\n";
 
-    int max_action = has_presets ? 8 : 7;
+    int max_action = has_presets ? 9 : 8;
     auto selected_action = input(max_action);
     if (!selected_action) {
         input_aborted_ = true;
@@ -607,24 +608,27 @@ Interactor::ActionStatus Interactor::interact_once()
     case 3:
         return action_status(add_task());
     case 4:
-        return action_status(move_task());
+        edit_task();
+        return input_aborted_ ? ActionStatus::Aborted : ActionStatus::Complete;
     case 5:
+        return action_status(move_task());
+    case 6:
         return action_status(delete_task());
-    case 6: {
+    case 7: {
         const bool completed = run();
         if (!mpause()) {
             return ActionStatus::Aborted;
         }
         return completed ? ActionStatus::Complete : ActionStatus::Incomplete;
     }
-    case 7:
+    case 8:
         if (has_presets) {
             return action_status(apply_preset());
         }
         else {
             return ActionStatus::Exit;
         }
-    case 8:
+    case 9:
         if (has_presets) {
             return ActionStatus::Exit;
         }
@@ -2033,7 +2037,242 @@ bool Interactor::process_level_options(
 
 void Interactor::edit_task()
 {
-    // TODO
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& all_config_tasks = config_.configuration().task;
+    if (all_config_tasks.empty()) {
+        std::cout << "No tasks to edit.\n\n";
+        return;
+    }
+
+    auto parse_choice = [](const std::string& line, int min, int max) -> std::optional<int> {
+        if (line.empty()) {
+            return std::nullopt;
+        }
+        int value = 0;
+        const auto* first = line.data();
+        const auto* last = first + line.size();
+        auto [ptr, ec] = std::from_chars(first, last, value);
+        if (ec != std::errc { } || ptr != last || value < min || value > max) {
+            return std::nullopt;
+        }
+        return value;
+    };
+
+    // 子选项
+    auto collect_children = [&](const std::vector<Configuration::Option>& options, const std::string& name) {
+        std::unordered_set<std::string> children;
+        std::vector<const InterfaceData::Option::Case*> selected_cases;
+        if (select_runtime_option_cases(name, options, selected_cases)) {
+            for (const auto* sc : selected_cases) {
+                for (const auto& child : sc->option) {
+                    children.insert(child);
+                }
+            }
+        }
+        return children;
+    };
+
+    // 选择任务
+    while (true) {
+        std::cout << "### Edit task ###\n\n";
+        print_config_tasks(true);
+        std::cout << "\t0. Back to main menu\n\n";
+
+        auto task_line = read_line("Select task: ");
+        if (!task_line) {
+            input_aborted_ = true;
+            return;
+        }
+
+        if (task_line->empty() || *task_line == "0") {
+            return; // 回到主菜单
+        }
+
+        auto task_num = parse_choice(*task_line, 1, static_cast<int>(all_config_tasks.size()));
+        if (!task_num) {
+            std::cout << "Invalid input.\n\n";
+            continue;
+        }
+
+        auto& config_task = all_config_tasks[static_cast<size_t>(*task_num - 1)];
+
+        // 从 interface 里查任务定义
+        auto data_task_iter = std::ranges::find(config_.interface_data().task, config_task.name, std::mem_fn(&InterfaceData::Task::name));
+
+        std::string task_display = config_task.name;
+        std::string task_desc;
+        if (data_task_iter != config_.interface_data().task.end()) {
+            task_display = get_display_name(data_task_iter->name, data_task_iter->label);
+            if (!data_task_iter->description.empty()) {
+                task_desc = read_text_content(data_task_iter->description);
+            }
+        }
+
+        std::cout << "\n### Task: " << MAA_NS::utf8_to_crt(task_display) << " ###\n\n";
+        if (!task_desc.empty()) {
+            std::cout << MAA_NS::utf8_to_crt(task_desc) << "\n\n";
+        }
+
+        // 空 option 的任务:补全一次
+        if (config_task.option.empty()) {
+            if (data_task_iter == config_.interface_data().task.end() || data_task_iter->option.empty()) {
+                std::cout << "This task has no options.\n\n";
+                continue; // 回到任务选择
+            }
+
+            std::cout << "This task has no configured options yet.\n";
+            std::cout << "Configure all " << data_task_iter->option.size() << " option(s) now:\n";
+
+            std::vector<Configuration::Option> config_options;
+            bool ok = true;
+            for (const auto& option_name : data_task_iter->option) {
+                if (!process_option(option_name, task_display, config_options, /*auto_accept_default=*/false)) {
+                    LogError << "Failed to process option" << VAR(option_name);
+                    std::cout << "Failed to configure option.\n\n";
+                    ok = false;
+                    break;
+                }
+            }
+            if (!ok) {
+                continue; // 回到任务选择
+            }
+            config_task.option = std::move(config_options);
+            std::cout << "\nTask configured with " << config_task.option.size() << " option(s).\n\n";
+        }
+
+        // 选择选项
+        while (true) {
+            std::cout << "Options:\n\n";
+
+            // 栈追踪当前遍历路径,计算每个选项的缩进深度
+            std::vector<std::unordered_set<std::string>> level_stack;
+
+            for (size_t i = 0; i < config_task.option.size(); ++i) {
+                const auto& opt = config_task.option[i];
+
+                // 弹出不再属于当前路径的层级
+                while (!level_stack.empty() && !level_stack.back().contains(opt.name)) {
+                    level_stack.pop_back();
+                }
+
+                const int depth = static_cast<int>(level_stack.size());
+                const std::string indent(static_cast<size_t>(depth), '-');
+
+                std::string val_str;
+                if (!opt.value.empty()) {
+                    val_str = opt.value;
+                }
+                else if (!opt.values.empty()) {
+                    val_str = "[";
+                    for (size_t j = 0; j < opt.values.size(); ++j) {
+                        if (j > 0) {
+                            val_str += ", ";
+                        }
+                        val_str += opt.values[j];
+                    }
+                    val_str += "]";
+                }
+                else if (!opt.inputs.empty()) {
+                    val_str = "{";
+                    bool first = true;
+                    for (const auto& [k, v] : opt.inputs) {
+                        if (!first) {
+                            val_str += ", ";
+                        }
+                        val_str += k;
+                        val_str += "=";
+                        val_str += display_input_value(opt.name, k, v);
+                        first = false;
+                    }
+                    val_str += "}";
+                }
+                else {
+                    val_str = "(empty)";
+                }
+
+                std::cout << MAA_NS::utf8_to_crt(std::format("{}{}. {} = {}\n", indent, i + 1, opt.name, val_str));
+
+                // 把该选项的子选项集合压栈,供后续选项判断深度
+                auto children = collect_children(config_task.option, opt.name);
+                if (!children.empty()) {
+                    level_stack.push_back(std::move(children));
+                }
+            }
+
+            std::cout << "0. Back to task selection\n\n";
+
+            auto opt_line = read_line("Select option: ");
+            if (!opt_line) {
+                input_aborted_ = true;
+                return;
+            }
+
+            if (opt_line->empty() || *opt_line == "0") {
+                break; // 回到任务选择
+            }
+
+            auto opt_num = parse_choice(*opt_line, 1, static_cast<int>(config_task.option.size()));
+            if (!opt_num) {
+                std::cout << "Invalid input.\n\n";
+                continue;
+            }
+
+            const size_t oi = static_cast<size_t>(*opt_num - 1);
+            const std::string edited_name = config_task.option[oi].name;
+
+            std::vector<Configuration::Option> edited_result;
+            bool ok = process_option(edited_name, task_display, edited_result, /*auto_accept_default=*/false);
+
+            if (!ok) {
+                LogError << "Failed to edit option" << VAR(edited_name);
+                std::cout << "Failed to edit option.\n\n";
+                continue; // 留在这个任务的选项列表
+            }
+
+            // 写回 config_task.option[oi]，并整体替换旧子树
+            auto new_iter = std::ranges::find_if(edited_result, [&](const auto& o) { return o.name == edited_name; });
+
+            if (new_iter == edited_result.end()) {
+                LogError << "Edited option not produced" << VAR(edited_name);
+                continue;
+            }
+
+            // 定位旧子树范围 [subtree_begin, subtree_end)
+            auto subtree_begin = config_task.option.begin() + static_cast<std::ptrdiff_t>(oi);
+            auto subtree_end = subtree_begin;
+
+            // active_names 保存当前已确认属于子树的选项的直接子选项名
+            std::unordered_set<std::string> active_names;
+            auto collect_child_names = [&](const std::string& name) {
+                std::vector<const InterfaceData::Option::Case*> selected_cases;
+                if (!select_runtime_option_cases(name, config_task.option, selected_cases)) {
+                    return;
+                }
+                for (const auto* sc : selected_cases) {
+                    for (const auto& child : sc->option) {
+                        active_names.insert(child);
+                    }
+                }
+            };
+
+            collect_child_names(edited_name);
+            ++subtree_end;
+
+            while (subtree_end != config_task.option.end() && active_names.contains(subtree_end->name)) {
+                collect_child_names(subtree_end->name);
+                ++subtree_end;
+            }
+
+            config_task.option.erase(subtree_begin, subtree_end);
+            config_task.option.insert(
+                config_task.option.begin() + static_cast<std::ptrdiff_t>(oi),
+                std::make_move_iterator(edited_result.begin()),
+                std::make_move_iterator(edited_result.end()));
+
+            std::cout << "Option \"" << MAA_NS::utf8_to_crt(edited_name) << "\" updated.\n\n";
+        }
+    }
 }
 
 void Interactor::print_config_tasks(bool with_index) const
