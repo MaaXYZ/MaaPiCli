@@ -187,6 +187,13 @@ struct InterfaceData
 
         struct Input
         {
+            enum class InputType
+            {
+                Text,
+                File,
+                Directory,
+            };
+
             enum class PipelineType
             {
                 String,
@@ -198,6 +205,7 @@ struct InterfaceData
             std::string label;
             std::string description;
             std::string default_;
+            InputType input_type = InputType::Text;
             PipelineType pipeline_type = PipelineType::String;
             std::string verify;      // regex
             std::string pattern_msg; // 验证失败提示
@@ -208,6 +216,7 @@ struct InterfaceData
                 MEO_OPT label,
                 MEO_OPT description,
                 MEO_OPT MEO_KEY("default") default_,
+                MEO_OPT input_type,
                 MEO_OPT pipeline_type,
                 MEO_OPT verify,
                 MEO_OPT pattern_msg,
@@ -320,10 +329,11 @@ struct InterfaceData
         std::string label;
         std::string description;
         std::string icon;
+        std::vector<std::string> controller; // v2.10.4: applicable controllers
         std::optional<std::vector<PresetPretask>> pretask;
         std::vector<PresetTask> task;
 
-        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, MEO_OPT pretask, task);
+        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, MEO_OPT controller, MEO_OPT pretask, task);
     };
 
     int interface_version = 2;

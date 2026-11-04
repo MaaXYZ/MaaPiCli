@@ -1,5 +1,6 @@
 #include "CLI/interactor.h"
 
+#include "MaaUtils/Platform.h"
 #include "ProjectInterface/Configurator.h"
 #include "ProjectInterface/Parser.h"
 
@@ -69,6 +70,133 @@ private:
     std::stringstream input_stream_;
     std::stringstream output_stream_;
 };
+
+void test_preset_controller_filter(const std::filesystem::path& fixture_dir)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto data = Parser::parse_interface(fixture_dir / "interface.json");
+    require(
+        data && data->preset.size() == 3 && data->preset.back().controller == std::vector<std::string> { "default-controller" },
+        "imported presets should retain controller restrictions");
+
+    for (const auto& controller : { "default-controller", "other-controller" }) {
+        const auto user_dir = unique_temp_directory();
+        std::filesystem::create_directories(user_dir / "config");
+        Configuration config;
+        config.controller.name = controller;
+        config.resource = "default-resource";
+        config.task.emplace_back().name = "original-task";
+        {
+            std::ofstream stream(user_dir / "config/maa_pi_config.json");
+            stream << config.to_json().dumps();
+        }
+
+        {
+            StreamRedirector redirector("7\n1\n8\n");
+            Interactor interactor(user_dir);
+            require(interactor.load(fixture_dir), "controller-filtered preset fixture should load");
+            require(interactor.interact(), "a visible preset should apply successfully");
+            const auto output = redirector.output().str();
+            const bool is_default = std::string_view(controller) == "default-controller";
+            require(output.find(is_default ? "other-only" : "default-only") == std::string::npos, "inapplicable presets should be hidden");
+            require(output.find(is_default ? "default-only" : "other-only") != std::string::npos, "applicable presets should be visible");
+            require(output.find("unrestricted") != std::string::npos, "presets without controller restrictions should remain visible");
+        }
+
+        const auto saved = Parser::parse_config(user_dir / "config/maa_pi_config.json");
+        const auto expected_task = std::string_view(controller) == "default-controller" ? "preset-task" : "original-task";
+        require(
+            saved && saved->task.size() == 1 && saved->task.front().name == expected_task,
+            "preset numbering should refer to the filtered list");
+        std::filesystem::remove_all(user_dir);
+    }
+
+    const auto user_dir = unique_temp_directory();
+    std::filesystem::create_directories(user_dir / "config");
+    Configuration config;
+    config.controller.name = "default-controller";
+    config.resource = "default-resource";
+    {
+        std::ofstream stream(user_dir / "config/maa_pi_config.json");
+        stream << config.to_json().dumps();
+    }
+    {
+        StreamRedirector redirector("7\n");
+        Interactor interactor(user_dir);
+        require(interactor.load(fixture_dir / "no_match"), "a fixture with no applicable presets should load");
+        require(interactor.interact(), "exit should retain its original index when no presets apply");
+        require(redirector.output().str().find("Apply preset") == std::string::npos, "the menu should hide unavailable preset actions");
+    }
+    std::filesystem::remove_all(user_dir);
+}
+
+void test_path_inputs_and_agent_environment(const std::filesystem::path& fixture_dir)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto user_dir = unique_temp_directory() / std::filesystem::path(u8"user 数据");
+    std::filesystem::create_directories(user_dir / "config");
+    Configuration config;
+    config.controller.name = "default-controller";
+    config.resource = "default-resource";
+    {
+        std::ofstream stream(user_dir / "config/maa_pi_config.json");
+        stream << config.to_json().dumps();
+    }
+
+    const std::string file = "C:\\future folder\\配置.json";
+    const auto directory = MAA_NS::path_to_utf8_string(user_dir / "future folder");
+    {
+        StreamRedirector redirector("3\n3\ninvalid.txt\n" + file + "\n" + directory + "\n\n\n\n8\n");
+        Interactor interactor(user_dir);
+        require(interactor.load(fixture_dir), "file and directory inputs should load without native dialogs");
+        require(interactor.interact(), "manual path inputs should save successfully");
+        const auto output = redirector.output().str();
+        require(
+            output.find("file path") != std::string::npos && output.find("directory path") != std::string::npos,
+            "path inputs should show hints");
+        require(output.find("Expected JSON file") != std::string::npos, "path inputs should retain regular expression validation");
+    }
+
+    Configurator reloaded;
+    const auto original_cwd = std::filesystem::current_path();
+    require(reloaded.load(fixture_dir, std::filesystem::relative(user_dir)), "saved paths and a relative user directory should load");
+    require(reloaded.configuration().task.size() == 1, "manual path input should add one task");
+    if (!reloaded.configuration().task.empty() && !reloaded.configuration().task.front().option.empty()) {
+        const auto& inputs = reloaded.configuration().task.front().option.front().inputs;
+        require(inputs.at("file") == file && inputs.at("directory") == directory, "saved path strings should remain unchanged");
+    }
+
+    std::filesystem::current_path(fixture_dir);
+    const auto runtime = reloaded.generate_runtime();
+    std::filesystem::current_path(original_cwd);
+    require(runtime.has_value(), "path inputs should generate a runtime without requiring paths to exist");
+    if (runtime) {
+        require(runtime->task.front().pipeline_override.as_array().size() == 2, "escaped path inputs should produce a pipeline override");
+        if (runtime->task.front().pipeline_override.as_array().size() == 2) {
+            const auto& node = runtime->task.front().pipeline_override.as_array().at(1).at("PathNode");
+            require(
+                node.at("file") == file && node.at("directory") == directory,
+                "pipeline substitution should preserve native path separators");
+            require(node.at("embedded") == "prefix:" + file, "embedded path placeholders should remain valid JSON");
+            require(node.at("note") == "keep \"quoted\" text", "text input quotes should remain valid JSON");
+            require(node.at("count") == 42 && node.at("enabled") == true, "input controls should retain pipeline type conversions");
+        }
+
+        require(runtime->agent.size() == 2, "all declared agents should be generated");
+        for (const auto& agent : runtime->agent) {
+            const auto directory_env = agent.env_vars.find("PI_USER_DATA_DIR");
+            const auto directory_path =
+                directory_env == agent.env_vars.end() ? std::filesystem::path { } : MAA_NS::path(directory_env->second);
+            require(
+                directory_path.is_absolute() && std::filesystem::equivalent(directory_path, user_dir),
+                "each agent should receive the absolute user directory captured at load, independent of its resource cwd");
+            require(agent.env_vars.at("PI_INTERFACE_VERSION") == "v2.11.0", "agents should receive the updated PI capability version");
+        }
+    }
+    std::filesystem::remove_all(user_dir.parent_path());
+}
 
 #if defined(__APPLE__)
 constexpr auto kTestAclType = ACL_TYPE_EXTENDED;
@@ -187,6 +315,9 @@ bool remove_configuration_acl(const std::filesystem::path& path)
 int main()
 {
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
+    test_preset_controller_filter(fixture_dir.parent_path() / "pi_extensions");
+    test_path_inputs_and_agent_environment(fixture_dir.parent_path() / "pi_extensions");
+
     const auto interface = MAA_PROJECT_INTERFACE_NS::Parser::parse_interface(fixture_dir / "interface.json");
     require(interface.has_value() && interface->controller.size() == 2, "the EOF fixture should contain two controllers");
 

@@ -573,7 +573,7 @@ bool Interactor::show_welcome_if_changed()
 
 Interactor::ActionStatus Interactor::interact_once()
 {
-    bool has_presets = !config_.interface_data().preset.empty();
+    const bool has_presets = !applicable_presets().empty();
 
     std::cout << "### Select action ###\n\n";
     std::cout << "\t1. Switch controller\n";
@@ -1871,6 +1871,12 @@ bool Interactor::process_option(
                 std::string input_desc = read_text_content(input_def.description);
                 std::cout << MAA_NS::utf8_to_crt(input_desc) << "\n";
             }
+            if (input_def.input_type == InterfaceData::Option::Input::InputType::File) {
+                input_display_name += " (file path)";
+            }
+            else if (input_def.input_type == InterfaceData::Option::Input::InputType::Directory) {
+                input_display_name += " (directory path)";
+            }
             std::cout << MAA_NS::utf8_to_crt(std::format("{} [{}]: ", input_display_name, input_def.password ? "********" : default_val));
 
             auto read_input_value = [&]() -> std::optional<std::string> {
@@ -2599,11 +2605,23 @@ bool Interactor::mpause()
     return true;
 }
 
+std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> Interactor::applicable_presets() const
+{
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> presets;
+    const auto& controller = config_.configuration().controller.name;
+    for (const auto& preset : config_.interface_data().preset) {
+        if (preset.controller.empty() || std::ranges::find(preset.controller, controller) != preset.controller.end()) {
+            presets.emplace_back(&preset);
+        }
+    }
+    return presets;
+}
+
 bool Interactor::apply_preset()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
-    const auto& presets = config_.interface_data().preset;
+    const auto presets = applicable_presets();
     if (presets.empty()) {
         std::cout << "No presets available.\n\n";
         return false;
@@ -2611,7 +2629,7 @@ bool Interactor::apply_preset()
 
     std::cout << "### Apply preset ###\n\n";
     for (size_t i = 0; i < presets.size(); ++i) {
-        const auto& p = presets[i];
+        const auto& p = *presets[i];
         std::string display_name = get_display_name(p.name, p.label);
         std::cout << MAA_NS::utf8_to_crt(std::format("\t{}. {}\n", i + 1, display_name));
         if (!p.description.empty()) {
@@ -2626,7 +2644,7 @@ bool Interactor::apply_preset()
         input_aborted_ = true;
         return false;
     }
-    const auto& preset = presets.at(static_cast<size_t>(*selected - 1));
+    const auto& preset = *presets.at(static_cast<size_t>(*selected - 1));
 
     std::optional<std::vector<std::string>> preset_enabled_pretasks;
     std::vector<Configuration::Pretask> preset_pretask_config;

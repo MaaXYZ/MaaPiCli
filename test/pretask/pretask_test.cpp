@@ -62,6 +62,8 @@ int main()
     Configuration::Option credentials;
     credentials.name = "credentials";
     credentials.inputs["token"] = "secret-token";
+    credentials.inputs["file"] = "C:\\future folder\\config.json";
+    credentials.inputs["directory"] = "/future folder/output";
 
     const auto& credentials_inputs = configurator.interface_data().option.at("credentials").inputs;
     require(
@@ -92,8 +94,11 @@ int main()
                     require(options->at("policy") == "fast", "select options should serialize as strings");
                     require(options->at("flags") == json::array { "alpha", "beta" }, "checkbox options should serialize as string arrays");
                     require(
-                        options->at("credentials") == json::object { { "token", "secret-token" } },
-                        "input options should serialize as field objects");
+                        options->at("credentials")
+                            == json::object { { "token", "secret-token" },
+                                              { "file", "C:\\future folder\\config.json" },
+                                              { "directory", "/future folder/output" } },
+                        "password and path inputs should serialize as unchanged strings in pretask field objects");
                     require(!options->contains("hidden-option"), "inapplicable options should be omitted");
                 }
             }

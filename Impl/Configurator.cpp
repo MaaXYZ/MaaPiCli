@@ -846,6 +846,7 @@ public:
         }
 
         struct stat lock_status { };
+
         if (::fstat(descriptor_, &lock_status) != 0 || !S_ISREG(lock_status.st_mode)) {
             LogError << "Configuration lock is not a regular file" << VAR(lock_name) << VAR(errno);
             ::close(descriptor_);
@@ -1135,6 +1136,7 @@ private:
     PACL sacl_ = nullptr;
 #else
     int descriptor_ = -1;
+
     struct stat status_ { };
 #if defined(__APPLE__)
     acl_t acl_ = nullptr;
@@ -1467,7 +1469,14 @@ bool Configurator::load(const std::filesystem::path& resource_dir, const std::fi
         return false;
     }
 
-    if (auto cfg_opt = Parser::parse_config(user_dir / kConfigPath)) {
+    std::error_code error;
+    user_dir_ = std::filesystem::absolute(user_dir, error);
+    if (error) {
+        LogError << "Failed to resolve user data directory" << VAR(user_dir) << VAR(error.message());
+        return false;
+    }
+
+    if (auto cfg_opt = Parser::parse_config(user_dir_ / kConfigPath)) {
         config_ = *std::move(cfg_opt);
         first_time_use_ = false;
         if (!transform_stored_passwords(data_.option, config_, SecretStore::decrypt)) {
@@ -1867,11 +1876,12 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
 
     // v2.5.0: prepare PI_* env vars
     std::unordered_map<std::string, std::string> pi_env;
-    pi_env["PI_INTERFACE_VERSION"] = "v2.6.0";
+    pi_env["PI_INTERFACE_VERSION"] = "v2.11.0";
     pi_env["PI_CLIENT_NAME"] = "MaaPiCli";
     pi_env["PI_CLIENT_VERSION"] = MaaVersion();
     pi_env["PI_CLIENT_LANGUAGE"] = detect_system_language();
     pi_env["PI_CLIENT_MAAFW_VERSION"] = MaaVersion();
+    pi_env["PI_USER_DATA_DIR"] = MaaNS::path_to_utf8_string(user_dir_);
     if (!data_.version.empty()) {
         pi_env["PI_VERSION"] = data_.version;
     }
@@ -1987,10 +1997,11 @@ void Configurator::merge_option_overrides(RuntimeParam::Task& runtime_task, cons
                 }
 
                 switch (input_def.pipeline_type) {
-                case InterfaceData::Option::Input::PipelineType::String:
-                    override_str = MaaNS::string_replace_all(override_str, "\"" + placeholder + "\"", "\"" + value + "\"");
-                    override_str = MaaNS::string_replace_all(override_str, placeholder, value);
-                    break;
+                case InterfaceData::Option::Input::PipelineType::String: {
+                    // Substitution happens inside serialized JSON, including embedded placeholders.
+                    const auto encoded = json::value(value).dumps();
+                    override_str = MaaNS::string_replace_all(override_str, placeholder, encoded.substr(1, encoded.size() - 2));
+                } break;
                 case InterfaceData::Option::Input::PipelineType::Int:
                 case InterfaceData::Option::Input::PipelineType::Bool:
                     override_str = MaaNS::string_replace_all(override_str, "\"" + placeholder + "\"", value);

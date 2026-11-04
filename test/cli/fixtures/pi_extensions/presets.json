@@ -1,0 +1,5 @@
+{
+    "preset": [
+        { "name": "default-only", "controller": [ "default-controller" ], "task": [ { "name": "preset-task" } ] }
+    ]
+}

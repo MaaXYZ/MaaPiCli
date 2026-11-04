@@ -57,6 +57,7 @@ private:
     std::string detect_system_language() const;
 
     std::filesystem::path resource_dir_;
+    std::filesystem::path user_dir_;
 
     InterfaceData data_;
     bool first_time_use_ = false;

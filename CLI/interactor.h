@@ -49,6 +49,7 @@ private:
     void edit_task();
     bool delete_task();
     bool move_task();
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> applicable_presets() const;
     bool apply_preset();
 
     bool process_level_options(

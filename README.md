@@ -22,9 +22,9 @@ cmake --build build --config RelWithDebInfo -j 16
 
 ## PI 协议支持版本
 
-MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入、v2.10.1 的 `checkbox` 数量限制、v2.10.2 的多条 `welcome` 公告和 v2.10.3 的预设 pretask 配置。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
+MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.8.1 的 pretask 适用范围过滤、v2.10.0 的密码输入、v2.10.1 的 `checkbox` 数量限制、v2.10.2 的多条 `welcome` 公告、v2.10.3 的预设 pretask 配置、v2.10.4 的预设控制器过滤和 v2.11.0 的用户数据目录环境变量；v2.10.5 的文件/目录输入使用终端文本输入降级。PI 语义版本与 MaaFramework release 版本、`interface.json` 中的 `interface_version: 2` 是三套不同概念。
 
-`maafw-version.txt` 当前锁定的 MaaFramework `v5.15.0-beta.1` 文档定义到 PI v2.10.3。下表列出协议能力，便于对照 MaaPiCli 的实际实现状态。
+`maafw-version.txt` 当前锁定的 MaaFramework `v5.15.0-beta.1` 文档定义到 PI v2.10.3，同时适配了 [MaaFramework 主分支的 PI v2.11.0 协议](https://github.com/MaaXYZ/MaaFramework/blob/main/docs/zh_cn/3.3-ProjectInterfaceV2协议.md) 中适合 CLI 的扩展。Agent 的 `PI_INTERFACE_VERSION` 声明为 `v2.11.0`，具体功能范围以下表为准；这些扩展不需要升级 MaaFramework runtime。
 
 | PI 版本 | 协议新增/变更 | MaaPiCli 状态 |
 |---------|----------------|--------------|
@@ -45,6 +45,9 @@ MaaPiCli 以 PI v2.6.0 为基线，额外支持 v2.7.0 引入的 `pretask`、v2.
 | v2.10.1 | `checkbox` 新增 `min_count` / `max_count`，限制可选和必选数量 | ✅ 支持：解析配置约束，在交互中阻止超出上限；已保存数量不足时要求补选，数量超限时清理选择 |
 | v2.10.2 | `welcome` 新增非空字符串数组，按声明顺序展示多条公告，完整顺序或内容更新后重新展示 | ✅ 支持：兼容旧字符串写法；持久化公告声明与解析后的内容快照 |
 | v2.10.3 | `preset.pretask` 设置预任务勾选状态与选项值 | ✅ 支持：预设声明时按其列表重设勾选项与配置值；未声明时保留现有预任务设置 |
+| v2.10.4 | `preset.controller` 限制预设适用的控制器 | ✅ 支持：隐藏不适用于当前控制器的预设；未声明或空列表时不限制 |
+| v2.10.5 | `input.inputs[].input_type` 指定 `text` / `file` / `directory` 编辑控件 | ⚠️ 降级支持：文件和目录显示路径提示，使用文本输入；保留默认值、正则校验和 `pipeline_type` 转换，不要求路径存在，不做分隔符转换或 `~` 展开 |
+| v2.11.0 | `PI_USER_DATA_DIR` 指定 Client 与 Agent 共用的用户数据目录 | ✅ 支持：向每个 Agent 传入加载配置时确定的用户数据目录绝对路径；与 Agent 的资源工作目录分别处理 |
 
 由于 `interface_version` 仍为 `2`，包含尚未支持字段的配置通常仍可被解析并加载其既有功能；具体支持情况见上表。使用 `hotkey` option 的项目可能无法得到预期交互，应优先为 CLI 提供其他 option 类型。
 
@@ -94,6 +97,7 @@ CLI 可组合以下 Linux 截图和输入方式：
 | task 禁用态显示 | 不满足 resource/controller 约束的 task 灰显 | 直接过滤不显示 |
 | option 禁用态显示 | 不满足约束的 option 灰显 | 直接跳过不提示 |
 | `setting` / `hotkey` | 渲染设置页分区；捕获快捷键并映射虚拟按键码 | `setting` 解析并合并但不渲染；`hotkey` 未实现 |
+| `input_type: file/directory` | 系统文件/目录选择对话框及可编辑路径 | 终端文本输入并显示路径提示，路径字符串原样保存与传递 |
 | `telemetry` 与 `focus.trace` | 经用户授权后向 Sentry 上报崩溃、任务与指定节点结果 | 不集成遥测 |
 
 ## 用法
