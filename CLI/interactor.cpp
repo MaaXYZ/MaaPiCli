@@ -2157,8 +2157,27 @@ bool Interactor::check_validity()
     }
 
     if (config_.configuration().controller.type == InterfaceData::Controller::Type::MacOS) {
+#if !defined(__APPLE__)
+        LogError << "MacOS controller is only supported on macOS";
+        return false;
+#endif
         auto& mac = config_.configuration().macos;
-        if (mac.window_id == 0 || mac.title.empty()) {
+        bool window_found = false;
+        if (mac.window_id != 0) {
+            auto list_handle = MaaToolkitDesktopWindowListCreate();
+            OnScopeLeave([&]() { MaaToolkitDesktopWindowListDestroy(list_handle); });
+
+            MaaToolkitDesktopWindowFindAll(list_handle);
+
+            for (MaaSize i = 0; i < MaaToolkitDesktopWindowListSize(list_handle); ++i) {
+                auto window = MaaToolkitDesktopWindowListAt(list_handle, i);
+                if (reinterpret_cast<uintptr_t>(MaaToolkitDesktopWindowGetHandle(window)) == mac.window_id) {
+                    window_found = true;
+                    break;
+                }
+            }
+        }
+        if (!window_found) {
             auto& name = config_.configuration().controller.name;
             auto controller_iter =
                 std::ranges::find(config_.interface_data().controller, name, std::mem_fn(&InterfaceData::Controller::name));
@@ -2168,8 +2187,7 @@ bool Interactor::check_validity()
                 return false;
             }
 
-            select_macos(controller_iter->macos);
-            return mac.window_id != 0;
+            return select_macos(controller_iter->macos) && mac.window_id != 0;
         }
     }
 

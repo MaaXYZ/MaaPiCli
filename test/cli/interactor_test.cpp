@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iterator>
+#include <limits>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -353,6 +355,59 @@ int main()
         "EOF during first-time setup should not create a configuration");
 
     std::filesystem::remove_all(user_dir);
+
+    for (const uint32_t window_id : { 0u, std::numeric_limits<uint32_t>::max() }) {
+        const auto resource_dir = unique_temp_directory();
+        const auto macos_user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        std::filesystem::create_directories(macos_user_dir / "config");
+
+        {
+            std::ofstream interface_stream(resource_dir / "interface.json");
+            interface_stream << R"json(
+{
+    "interface_version": 2,
+    "controller": [ { "name": "macos-controller", "type": "MacOS" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ]
+}
+)json";
+        }
+        {
+            std::ofstream config_stream(macos_user_dir / "config/maa_pi_config.json");
+            config_stream << R"json({
+    "controller": { "name": "macos-controller" },
+    "resource": "default-resource",
+    "task": [],
+    "macos": { "window_id": )json"
+                          << window_id << R"json(, "title": ")json" << (window_id == 0 ? "" : "stale-window") << R"json(" }
+})json";
+        }
+
+        std::ifstream original_stream(macos_user_dir / "config/maa_pi_config.json");
+        const std::string original_config { std::istreambuf_iterator<char>(original_stream), std::istreambuf_iterator<char>() };
+        original_stream.close();
+
+        {
+            StreamRedirector redirector;
+            Interactor interactor(macos_user_dir);
+            require(interactor.load(resource_dir), "the macOS window fixture should load");
+            require(!interactor.run(), "the taskless macOS fixture should not start a controller");
+            const bool prompted = redirector.output().str().find("Title regex:") != std::string::npos;
+#if defined(__APPLE__)
+            require(prompted, "a missing or stale macOS window ID should request window selection");
+#else
+            require(!prompted, "an unsupported macOS controller should not request window selection");
+#endif
+        }
+
+        std::ifstream saved_stream(macos_user_dir / "config/maa_pi_config.json");
+        const std::string saved_config { std::istreambuf_iterator<char>(saved_stream), std::istreambuf_iterator<char>() };
+        saved_stream.close();
+        require(saved_config == original_config, "failed window selection should not save a stale window ID");
+
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(macos_user_dir);
+    }
 
     {
         const auto resource_dir = unique_temp_directory();
