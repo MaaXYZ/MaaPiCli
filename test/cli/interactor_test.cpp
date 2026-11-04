@@ -80,13 +80,20 @@ void test_preset_controller_filter(const std::filesystem::path& fixture_dir)
         data && data->preset.size() == 3 && data->preset.back().controller == std::vector<std::string> { "default-controller" },
         "imported presets should retain controller restrictions");
 
+    const auto original_cwd = std::filesystem::current_path();
     for (const auto& controller : { "default-controller", "other-controller" }) {
-        const auto user_dir = unique_temp_directory();
+        const auto root_dir = unique_temp_directory();
+        const auto user_dir = root_dir / "user";
+        const auto changed_cwd = root_dir / "changed-cwd";
         std::filesystem::create_directories(user_dir / "config");
+        std::filesystem::create_directories(changed_cwd);
+        const bool is_default = std::string_view(controller) == "default-controller";
         Configuration config;
         config.controller.name = controller;
         config.resource = "default-resource";
-        config.task.emplace_back().name = "original-task";
+        config.task.emplace_back().name = is_default ? "original-task" : "preset-task";
+        config.last_welcome = { "stale announcement" };
+        config.last_resolved_welcome = config.last_welcome;
         {
             std::ofstream stream(user_dir / "config/maa_pi_config.json");
             stream << config.to_json().dumps();
@@ -94,22 +101,28 @@ void test_preset_controller_filter(const std::filesystem::path& fixture_dir)
 
         {
             StreamRedirector redirector("7\n1\n8\n");
-            Interactor interactor(user_dir);
+            std::filesystem::current_path(root_dir);
+            Interactor interactor("user");
             require(interactor.load(fixture_dir), "controller-filtered preset fixture should load");
+            std::filesystem::current_path(changed_cwd);
             require(interactor.interact(), "a visible preset should apply successfully");
+            std::filesystem::current_path(original_cwd);
             const auto output = redirector.output().str();
-            const bool is_default = std::string_view(controller) == "default-controller";
             require(output.find(is_default ? "other-only" : "default-only") == std::string::npos, "inapplicable presets should be hidden");
             require(output.find(is_default ? "default-only" : "other-only") != std::string::npos, "applicable presets should be visible");
             require(output.find("unrestricted") != std::string::npos, "presets without controller restrictions should remain visible");
         }
 
         const auto saved = Parser::parse_config(user_dir / "config/maa_pi_config.json");
-        const auto expected_task = std::string_view(controller) == "default-controller" ? "preset-task" : "original-task";
+        const auto expected_task = is_default ? "preset-task" : "original-task";
         require(
             saved && saved->task.size() == 1 && saved->task.front().name == expected_task,
             "preset numbering should refer to the filtered list");
-        std::filesystem::remove_all(user_dir);
+        require(
+            saved && saved->last_welcome.empty() && saved->last_resolved_welcome.empty(),
+            "welcome snapshots should update in the loaded user directory after cwd changes");
+        require(!std::filesystem::exists(changed_cwd / "user"), "saving should not create a user directory relative to the changed cwd");
+        std::filesystem::remove_all(root_dir);
     }
 
     const auto user_dir = unique_temp_directory();

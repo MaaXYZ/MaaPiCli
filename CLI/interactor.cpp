@@ -199,7 +199,7 @@ bool restart_self_as_admin()
 } // namespace
 
 Interactor::Interactor(std::filesystem::path user_path)
-    : user_path_(std::move(user_path))
+    : user_path_(std::filesystem::absolute(user_path))
 {
     LogDebug << VAR(user_path_);
 }
