@@ -1065,6 +1065,70 @@ int main()
         std::filesystem::remove(user_dir);
     }
 
+    {
+        using namespace MAA_PROJECT_INTERFACE_NS;
+        const auto resource_dir = unique_temp_directory();
+        const auto ios_user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        {
+            std::ofstream stream(resource_dir / "interface.json");
+            stream << R"json({
+                "interface_version": 2,
+                "controller": [{"name": "ios", "type": "IOS", "ios": {
+                    "udid": "test-iphone", "connection": "WiFi", "screencap": "Stream",
+                    "config": {"server_port": 17424}
+                }}],
+                "resource": [{"name": "default", "path": ["resource"]}],
+                "task": [{"name": "capture", "entry": "Capture"}]
+            })json";
+        }
+        Configurator configurator;
+        require(configurator.load(resource_dir, ios_user_dir), "iOS project configuration should load");
+        auto& configuration = configurator.configuration();
+        configuration.controller.name = "ios";
+        configuration.resource = "default";
+        configuration.task.push_back({ "capture", { } });
+        require(configurator.check_configuration(), "iOS controller should be selected by name");
+        configuration.ios.screencap = "ScreenshotService";
+        const auto runtime = configurator.generate_runtime();
+        const auto* ios = runtime ? std::get_if<RuntimeParam::IOSParam>(&runtime->controller_param) : nullptr;
+        require(ios && ios->udid == "test-iphone" && ios->connection == MaaIOSConnectionMethod_WiFi, "iOS runtime should use project device defaults");
+        require(ios && ios->screencap == MaaIOSScreencapMethod_ScreenshotService, "saved iOS screencap choice should override the project");
+        require(ios && ios->config.find("17424") != std::string::npos, "iOS server configuration should reach the runtime");
+        configuration.ios.connection = "USB";
+        const auto usb_runtime = configurator.generate_runtime();
+        const auto* usb = usb_runtime ? std::get_if<RuntimeParam::IOSParam>(&usb_runtime->controller_param) : nullptr;
+        require(usb && usb->connection == MaaIOSConnectionMethod_USB, "saved USB connection should override project Wi-Fi");
+        configuration.ios.connection = "invalid";
+        require(!configurator.generate_runtime(), "unknown iOS transport must fail runtime generation");
+        configuration.ios.connection.clear();
+        configuration.ios.udid = "saved-iphone";
+        require(configurator.save(ios_user_dir), "iOS user configuration should save");
+        {
+            StreamRedirector redirector("1\n\n3\n\n3\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir), "saved iOS configuration should load in the CLI");
+            require(interactor.interact(), "iOS device and screencap selection should complete");
+        }
+        const auto saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->ios.udid == "saved-iphone" && saved->ios.screencap == "Stream|ScreenshotService",
+            "iOS selection should preserve the UDID and save the combined screencap method");
+        {
+            StreamRedirector redirector("1\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir), "iOS EOF fixture should load");
+            require(interactor.interact(), "EOF during iOS configuration should exit cleanly");
+            require(
+                redirector.output().str().find("Choose screencap method") == std::string::npos,
+                "EOF at the UDID prompt should not advance to screencap selection");
+        }
+        const auto after_eof = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(after_eof && saved && after_eof->ios == saved->ios, "aborted iOS selection should not overwrite saved configuration");
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(ios_user_dir);
+    }
+
     if (failures != 0) {
         std::cerr << failures << " interactor test assertion(s) failed\n";
         return 1;

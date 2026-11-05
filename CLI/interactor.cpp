@@ -23,6 +23,7 @@
 #include "MaaFramework/Utility/MaaBuffer.h"
 #include "MaaToolkit/AdbDevice/MaaToolkitAdbDevice.h"
 #include "MaaToolkit/DesktopWindow/MaaToolkitDesktopWindow.h"
+#include "MaaToolkit/IOSDevice/MaaToolkitIOSDevice.h"
 #include "MaaUtils/Encoding.h"
 #include "MaaUtils/Logger.h"
 #include "MaaUtils/Platform.h"
@@ -352,6 +353,11 @@ void Interactor::print_config()
         std::cout << MAA_NS::utf8_to_crt(
             std::format("\t\t{}\n\t\t{}\n", config_.configuration().adb.adb_path, config_.configuration().adb.address));
         break;
+    case InterfaceData::Controller::Type::IOS: {
+        const auto& ios = config_.configuration().ios;
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t\tUDID: {}\n\t\tScreencap: {}\n", ios.udid.empty() ? "(not configured)" : ios.udid, ios.screencap));
+    } break;
     case InterfaceData::Controller::Type::Win32:
         if (config_.configuration().win32.hwnd) {
             std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", format_win32_config(config_.configuration().win32)));
@@ -695,6 +701,8 @@ bool Interactor::select_controller()
     case InterfaceData::Controller::Type::Adb:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Adb;
         return select_adb();
+    case InterfaceData::Controller::Type::IOS:
+        return select_ios(controller.ios);
     case InterfaceData::Controller::Type::Win32:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Win32;
         return select_win32_hwnd(controller.win32);
@@ -879,6 +887,109 @@ bool Interactor::select_playcover(const MAA_PROJECT_INTERFACE_NS::InterfaceData:
     pc.address = buffer->empty() ? default_address : *buffer;
     std::cout << "\n";
 
+    return true;
+}
+
+bool Interactor::select_ios_auto_detect()
+{
+    std::cout << "Searching USB and Wi-Fi iOS devices...\n";
+    auto* list = MaaToolkitIOSDeviceListCreate();
+    if (!list) {
+        return true;
+    }
+    OnScopeLeave([&]() { MaaToolkitIOSDeviceListDestroy(list); });
+    const auto options = json::value(config_.configuration().ios.config).to_string();
+    if (!MaaToolkitIOSDeviceFindWithOptions(MaaIOSConnectionMethod_Auto, options.c_str(), nullptr, nullptr, list)) {
+        std::cout << MaaToolkitIOSDeviceListGetWarnings(list) << "\n";
+        return true;
+    }
+    std::vector<const MaaToolkitIOSDevice*> devices;
+    for (MaaSize i = 0; i < MaaToolkitIOSDeviceListSize(list); ++i) {
+        const auto* device = MaaToolkitIOSDeviceListAt(list, i);
+        if (!device || !MaaToolkitIOSDeviceGetUdid(device)[0]) {
+            continue;
+        }
+        devices.push_back(device);
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t{}. {}  {}\n", devices.size(), MaaToolkitIOSDeviceGetName(device), MaaToolkitIOSDeviceGetUdid(device)));
+    }
+    if (devices.empty()) {
+        std::cout << "No selectable device. Pair and prepare the device with xdb, or enter a UDID manually.\n";
+        return true;
+    }
+    std::cout << std::format("\t{}. Enter a UDID manually\n", devices.size() + 1);
+    const auto choice = input(devices.size() + 1, "Select device");
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    if (*choice <= static_cast<int>(devices.size())) {
+        config_.configuration().ios.udid = MaaToolkitIOSDeviceGetUdid(devices[*choice - 1]);
+    }
+    return true;
+}
+
+bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config)
+{
+    std::cout << "### Configure iOS device ###\n\n"
+                 "Pair and prepare the device with xdb before running tasks.\n";
+    auto& ios = config_.configuration().ios;
+    if (ios.config.empty()) {
+        ios.config = ios_config.config;
+    }
+    if (ios.udid.empty()) {
+        ios.udid = ios_config.udid;
+    }
+    if (ios.udid.empty() && !select_ios_auto_detect()) {
+        return false;
+    }
+
+    std::cout << "Device UDID is required. Select a discovered device or enter its UDID.\n";
+    do {
+        const auto value = read_line(std::format("UDID [{}]: ", ios.udid));
+        if (!value) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (!value->empty()) {
+            ios.udid = *value;
+        }
+        if (ios.udid.empty()) {
+            std::cout << "Device UDID cannot be empty.\n";
+        }
+    } while (ios.udid.empty());
+
+    std::cout << "\n### Select connection method ###\n\n"
+                 "\t1. Auto: prefer USB, then paired Wi-Fi\n"
+                 "\t2. USB\n"
+                 "\t3. Wi-Fi\n";
+    const auto transport = input(3, "Choose connection method");
+    if (!transport) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.connection = *transport == 1 ? "Auto" : *transport == 2 ? "USB" : "WiFi";
+    if (ios.connection == "WiFi") {
+        const auto current = ios.config.get("wifi_address", std::string("auto"));
+        const auto address = read_line(std::format("Wi-Fi address [{}]: ", current));
+        if (!address) {
+            input_aborted_ = true;
+            return false;
+        }
+        ios.config["wifi_address"] = address->empty() ? current : *address;
+    }
+
+    std::cout << "\n### Select screencap method ###\n\n"
+                 "\t1. Stream: video frames, low latency, lossy, background decoding\n"
+                 "\t2. ScreenshotService: lossless screenshot RPC, no background decoding\n"
+                 "\t3. Both: stream first, fall back to the screenshot service\n";
+    const auto choice = input(3, "Choose screencap method");
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.screencap = *choice == 1 ? "Stream" : *choice == 2 ? "ScreenshotService" : "Stream|ScreenshotService";
+    std::cout << "\n";
     return true;
 }
 

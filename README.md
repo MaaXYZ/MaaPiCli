@@ -73,6 +73,37 @@ CLI 可组合以下 Linux 截图和输入方式：
 
 `controller.linux.use_win32_vk_code` 可把 Win32 Virtual-Key 键码转换为 Linux evdev 键码。Linux 运行环境仍需按 MaaFramework 文档准备 Wayland、PipeWire、Portal、libei 或 uinput 相关权限和服务。
 
+## iOS 控制器
+
+需要使用包含 iOS 控制器的 MaaFramework SDK 与运行库，并安装 xdb Server 1.6.0 或更新版本。安装步骤见 [XDeviceBridge 文档](https://github.com/scrctl/XDeviceBridge/blob/main/docs/INSTALL_zh.md)。
+先用 xdb 完成设备配对和 DDI 准备：
+
+```bash
+xdb pair --wifi
+xdb devices -l
+xdb -s '<UDID>' ddi prepare --wifi auto
+```
+
+在项目的 `interface.json` 中声明 `"type": "IOS"`，运行 MaaPiCli 后选择该控制器。
+CLI 可以发现设备或手动输入 UDID，选择 Auto、USB 或 Wi-Fi 连接，以及 `Stream`、`ScreenshotService` 或两者组合的取图方式。
+UDID、连接方式、取图方式和可选的 `config.server_port` 保存在 `config/maa_pi_config.json`；配对凭据与 DDI 由 xdb 管理。
+
+```json
+{
+    "name": "iOS",
+    "type": "IOS",
+    "ios": {
+        "udid": "<UDID>",
+        "connection": "WiFi",
+        "config": { "wifi_address": "auto" },
+        "screencap": "Stream|ScreenshotService"
+    }
+}
+```
+
+`ios` 中的字段是项目默认值。`connection` 默认为 `Auto`，优先 USB，再尝试已配对的 Wi-Fi。`config.wifi_address` 可填 `auto` 自动发现或设备 IP 地址。
+完整字段说明见 [MaaFramework iOS 控制方式](https://github.com/MaaXYZ/MaaFramework/blob/main/docs/zh_cn/2.4-%E6%8E%A7%E5%88%B6%E6%96%B9%E5%BC%8F%E8%AF%B4%E6%98%8E.md#ios)。
+
 ## CLI 局限性
 
 以下 PI 协议功能由于终端环境的固有限制，无法实现或仅提供降级支持：

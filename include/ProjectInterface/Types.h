@@ -21,6 +21,16 @@ struct InterfaceData
 
     struct Controller
     {
+        struct IOSConfig
+        {
+            std::string udid;
+            std::string connection;
+            std::string screencap;
+            json::object config;
+
+            MEO_JSONIZATION(MEO_OPT udid, MEO_OPT connection, MEO_OPT screencap, MEO_OPT config);
+        };
+
         struct Win32Config
         {
             std::string class_regex;
@@ -73,6 +83,7 @@ struct InterfaceData
         {
             Invalid,
             Adb,
+            IOS,
             Win32,
             MacOS,
             PlayCover,
@@ -100,6 +111,7 @@ struct InterfaceData
         // v2.3.0: 控制器级选项
         std::vector<std::string> option;
 
+        IOSConfig ios;
         Win32Config win32;
         MacOSConfig macos;
         PlayCoverConfig playcover;
@@ -118,6 +130,7 @@ struct InterfaceData
             MEO_OPT display_raw,
             MEO_OPT attach_resource_path,
             MEO_OPT option,
+            MEO_OPT ios,
             MEO_OPT win32,
             MEO_OPT macos,
             MEO_OPT playcover,
@@ -459,6 +472,18 @@ struct Configuration
         MEO_JSONIZATION(name, adb_path, address);
     };
 
+    struct IOSConfig
+    {
+        std::string udid;
+        std::string connection;
+        std::string screencap;
+        json::object config;
+
+        bool operator==(const IOSConfig&) const = default;
+
+        MEO_JSONIZATION(MEO_OPT udid, MEO_OPT connection, MEO_OPT screencap, MEO_OPT config);
+    };
+
     struct PlayCoverConfig
     {
         std::string address;
@@ -519,6 +544,7 @@ struct Configuration
 
     Controller controller;
     AdbConfig adb;
+    IOSConfig ios;
     Win32Config win32;
     MacOSConfig macos;
     PlayCoverConfig playcover;
@@ -538,6 +564,7 @@ struct Configuration
     MEO_JSONIZATION(
         controller,
         MEO_OPT adb,
+        MEO_OPT ios,
         MEO_OPT win32,
         MEO_OPT macos,
         MEO_OPT playcover,
@@ -574,6 +601,14 @@ struct RuntimeParam
         MaaAdbInputMethod input = MaaAdbInputMethod_None;
         std::string config;
         std::string agent_path;
+    };
+
+    struct IOSParam
+    {
+        std::string udid;
+        MaaIOSConnectionMethod connection = MaaIOSConnectionMethod_Auto;
+        MaaIOSScreencapMethod screencap = MaaIOSScreencapMethod_Default;
+        std::string config;
     };
 
     struct Win32Param
@@ -640,7 +675,7 @@ struct RuntimeParam
         std::filesystem::path cwd;
     };
 
-    std::variant<std::monostate, AdbParam, Win32Param, MacOSParam, PlayCoverParam, GamepadParam, LinuxParam> controller_param;
+    std::variant<std::monostate, AdbParam, IOSParam, Win32Param, MacOSParam, PlayCoverParam, GamepadParam, LinuxParam> controller_param;
     std::vector<std::filesystem::path> resource_path;
     size_t primary_resource_count = 0; // resource.path 加载数量，加载完成后、附加资源前校验 hash
     std::string resource_hash;

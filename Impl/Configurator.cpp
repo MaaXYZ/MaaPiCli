@@ -326,6 +326,42 @@ MaaMacOSInputMethod parse_macos_input_method(const std::string& method)
     return MaaMacOSInputMethod_None;
 }
 
+MaaIOSScreencapMethod parse_ios_screencap_method(const std::string& method)
+{
+    static const std::unordered_map<std::string, MaaIOSScreencapMethod> mapping = {
+        { "Stream", MaaIOSScreencapMethod_Stream },
+        { "ScreenshotService", MaaIOSScreencapMethod_ScreenshotService },
+        { "Service", MaaIOSScreencapMethod_ScreenshotService },
+    };
+
+    // Accept combined methods, e.g. "Stream|ScreenshotService".
+    MaaIOSScreencapMethod result = MaaIOSScreencapMethod_None;
+    std::vector<std::string> tokens;
+    for (auto&& pipe : string_split(method, '|')) {
+        for (auto&& comma : string_split(pipe, ',')) {
+            tokens.push_back(comma);
+        }
+    }
+
+    for (auto& token : tokens) {
+        string_trim_(token);
+        if (token.empty()) {
+            continue;
+        }
+        if (token == "All" || token == "Default") {
+            result |= MaaIOSScreencapMethod_All;
+            continue;
+        }
+        auto it = mapping.find(token);
+        if (it == mapping.end()) {
+            LogError << "Unknown iOS screencap method" << VAR(token);
+            return MaaIOSScreencapMethod_None;
+        }
+        result |= it->second;
+    }
+    return result;
+}
+
 MaaLinuxScreencapMethod parse_linux_screencap_method(const std::string& method)
 {
     static const std::unordered_map<std::string, MaaLinuxScreencapMethod> mapping = {
@@ -1435,6 +1471,7 @@ void merge_local_changes(const Configuration& baseline, const Configuration& loc
 
     merge_field(&Configuration::controller);
     merge_field(&Configuration::adb);
+    merge_field(&Configuration::ios);
     merge_field(&Configuration::win32);
     merge_field(&Configuration::macos);
     merge_field(&Configuration::playcover);
@@ -1693,6 +1730,39 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         adb.agent_path = MaaNS::path_to_utf8_string(resource_dir_ / "MaaAgentBinary");
 
         runtime.controller_param = std::move(adb);
+    } break;
+
+    case InterfaceData::Controller::Type::IOS: {
+        RuntimeParam::IOSParam ios;
+        ios.udid = config_.ios.udid.empty() ? controller.ios.udid : config_.ios.udid;
+        const auto& connection = config_.ios.connection.empty() ? controller.ios.connection : config_.ios.connection;
+        if (connection.empty() || connection == "Auto") {
+            ios.connection = MaaIOSConnectionMethod_Auto;
+        }
+        else if (connection == "USB") {
+            ios.connection = MaaIOSConnectionMethod_USB;
+        }
+        else if (connection == "WiFi") {
+            ios.connection = MaaIOSConnectionMethod_WiFi;
+        }
+        else {
+            LogError << "Invalid iOS connection method" << VAR(connection);
+            return std::nullopt;
+        }
+        ios.config = json::value(config_.ios.config.empty() ? controller.ios.config : config_.ios.config).to_string();
+        if (ios.udid.empty()) {
+            LogError << "iOS device UDID is empty";
+            return std::nullopt;
+        }
+        const auto& screencap = config_.ios.screencap.empty() ? controller.ios.screencap : config_.ios.screencap;
+        if (!screencap.empty()) {
+            ios.screencap = parse_ios_screencap_method(screencap);
+            if (ios.screencap == MaaIOSScreencapMethod_None) {
+                LogError << "Invalid iOS screencap method" << VAR(screencap);
+                return std::nullopt;
+            }
+        }
+        runtime.controller_param = std::move(ios);
     } break;
 
     case InterfaceData::Controller::Type::Win32: {
