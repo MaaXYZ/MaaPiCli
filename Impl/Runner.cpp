@@ -488,8 +488,8 @@ bool Runner::run(const RuntimeParam& param)
             adb_param.agent_path.c_str());
     }
     else if (const auto* p_ios_param = std::get_if<RuntimeParam::IOSParam>(&param.controller_param)) {
-        controller_handle = MaaIOSControllerCreate(
-            p_ios_param->udid.c_str(), p_ios_param->screencap, p_ios_param->connection, p_ios_param->config.c_str());
+        controller_handle =
+            MaaIOSControllerCreate(p_ios_param->udid.c_str(), p_ios_param->screencap, p_ios_param->connection, p_ios_param->config.c_str());
     }
     else if (const auto* p_win32_param = std::get_if<RuntimeParam::Win32Param>(&param.controller_param)) {
         controller_handle =

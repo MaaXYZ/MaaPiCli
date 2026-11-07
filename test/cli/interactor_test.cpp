@@ -1092,7 +1092,9 @@ int main()
         configuration.ios.screencap = "ScreenshotService";
         const auto runtime = configurator.generate_runtime();
         const auto* ios = runtime ? std::get_if<RuntimeParam::IOSParam>(&runtime->controller_param) : nullptr;
-        require(ios && ios->udid == "test-iphone" && ios->connection == MaaIOSConnectionMethod_WiFi, "iOS runtime should use project device defaults");
+        require(
+            ios && ios->udid == "test-iphone" && ios->connection == MaaIOSConnectionMethod_WiFi,
+            "iOS runtime should use project device defaults");
         require(ios && ios->screencap == MaaIOSScreencapMethod_ScreenshotService, "saved iOS screencap choice should override the project");
         require(ios && ios->config.find("17424") != std::string::npos, "iOS server configuration should reach the runtime");
         configuration.ios.connection = "USB";
@@ -1114,17 +1116,17 @@ int main()
         require(
             saved && saved->ios.udid == "saved-iphone" && saved->ios.screencap == "Stream|ScreenshotService",
             "iOS selection should preserve the UDID and save the combined screencap method");
-        require(saved && saved->ios.config.get("wifi_address", std::string()) == "auto",
-                "Wi-Fi selection should save its address");
+        require(saved && saved->ios.config.get("wifi_address", std::string()) == "auto", "Wi-Fi selection should save its address");
         {
             StreamRedirector redirector("1\n\n1\n2\n7\n");
             Interactor interactor(ios_user_dir);
             require(interactor.load(resource_dir) && interactor.interact(), "switching from Wi-Fi to Auto should complete");
         }
         saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
-        require(saved && saved->ios.connection == "Auto" && !saved->ios.config.contains("wifi_address")
-                    && saved->ios.config.get("server_port", 0) == 17424,
-                "Auto must clear the Wi-Fi override while preserving server settings");
+        require(
+            saved && saved->ios.connection == "Auto" && !saved->ios.config.contains("wifi_address")
+                && saved->ios.config.get("server_port", 0) == 17424,
+            "Auto must clear the Wi-Fi override while preserving server settings");
         {
             StreamRedirector redirector("1\n");
             Interactor interactor(ios_user_dir);
