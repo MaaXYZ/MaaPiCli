@@ -1110,10 +1110,21 @@ int main()
             require(interactor.load(resource_dir), "saved iOS configuration should load in the CLI");
             require(interactor.interact(), "iOS device and screencap selection should complete");
         }
-        const auto saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        auto saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
         require(
             saved && saved->ios.udid == "saved-iphone" && saved->ios.screencap == "Stream|ScreenshotService",
             "iOS selection should preserve the UDID and save the combined screencap method");
+        require(saved && saved->ios.config.get("wifi_address", std::string()) == "auto",
+                "Wi-Fi selection should save its address");
+        {
+            StreamRedirector redirector("1\n\n1\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "switching from Wi-Fi to Auto should complete");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(saved && saved->ios.connection == "Auto" && !saved->ios.config.contains("wifi_address")
+                    && saved->ios.config.get("server_port", 0) == 17424,
+                "Auto must clear the Wi-Fi override while preserving server settings");
         {
             StreamRedirector redirector("1\n");
             Interactor interactor(ios_user_dir);

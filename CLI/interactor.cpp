@@ -978,6 +978,9 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
         }
         ios.config["wifi_address"] = address->empty() ? current : *address;
     }
+    else {
+        ios.config.erase("wifi_address");
+    }
 
     std::cout << "\n### Select screencap method ###\n\n"
                  "\t1. Stream: video frames, low latency, lossy, background decoding\n"
