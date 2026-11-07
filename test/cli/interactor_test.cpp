@@ -174,7 +174,9 @@ void test_path_inputs_and_agent_environment(const std::filesystem::path& fixture
 
     Configurator reloaded;
     const auto original_cwd = std::filesystem::current_path();
+    std::filesystem::current_path(user_dir.parent_path());
     require(reloaded.load(fixture_dir, std::filesystem::relative(user_dir)), "saved paths and a relative user directory should load");
+    std::filesystem::current_path(original_cwd);
     require(reloaded.configuration().task.size() == 1, "manual path input should add one task");
     if (!reloaded.configuration().task.empty() && !reloaded.configuration().task.front().option.empty()) {
         const auto& inputs = reloaded.configuration().task.front().option.front().inputs;
