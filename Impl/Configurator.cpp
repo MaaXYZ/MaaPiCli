@@ -1471,7 +1471,24 @@ void merge_local_changes(const Configuration& baseline, const Configuration& loc
 
     merge_field(&Configuration::controller);
     merge_field(&Configuration::adb);
-    merge_field(&Configuration::ios);
+    auto merge_ios_field = [&]<typename Field>(Field Configuration::IOSConfig::* field) {
+        if (local.ios.*field != baseline.ios.*field) {
+            persisted.ios.*field = local.ios.*field;
+        }
+    };
+    merge_ios_field(&Configuration::IOSConfig::udid);
+    merge_ios_field(&Configuration::IOSConfig::connection);
+    merge_ios_field(&Configuration::IOSConfig::screencap);
+    for (const auto& [key, value] : baseline.ios.config) {
+        if (!local.ios.config.contains(key)) {
+            persisted.ios.config.erase(key);
+        }
+    }
+    for (const auto& [key, value] : local.ios.config) {
+        if (!baseline.ios.config.contains(key) || baseline.ios.config.at(key) != value) {
+            persisted.ios.config[key] = value;
+        }
+    }
     merge_field(&Configuration::win32);
     merge_field(&Configuration::macos);
     merge_field(&Configuration::playcover);
@@ -1749,7 +1766,14 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
             LogError << "Invalid iOS connection method" << VAR(connection);
             return std::nullopt;
         }
-        ios.config = json::value(config_.ios.config.empty() ? controller.ios.config : config_.ios.config).to_string();
+        auto options = controller.ios.config;
+        for (const auto& [key, value] : config_.ios.config) {
+            options[key] = value;
+        }
+        if (ios.connection != MaaIOSConnectionMethod_WiFi) {
+            options.erase("wifi_address");
+        }
+        ios.config = json::value(std::move(options)).to_string();
         if (ios.udid.empty()) {
             LogError << "iOS device UDID is empty";
             return std::nullopt;

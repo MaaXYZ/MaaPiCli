@@ -1076,7 +1076,7 @@ int main()
                 "interface_version": 2,
                 "controller": [{"name": "ios", "type": "IOS", "ios": {
                     "udid": "test-iphone", "connection": "WiFi", "screencap": "Stream",
-                    "config": {"server_port": 17424}
+                    "config": {"server_port": 17424, "wifi_address": "10.0.0.1"}
                 }}],
                 "resource": [{"name": "default", "path": ["resource"]}],
                 "task": [{"name": "capture", "entry": "Capture"}]
@@ -1097,17 +1097,32 @@ int main()
             "iOS runtime should use project device defaults");
         require(ios && ios->screencap == MaaIOSScreencapMethod_ScreenshotService, "saved iOS screencap choice should override the project");
         require(ios && ios->config.find("17424") != std::string::npos, "iOS server configuration should reach the runtime");
+        configuration.ios.config = { { "max_fps", 15 } };
+        const auto merged_runtime = configurator.generate_runtime();
+        const auto* merged = merged_runtime ? std::get_if<RuntimeParam::IOSParam>(&merged_runtime->controller_param) : nullptr;
+        const auto merged_options = merged ? json::parse(merged->config) : std::nullopt;
+        require(
+            merged_options && merged_options->get("server_port", 0) == 17424 && merged_options->get("max_fps", 0) == 15,
+            "user fields must merge with project server settings");
+        configuration.ios.config = { };
         configuration.ios.connection = "USB";
         const auto usb_runtime = configurator.generate_runtime();
         const auto* usb = usb_runtime ? std::get_if<RuntimeParam::IOSParam>(&usb_runtime->controller_param) : nullptr;
         require(usb && usb->connection == MaaIOSConnectionMethod_USB, "saved USB connection should override project Wi-Fi");
+        const auto usb_options = usb ? json::parse(usb->config) : std::nullopt;
+        require(usb_options && !usb_options->contains("wifi_address"), "USB must ignore project Wi-Fi addresses");
+        configuration.ios.connection = "Auto";
+        const auto auto_runtime = configurator.generate_runtime();
+        const auto* automatic = auto_runtime ? std::get_if<RuntimeParam::IOSParam>(&auto_runtime->controller_param) : nullptr;
+        const auto auto_options = automatic ? json::parse(automatic->config) : std::nullopt;
+        require(auto_options && !auto_options->contains("wifi_address"), "Auto must not restore the project Wi-Fi override");
         configuration.ios.connection = "invalid";
         require(!configurator.generate_runtime(), "unknown iOS transport must fail runtime generation");
         configuration.ios.connection.clear();
         configuration.ios.udid = "saved-iphone";
         require(configurator.save(ios_user_dir), "iOS user configuration should save");
         {
-            StreamRedirector redirector("1\n\n3\n\n3\n7\n");
+            StreamRedirector redirector("1\n\n3\n10.0.0.99\n3\n7\n");
             Interactor interactor(ios_user_dir);
             require(interactor.load(resource_dir), "saved iOS configuration should load in the CLI");
             require(interactor.interact(), "iOS device and screencap selection should complete");
@@ -1116,7 +1131,7 @@ int main()
         require(
             saved && saved->ios.udid == "saved-iphone" && saved->ios.screencap == "Stream|ScreenshotService",
             "iOS selection should preserve the UDID and save the combined screencap method");
-        require(saved && saved->ios.config.get("wifi_address", std::string()) == "auto", "Wi-Fi selection should save its address");
+        require(saved && saved->ios.config.get("wifi_address", std::string()) == "10.0.0.99", "Wi-Fi selection should save its address");
         {
             StreamRedirector redirector("1\n\n1\n2\n7\n");
             Interactor interactor(ios_user_dir);
@@ -1138,6 +1153,47 @@ int main()
         }
         const auto after_eof = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
         require(after_eof && saved && after_eof->ios == saved->ios, "aborted iOS selection should not overwrite saved configuration");
+        Configurator first_writer, second_writer;
+        require(
+            first_writer.load(resource_dir, ios_user_dir) && second_writer.load(resource_dir, ios_user_dir),
+            "concurrent iOS configurations should load");
+        first_writer.configuration().ios.udid = "first-writer";
+        first_writer.configuration().ios.config["max_fps"] = 10;
+        second_writer.configuration().ios.screencap = "Stream";
+        second_writer.configuration().ios.config["hardware_decode"] = false;
+        require(first_writer.save(ios_user_dir) && second_writer.save(ios_user_dir), "independent iOS edits should save");
+        const auto combined = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            combined && combined->ios.udid == "first-writer" && combined->ios.screencap == "Stream"
+                && combined->ios.config.get("max_fps", 0) == 10 && combined->ios.config.contains("hardware_decode"),
+            "concurrent writers must preserve independent iOS fields and config keys");
+
+        std::filesystem::create_directories(resource_dir);
+        {
+            std::ofstream stream(resource_dir / "interface.json");
+            stream << R"json({
+                "interface_version": 2,
+                "controller": [
+                    {"name": "ios", "type": "IOS", "ios": {"udid": "phone-a"}},
+                    {"name": "second", "type": "IOS", "ios": {
+                        "udid": "phone-b", "connection": "USB", "screencap": "ScreenshotService",
+                        "config": {"server_port": 17425}
+                    }}
+                ],
+                "resource": [{"name": "default", "path": ["resource"]}],
+                "task": [{"name": "capture", "entry": "Capture"}]
+            })json";
+        }
+        {
+            StreamRedirector redirector("1\n2\n\n\n\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "switching iOS controllers should complete");
+        }
+        const auto second = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            second && second->controller.name == "second" && second->ios.udid == "phone-b" && second->ios.connection == "USB"
+                && second->ios.screencap == "ScreenshotService" && second->ios.config.get("server_port", 0) == 17425,
+            "new controller must use its own device, settings and default menu choices");
         std::filesystem::remove_all(resource_dir);
         std::filesystem::remove_all(ios_user_dir);
     }

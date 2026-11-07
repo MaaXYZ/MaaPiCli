@@ -694,6 +694,9 @@ bool Interactor::select_controller()
     }
     const auto& controller = all_controllers[index];
 
+    if (controller.type == InterfaceData::Controller::Type::IOS && config_.configuration().controller.name != controller.name) {
+        config_.configuration().ios = { };
+    }
     config_.configuration().controller.name = controller.name;
     config_.configuration().controller.type = controller.type;
 
@@ -934,8 +937,16 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
     std::cout << "### Configure iOS device ###\n\n"
                  "Pair and prepare the device with xdb before running tasks.\n";
     auto& ios = config_.configuration().ios;
-    if (ios.config.empty()) {
-        ios.config = ios_config.config;
+    for (const auto& [key, value] : ios_config.config) {
+        if (!ios.config.contains(key)) {
+            ios.config[key] = value;
+        }
+    }
+    if (ios.connection.empty()) {
+        ios.connection = ios_config.connection;
+    }
+    if (ios.screencap.empty()) {
+        ios.screencap = ios_config.screencap;
     }
     if (ios.udid.empty()) {
         ios.udid = ios_config.udid;
@@ -963,7 +974,8 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
                  "\t1. Auto: prefer USB, then paired Wi-Fi\n"
                  "\t2. USB\n"
                  "\t3. Wi-Fi\n";
-    const auto transport = input(3, "Choose connection method");
+    const int default_transport = ios.connection == "USB" ? 2 : ios.connection == "WiFi" ? 3 : 1;
+    const auto transport = input(3, "Choose connection method", default_transport);
     if (!transport) {
         input_aborted_ = true;
         return false;
@@ -986,7 +998,10 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
                  "\t1. Stream: video frames, low latency, lossy, background decoding\n"
                  "\t2. ScreenshotService: lossless screenshot RPC, no background decoding\n"
                  "\t3. Both: stream first, fall back to the screenshot service\n";
-    const auto choice = input(3, "Choose screencap method");
+    const int default_screencap = ios.screencap == "Stream"                                            ? 1
+                                  : ios.screencap == "ScreenshotService" || ios.screencap == "Service" ? 2
+                                                                                                       : 3;
+    const auto choice = input(3, "Choose screencap method", default_screencap);
     if (!choice) {
         input_aborted_ = true;
         return false;
