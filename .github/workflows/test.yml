@@ -75,7 +75,7 @@ jobs:
                       platform: x64
                       build-config: RelWithDebInfo
                     - os: linux
-                      runs-on: ubuntu-latest
+                      runs-on: ubuntu-24.04
                       arch: x86_64
                       platform: x86_64
                       build-config: Debug
