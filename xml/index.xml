@@ -48,6 +48,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a08f4c8ff9566fbf805c9e1f801c523da" kind="variable"><name>resource_option</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a659f473deae03f97db27d78253a0c147" kind="variable"><name>controller_option</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a84b453403ed4eb225a99cb97496f9af8" kind="variable"><name>pretask</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1adceb79eae0e4332b2faaf9a5d5d62715" kind="variable"><name>enabled_pretask</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1aeeab695e0973d55484ecbe1052f067eb" kind="variable"><name>last_welcome</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1a9f406e8825412bb554b04af5ebc54f36" kind="variable"><name>last_resolved_welcome</name></member>
   </compound>
@@ -55,6 +56,7 @@
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac053d3b399c4ecd0aea20421a8558906" kind="variable"><name>kInterfaceFilename</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a15b75dd5e1e5de823dd0379056d0c6c2" kind="variable"><name>kConfigPath</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af241e5ee11acf54976ea47d13f7aac3b" kind="variable"><name>resource_dir_</name></member>
+    <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a402f45154de0705318e6221f272796dc" kind="variable"><name>user_dir_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a079d5b3187f15dd1958662acf9701554" kind="variable"><name>data_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a03ad2ec7a2c139d4560b401bdb01a328" kind="variable"><name>first_time_use_</name></member>
     <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a9d59264d120edfc24f1ccedad69dd50f" kind="variable"><name>config_</name></member>
@@ -152,6 +154,10 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a6a5133e526517723c42923e078b264f4" kind="variable"><name>setting</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a5fbeccaea6c8d7c61613b1c37127deab" kind="enum"><name>InputType</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675" kind="enumvalue"><name>Text</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a5fbeccaea6c8d7c61613b1c37127deaba0b27918290ff5323bea1e3b78a9cf04e" kind="enumvalue"><name>File</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a5fbeccaea6c8d7c61613b1c37127deabae73cda510e8bb947f7e61089e5581494" kind="enumvalue"><name>Directory</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260" kind="enum"><name>PipelineType</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260a27118326006d3829667a400ad23d5d98" kind="enumvalue"><name>String</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1ab12bd9187d5f3421b38f61f221587260a1686a6c336b71b36d77354cea19a8b52" kind="enumvalue"><name>Int</name></member>
@@ -160,6 +166,7 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1aeb33851a5b84b6956058526ee20fd5dd" kind="variable"><name>label</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a660f42d93db6d9f8854245edb99470ae" kind="variable"><name>description</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a712f0589637c8ba9a353d2b921dcb3ee" kind="variable"><name>default_</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a637df57a7095ff75298f3cfa815e90b1" kind="variable"><name>input_type</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a941ace931858b6249675cd25e5f41ff5" kind="variable"><name>pipeline_type</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1ab25feedee049d4e105b73b1cf91e54" kind="variable"><name>verify</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input_1a1e0d29ef50001245b9195eb858222b39" kind="variable"><name>pattern_msg</name></member>
@@ -285,7 +292,14 @@
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a0d82aa9832c11c16ba9413395d224c25" kind="variable"><name>label</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a147e5f89bee06df3326dac0d3b02d777" kind="variable"><name>description</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a9253c6b262e32b2b42d49222074df785" kind="variable"><name>icon</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a044277d15ce3c7f5f1e5385bb2865edc" kind="variable"><name>controller</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a1dcc4c2cd098c0cdbda86c5cc8d3da1b" kind="variable"><name>pretask</name></member>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1a78387ea11a7fb52e218e8a3bd171f62f" kind="variable"><name>task</name></member>
+  </compound>
+  <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetPretask</name>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1a51e71963d8c864f5316959f6796a27f9" kind="variable"><name>name</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1ae199795ca6393938f26a16da2f6bcd28" kind="variable"><name>enabled</name></member>
+    <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1af56102fab78a8b56baf2fdc8e9cd990d" kind="variable"><name>option</name></member>
   </compound>
   <compound refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask" kind="struct"><name>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask</name>
     <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask_1add6508a103a5f2affb837f14cd4684c2" kind="variable"><name>name</name></member>

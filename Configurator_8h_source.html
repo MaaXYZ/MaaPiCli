@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.14.3</span>
+   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.15.0</span>
    </div>
    <div id="projectbrief">Command-line ProjectInterface client for MaaFramework</div>
   </td>
@@ -153,16 +153,17 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::string detect_system_language() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::filesystem::path resource_dir_;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">InterfaceData</a> data_;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">bool</span> first_time_use_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> config_;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> loaded_config_;                               <span class="comment">// Decrypted state used to identify local edits.</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    std::unordered_map&lt;std::string, std::string&gt; translations_; <span class="comment">// 翻译表</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>};</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    std::filesystem::path user_dir_;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">InterfaceData</a> data_;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">bool</span> first_time_use_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> config_;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <a class="code hl_struct" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">Configuration</a> loaded_config_;                               <span class="comment">// Decrypted state used to identify local edits.</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::unordered_map&lt;std::string, std::string&gt; translations_; <span class="comment">// 翻译表</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
 </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><a class="code hl_define" href="Conf_8h.html#ad36fabf2cb6e023566cc44c41e8f8a3c">MAA_PROJECT_INTERFACE_NS_END</a></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><a class="code hl_define" href="Conf_8h.html#ad36fabf2cb6e023566cc44c41e8f8a3c">MAA_PROJECT_INTERFACE_NS_END</a></div>
 </div>
 <div class="ttc" id="aConf_8h_html"><div class="ttname"><a href="Conf_8h.html">Conf.h</a></div></div>
 <div class="ttc" id="aConf_8h_html_a1ad05088b35493ae047bc81861829b9d"><div class="ttname"><a href="Conf_8h.html#a1ad05088b35493ae047bc81861829b9d">MAA_PROJECT_INTERFACE_NS_BEGIN</a></div><div class="ttdeci">#define MAA_PROJECT_INTERFACE_NS_BEGIN</div><div class="ttdef"><b>Definition</b> Conf.h:6</div></div>
@@ -180,13 +181,13 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_ac06c2c1f3765dbc38cf1f67103b22fed"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#ac06c2c1f3765dbc38cf1f67103b22fed">MaaPiCli::ProjectInterfaceNS::Configurator::resource_dir</a></div><div class="ttdeci">const auto &amp; resource_dir() const</div><div class="ttdef"><b>Definition</b> Configurator.h:39</div></div>
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_acb365a63dd97c194bd254f4d8f5ba479"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#acb365a63dd97c194bd254f4d8f5ba479">MaaPiCli::ProjectInterfaceNS::Configurator::update_welcome_snapshots</a></div><div class="ttdeci">std::optional&lt; bool &gt; update_welcome_snapshots(const std::filesystem::path &amp;user_dir, std::vector&lt; std::string &gt; declared, std::vector&lt; std::string &gt; resolved)</div></div>
 <div class="ttc" id="aclassMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_html_af6da949c79a372a934a3ef2a6fe367e2"><div class="ttname"><a href="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#af6da949c79a372a934a3ef2a6fe367e2">MaaPiCli::ProjectInterfaceNS::Configurator::configuration</a></div><div class="ttdeci">auto &amp; configuration()</div><div class="ttdef"><b>Definition</b> Configurator.h:35</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</a></div><div class="ttdef"><b>Definition</b> Types.h:387</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task.html">MaaPiCli::ProjectInterfaceNS::Configuration::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:491</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">MaaPiCli::ProjectInterfaceNS::Configuration</a></div><div class="ttdef"><b>Definition</b> Types.h:383</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Pretask.html">MaaPiCli::ProjectInterfaceNS::Configuration::Pretask</a></div><div class="ttdef"><b>Definition</b> Types.h:407</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1Task.html">MaaPiCli::ProjectInterfaceNS::Configuration::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:511</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html">MaaPiCli::ProjectInterfaceNS::Configuration</a></div><div class="ttdef"><b>Definition</b> Types.h:403</div></div>
 <div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option.html">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</a></div><div class="ttdef"><b>Definition</b> Types.h:168</div></div>
 <div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Task.html">MaaPiCli::ProjectInterfaceNS::InterfaceData::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:142</div></div>
 <div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html">MaaPiCli::ProjectInterfaceNS::InterfaceData</a></div><div class="ttdef"><b>Definition</b> Types.h:19</div></div>
-<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:598</div></div>
+<div class="ttc" id="astructMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task_html"><div class="ttname"><a href="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1Task.html">MaaPiCli::ProjectInterfaceNS::RuntimeParam::Task</a></div><div class="ttdef"><b>Definition</b> Types.h:620</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="540" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="540" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="562" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="562" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" static="no" mutable="no">
         <type>std::optional&lt; int &gt;</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="541" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="541" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="563" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="563" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1aaa219e2f720ce05fc73de6c774a0f02a" prot="public" static="no" mutable="no">
         <type>std::optional&lt; std::array&lt; int, 2 &gt; &gt;</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="542" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="542" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="564" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="564" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1af045b2b596131dc7e3661c0cf270d985" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -59,14 +59,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="543" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="543" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="565" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="565" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/ProjectInterface/Types.h" line="538" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="539" bodyend="544"/>
+    <location file="include/ProjectInterface/Types.h" line="560" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="561" bodyend="566"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1aaa219e2f720ce05fc73de6c774a0f02a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>expand</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1DisplayConfig_1a85895aa74eca2e0c6f70f600da51ce2a" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::RuntimeParam::DisplayConfig</scope><name>long_side</name></member>

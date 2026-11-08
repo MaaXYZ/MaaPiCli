@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type_0',['Type',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller.html#ac94c85a98579e573f3d7a3774b6b7b19',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::Type'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option.html#a4d98381f50d946de17ba15c3b47d3791',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Type']]]
+  ['pipelinetype_0',['PipelineType',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input.html#ab12bd9187d5f3421b38f61f221587260',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input']]]
 ];

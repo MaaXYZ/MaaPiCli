@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.14.3</span>
+   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.15.0</span>
    </div>
    <div id="projectbrief">Command-line ProjectInterface client for MaaFramework</div>
   </td>
@@ -101,6 +101,11 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a5fbeccaea6c8d7c61613b1c37127deab" id="r_a5fbeccaea6c8d7c61613b1c37127deab"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deab">InputType</a> { <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675">Text</a>
+, <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deaba0b27918290ff5323bea1e3b78a9cf04e">File</a>
+, <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deabae73cda510e8bb947f7e61089e5581494">Directory</a>
+ }</td></tr>
+<tr class="separator:a5fbeccaea6c8d7c61613b1c37127deab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab12bd9187d5f3421b38f61f221587260" id="r_ab12bd9187d5f3421b38f61f221587260"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab12bd9187d5f3421b38f61f221587260">PipelineType</a> { <a class="el" href="#ab12bd9187d5f3421b38f61f221587260a27118326006d3829667a400ad23d5d98">String</a>
 , <a class="el" href="#ab12bd9187d5f3421b38f61f221587260a1686a6c336b71b36d77354cea19a8b52">Int</a>
 , <a class="el" href="#ab12bd9187d5f3421b38f61f221587260ac26f15e86e3de4c398a8273272aba034">Bool</a>
@@ -117,6 +122,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a660f42d93db6d9f8854245edb99470ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a712f0589637c8ba9a353d2b921dcb3ee" id="r_a712f0589637c8ba9a353d2b921dcb3ee"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a712f0589637c8ba9a353d2b921dcb3ee">default_</a></td></tr>
 <tr class="separator:a712f0589637c8ba9a353d2b921dcb3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a637df57a7095ff75298f3cfa815e90b1" id="r_a637df57a7095ff75298f3cfa815e90b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deab">InputType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a637df57a7095ff75298f3cfa815e90b1">input_type</a> = <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675">InputType::Text</a></td></tr>
+<tr class="separator:a637df57a7095ff75298f3cfa815e90b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a941ace931858b6249675cd25e5f41ff5" id="r_a941ace931858b6249675cd25e5f41ff5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab12bd9187d5f3421b38f61f221587260">PipelineType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a941ace931858b6249675cd25e5f41ff5">pipeline_type</a> = <a class="el" href="#ab12bd9187d5f3421b38f61f221587260a27118326006d3829667a400ad23d5d98">PipelineType::String</a></td></tr>
 <tr class="separator:a941ace931858b6249675cd25e5f41ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ab25feedee049d4e105b73b1cf91e54" id="r_a1ab25feedee049d4e105b73b1cf91e54"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ab25feedee049d4e105b73b1cf91e54">verify</a></td></tr>
@@ -127,6 +134,33 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a0d50ca890e329a192038835d8809f9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a5fbeccaea6c8d7c61613b1c37127deab" name="a5fbeccaea6c8d7c61613b1c37127deab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fbeccaea6c8d7c61613b1c37127deab">&#9670;&#160;</a></span>InputType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deab">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::InputType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675" name="a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675"></a>Text&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5fbeccaea6c8d7c61613b1c37127deaba0b27918290ff5323bea1e3b78a9cf04e" name="a5fbeccaea6c8d7c61613b1c37127deaba0b27918290ff5323bea1e3b78a9cf04e"></a>File&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5fbeccaea6c8d7c61613b1c37127deabae73cda510e8bb947f7e61089e5581494" name="a5fbeccaea6c8d7c61613b1c37127deabae73cda510e8bb947f7e61089e5581494"></a>Directory&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="ab12bd9187d5f3421b38f61f221587260" name="ab12bd9187d5f3421b38f61f221587260"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab12bd9187d5f3421b38f61f221587260">&#9670;&#160;</a></span>PipelineType</h2>
 
@@ -205,6 +239,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::string MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::default_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a637df57a7095ff75298f3cfa815e90b1" name="a637df57a7095ff75298f3cfa815e90b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a637df57a7095ff75298f3cfa815e90b1">&#9670;&#160;</a></span>input_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deab">InputType</a> MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input::input_type = <a class="el" href="#a5fbeccaea6c8d7c61613b1c37127deaba9dffbf69ffba8bc38bc4e01abf4b1675">InputType::Text</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

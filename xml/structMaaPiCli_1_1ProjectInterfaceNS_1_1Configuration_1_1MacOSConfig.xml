@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="421" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="421" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="441" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="441" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1a27fd02688b8af4af9f80ec2c13aa2548" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="422" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="422" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="442" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="442" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ab8ae6428e400762f5e4db9366b072186" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="423" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="423" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="443" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="443" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1affd5b272c2f874867f7a1a83f96ffa44" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="424" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="424" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="444" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="444" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -78,7 +78,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="426" column="14"/>
+        <location file="include/ProjectInterface/Types.h" line="446" column="14"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -104,7 +104,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="419" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="420" bodyend="429"/>
+    <location file="include/ProjectInterface/Types.h" line="439" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="440" bodyend="449"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1affd5b272c2f874867f7a1a83f96ffa44" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>input</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1MacOSConfig_1ae7315a051834590cdf1614fbad184803" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configuration::MacOSConfig</scope><name>operator==</name></member>

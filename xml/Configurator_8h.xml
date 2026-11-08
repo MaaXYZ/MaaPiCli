@@ -162,15 +162,16 @@
 <codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/>detect_system_language()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="58"><highlight class="normal"></highlight></codeline>
 <codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>resource_dir_;</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref><sp/>data_;</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>first_time_use_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>config_;</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>loaded_config_;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Decrypted<sp/>state<sp/>used<sp/>to<sp/>identify<sp/>local<sp/>edits.</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unordered_map&lt;std::string,<sp/>std::string&gt;<sp/>translations_;<sp/></highlight><highlight class="comment">//<sp/>翻译表</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="66"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"></highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><ref refid="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" kindref="member">MAA_PROJECT_INTERFACE_NS_END</ref></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>user_dir_;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData" kindref="compound">InterfaceData</ref><sp/>data_;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>first_time_use_<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>config_;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration" kindref="compound">Configuration</ref><sp/>loaded_config_;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Decrypted<sp/>state<sp/>used<sp/>to<sp/>identify<sp/>local<sp/>edits.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unordered_map&lt;std::string,<sp/>std::string&gt;<sp/>translations_;<sp/></highlight><highlight class="comment">//<sp/>翻译表</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><ref refid="Conf_8h_1ad36fabf2cb6e023566cc44c41e8f8a3c" kindref="member">MAA_PROJECT_INTERFACE_NS_END</ref></highlight></codeline>
     </programlisting>
     <location file="include/ProjectInterface/Configurator.h"/>
   </compounddef>
