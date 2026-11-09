@@ -111,6 +111,10 @@ CLI 可组合以下 Linux 截图和输入方式：
 
 `controller.linux.use_win32_vk_code` 可把 Win32 Virtual-Key 键码转换为 Linux evdev 键码。Linux 运行环境仍需按 MaaFramework 文档准备 Wayland、PipeWire、Portal、libei 或 uinput 相关权限和服务。
 
+## macOS 控制器
+
+macOS 控制器会确认已保存的 `macos.window_id` 仍在当前窗口列表中，再用它恢复连接。`macos.title` 可以为空：隐藏标题栏的窗口也可能没有标题，`-d` 运行不会因此再次要求选择窗口。窗口 ID 缺失或已失效时，使用配置的标题正则重新选择；未配置正则时会提示输入，`^$` 可匹配空标题。取消或选择失败会停止本次运行。
+
 ## CLI 局限性
 
 以下 PI 协议功能由于终端环境的固有限制，无法实现或仅提供降级支持：
