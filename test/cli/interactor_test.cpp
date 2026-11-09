@@ -1169,6 +1169,34 @@ int main()
             saved && saved->ios.connection == "Auto" && saved->ios.config.get("wifi_address", std::string("missing")).empty()
                 && saved->ios.config.get("server_port", 0) == 17424,
             "an explicitly empty address must override the project address without losing server settings");
+        Configurator search_fixture;
+        require(search_fixture.load(resource_dir, ios_user_dir), "saved iOS device selection fixture should load");
+        search_fixture.configuration().ios.config["server_port"] = -1;
+        require(search_fixture.save(ios_user_dir), "unavailable discovery endpoint should save for the offline menu test");
+        {
+            StreamRedirector redirector("1\n2\nother-iphone\n1\n\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "saved iOS devices should allow another discovery attempt");
+            require(
+                redirector.output().str().find("Searching USB and Wi-Fi iOS devices") != std::string::npos,
+                "Search devices must invoke discovery even when a UDID is already saved");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(saved && saved->ios.udid == "other-iphone", "failed discovery should allow entering a different UDID");
+        {
+            StreamRedirector redirector("1\n3\nmanual-iphone\n1\n\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "a saved device should allow direct manual replacement");
+            require(
+                redirector.output().str().find("Searching USB and Wi-Fi iOS devices") == std::string::npos,
+                "manual replacement must not require a discovery connection");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(saved && saved->ios.udid == "manual-iphone", "manual device selection should replace the saved UDID");
+        require(search_fixture.load(resource_dir, ios_user_dir), "discovery fixture should reload after selection");
+        search_fixture.configuration().ios.config["server_port"] = 17424;
+        require(search_fixture.save(ios_user_dir), "discovery fixture should restore the server port");
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
         {
             StreamRedirector redirector("1\n");
             Interactor interactor(ios_user_dir);
@@ -1176,7 +1204,7 @@ int main()
             require(interactor.interact(), "EOF during iOS configuration should exit cleanly");
             require(
                 redirector.output().str().find("Choose screencap method") == std::string::npos,
-                "EOF at the UDID prompt should not advance to screencap selection");
+                "EOF at the device menu should not advance to screencap selection");
         }
         const auto after_eof = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
         require(after_eof && saved && after_eof->ios == saved->ios, "aborted iOS selection should not overwrite saved configuration");

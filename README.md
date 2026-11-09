@@ -123,7 +123,7 @@ xdb -s '<UDID>' ddi prepare --wifi auto
 ```
 
 在项目的 `interface.json` 中声明 `"type": "IOS"`，运行 MaaPiCli 后选择该控制器。
-CLI 可以发现设备或手动输入 UDID，选择 Auto、USB 或 Wi-Fi 连接，以及 `Stream`、`ScreenshotService` 或两者组合的取图方式。
+CLI 可以发现设备或手动输入 UDID，选择 Auto、USB 或 Wi-Fi 连接，以及 `Stream`、`ScreenshotService` 或两者组合的取图方式。重新配置时，可保留当前设备、重新搜索设备列表，或手动输入其他 UDID。
 UDID、连接方式、取图方式和可选的 `config.server_port` 保存在 `config/maa_pi_config.json`；配对凭据与 DDI 由 xdb 管理。
 
 ```json

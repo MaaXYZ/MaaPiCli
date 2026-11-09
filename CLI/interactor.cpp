@@ -932,6 +932,45 @@ bool Interactor::select_ios_auto_detect()
     return true;
 }
 
+bool Interactor::select_ios_device()
+{
+    auto& ios = config_.configuration().ios;
+    bool search = ios.udid.empty();
+    if (!ios.udid.empty()) {
+        std::cout << std::format("\n### Select iOS device ###\n\n\t1. Use current device: {}\n", ios.udid)
+                  << "\t2. Search devices\n"
+                     "\t3. Enter a UDID manually\n";
+        const auto choice = input(3, "Choose device action", 1);
+        if (!choice) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (*choice == 1) {
+            return true;
+        }
+        search = *choice == 2;
+    }
+    if (search && !select_ios_auto_detect()) {
+        return false;
+    }
+
+    std::cout << "Device UDID is required. Select a discovered device or enter its UDID.\n";
+    do {
+        const auto value = read_line(std::format("UDID [{}]: ", ios.udid));
+        if (!value) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (!value->empty()) {
+            ios.udid = *value;
+        }
+        if (ios.udid.empty()) {
+            std::cout << "Device UDID cannot be empty.\n";
+        }
+    } while (ios.udid.empty());
+    return true;
+}
+
 bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config)
 {
     std::cout << "### Configure iOS device ###\n\n"
@@ -951,24 +990,9 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
     if (ios.udid.empty()) {
         ios.udid = ios_config.udid;
     }
-    if (ios.udid.empty() && !select_ios_auto_detect()) {
+    if (!select_ios_device()) {
         return false;
     }
-
-    std::cout << "Device UDID is required. Select a discovered device or enter its UDID.\n";
-    do {
-        const auto value = read_line(std::format("UDID [{}]: ", ios.udid));
-        if (!value) {
-            input_aborted_ = true;
-            return false;
-        }
-        if (!value->empty()) {
-            ios.udid = *value;
-        }
-        if (ios.udid.empty()) {
-            std::cout << "Device UDID cannot be empty.\n";
-        }
-    } while (ios.udid.empty());
 
     std::cout << "\n### Select connection method ###\n\n"
                  "\t1. Auto: prefer USB when no Wi-Fi address is set; otherwise Wi-Fi\n"
