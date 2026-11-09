@@ -1770,7 +1770,7 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         for (const auto& [key, value] : config_.ios.config) {
             options[key] = value;
         }
-        if (ios.connection != MaaIOSConnectionMethod_WiFi) {
+        if (ios.connection == MaaIOSConnectionMethod_USB) {
             options.erase("wifi_address");
         }
         ios.config = json::value(std::move(options)).to_string();

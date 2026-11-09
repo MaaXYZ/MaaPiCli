@@ -139,7 +139,7 @@ UDID、连接方式、取图方式和可选的 `config.server_port` 保存在 `c
 }
 ```
 
-`ios` 中的字段是项目默认值。`connection` 默认为 `Auto`，优先 USB，再尝试已配对的 Wi-Fi。`config.wifi_address` 可填 `auto` 自动发现或设备 IP 地址。
+`ios` 中的字段是项目默认值。`connection` 默认为 `Auto`；`config.wifi_address` 留空时优先 USB，再尝试已配对的 Wi-Fi，填 `"auto"` 时只尝试 Wi-Fi 自动发现，填设备 IP 时只尝试指定 Wi-Fi 地址。`WiFi` 模式下地址留空或填 `"auto"` 均使用 Wi-Fi 自动发现；`USB` 模式忽略 Wi-Fi 地址。CLI 地址提示中按回车保留当前值，输入 `-` 清空地址。
 完整字段说明见 [MaaFramework iOS 控制方式](https://github.com/MaaXYZ/MaaFramework/blob/main/docs/zh_cn/2.4-%E6%8E%A7%E5%88%B6%E6%96%B9%E5%BC%8F%E8%AF%B4%E6%98%8E.md#ios)。
 
 ## CLI 局限性

@@ -971,7 +971,7 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
     } while (ios.udid.empty());
 
     std::cout << "\n### Select connection method ###\n\n"
-                 "\t1. Auto: prefer USB, then paired Wi-Fi\n"
+                 "\t1. Auto: prefer USB when no Wi-Fi address is set; otherwise Wi-Fi\n"
                  "\t2. USB\n"
                  "\t3. Wi-Fi\n";
     const int default_transport = ios.connection == "USB" ? 2 : ios.connection == "WiFi" ? 3 : 1;
@@ -981,14 +981,16 @@ bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Contr
         return false;
     }
     ios.connection = *transport == 1 ? "Auto" : *transport == 2 ? "USB" : "WiFi";
-    if (ios.connection == "WiFi") {
-        const auto current = ios.config.get("wifi_address", std::string("auto"));
+    if (ios.connection != "USB") {
+        std::cout << "Wi-Fi address: IP for direct connection, auto for Wi-Fi discovery.\n"
+                     "Enter - to clear it; Auto with an empty address prefers USB, then paired Wi-Fi.\n";
+        const auto current = ios.config.get("wifi_address", ios.connection == "WiFi" ? std::string("auto") : std::string());
         const auto address = read_line(std::format("Wi-Fi address [{}]: ", current));
         if (!address) {
             input_aborted_ = true;
             return false;
         }
-        ios.config["wifi_address"] = address->empty() ? current : *address;
+        ios.config["wifi_address"] = *address == "-" ? std::string() : address->empty() ? current : *address;
     }
     else {
         ios.config.erase("wifi_address");

@@ -1118,7 +1118,21 @@ int main()
         const auto auto_runtime = configurator.generate_runtime();
         const auto* automatic = auto_runtime ? std::get_if<RuntimeParam::IOSParam>(&auto_runtime->controller_param) : nullptr;
         const auto auto_options = automatic ? json::parse(automatic->config) : std::nullopt;
-        require(auto_options && !auto_options->contains("wifi_address"), "Auto must not restore the project Wi-Fi override");
+        require(
+            auto_options && auto_options->get("wifi_address", std::string()) == "10.0.0.1",
+            "Auto must preserve an explicit project Wi-Fi address");
+        for (const auto& address : { "10.0.0.99", "auto", "" }) {
+            configuration.ios.config = { { "wifi_address", address }, { "max_fps", 15 } };
+            const auto selected_runtime = configurator.generate_runtime();
+            const auto* selected = selected_runtime ? std::get_if<RuntimeParam::IOSParam>(&selected_runtime->controller_param) : nullptr;
+            const auto selected_options = selected ? json::parse(selected->config) : std::nullopt;
+            require(
+                selected && selected->connection == MaaIOSConnectionMethod_Auto && selected_options
+                    && selected_options->get("wifi_address", std::string("missing")) == address
+                    && selected_options->get("server_port", 0) == 17424 && selected_options->get("max_fps", 0) == 15,
+                "Auto must preserve explicit, discovery and empty Wi-Fi addresses alongside unrelated options");
+        }
+        configuration.ios.config = { };
         configuration.ios.connection = "invalid";
         require(!configurator.generate_runtime(), "unknown iOS transport must fail runtime generation");
         configuration.ios.connection.clear();
@@ -1136,15 +1150,25 @@ int main()
             "iOS selection should preserve the UDID and save the combined screencap method");
         require(saved && saved->ios.config.get("wifi_address", std::string()) == "10.0.0.99", "Wi-Fi selection should save its address");
         {
-            StreamRedirector redirector("1\n\n1\n2\n7\n");
+            StreamRedirector redirector("1\n\n1\n\n2\n7\n");
             Interactor interactor(ios_user_dir);
             require(interactor.load(resource_dir) && interactor.interact(), "switching from Wi-Fi to Auto should complete");
         }
         saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
         require(
-            saved && saved->ios.connection == "Auto" && !saved->ios.config.contains("wifi_address")
+            saved && saved->ios.connection == "Auto" && saved->ios.config.get("wifi_address", std::string()) == "10.0.0.99"
                 && saved->ios.config.get("server_port", 0) == 17424,
-            "Auto must clear the Wi-Fi override while preserving server settings");
+            "Auto must preserve a supplied Wi-Fi address and server settings");
+        {
+            StreamRedirector redirector("1\n\n1\n-\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "clearing the Auto Wi-Fi address should complete");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->ios.connection == "Auto" && saved->ios.config.get("wifi_address", std::string("missing")).empty()
+                && saved->ios.config.get("server_port", 0) == 17424,
+            "an explicitly empty address must override the project address without losing server settings");
         {
             StreamRedirector redirector("1\n");
             Interactor interactor(ios_user_dir);
