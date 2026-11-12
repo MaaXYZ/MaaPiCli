@@ -1,3 +1,4 @@
+#include "CLI/TextFile.h"
 #include "CLI/interactor.h"
 
 #include "MaaUtils/Platform.h"
@@ -214,6 +215,141 @@ void test_path_inputs_and_agent_environment(const std::filesystem::path& fixture
     std::filesystem::remove_all(user_dir.parent_path());
 }
 
+void test_text_content_link_replacement()
+{
+    const auto root = unique_temp_directory();
+    const auto resource = root / "resource";
+    const auto outside = root / "outside";
+    std::filesystem::create_directories(resource / "docs");
+    std::filesystem::create_directories(outside);
+    std::ofstream(resource / "docs/text.txt") << "safe text\n";
+    std::ofstream(outside / "text.txt") << "outside secret";
+    const auto resolved = std::filesystem::canonical(resource / "docs/text.txt");
+    require(MaaPiCliText::read_canonical_file(resolved) == "safe text\n", "the checked file handle should return normal text");
+
+    // Simulate replacement after canonicalization/boundary validation, before opening.
+    std::filesystem::rename(resource / "docs/text.txt", resource / "docs/original.txt");
+    std::error_code ec;
+    std::filesystem::create_symlink(outside / "text.txt", resource / "docs/text.txt", ec);
+    if (ec) {
+#ifdef _WIN32
+        std::cerr << "SKIPPED: replacement symlink fixtures: " << ec.message() << '\n';
+#else
+        require(false, "replacement symlink fixture should be created: " + ec.message());
+#endif
+        std::filesystem::remove_all(root);
+        return;
+    }
+    require(!MaaPiCliText::read_canonical_file(resolved), "a file replaced by a symlink after validation must not be read");
+    std::filesystem::remove(resource / "docs/text.txt");
+    std::filesystem::rename(resource / "docs/original.txt", resource / "docs/text.txt");
+
+    std::filesystem::rename(resource / "docs", resource / "original-docs");
+    std::filesystem::create_directory_symlink(outside, resource / "docs");
+    require(!MaaPiCliText::read_canonical_file(resolved), "a parent directory replaced after validation must not be followed");
+    std::filesystem::remove(resource / "docs");
+    std::filesystem::rename(resource / "original-docs", resource / "docs");
+
+    std::filesystem::rename(resource, root / "original-resource");
+    std::filesystem::create_directories(outside / "docs");
+    std::ofstream(outside / "docs/text.txt") << "outside root secret";
+    std::filesystem::create_directory_symlink(outside, resource);
+    require(!MaaPiCliText::read_canonical_file(resolved), "a resource root replaced after validation must not be followed");
+    std::filesystem::remove_all(root);
+}
+
+void test_text_content_path_boundaries()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto root = unique_temp_directory();
+    const auto resource_dir = root / "resource";
+    const auto user_dir = root / "user";
+    std::filesystem::create_directories(resource_dir / "docs");
+    std::filesystem::create_directories(root / "resource-other");
+    std::filesystem::create_directories(user_dir / "config");
+    const std::string safe_content = "Text inside the resource directory";
+    const std::string secret_content = "SECRET outside the resource directory";
+    std::ofstream(resource_dir / "docs/text.txt") << safe_content;
+    std::ofstream(root / "secret.txt") << secret_content;
+    std::ofstream(root / "resource-other/secret.txt") << secret_content;
+
+    std::vector<std::string> declared {
+        "docs/text.txt",
+        "docs/../docs/text.txt",
+        "../secret.txt",
+        "../resource-other/secret.txt",
+        MAA_NS::path_to_utf8_string(root / "secret.txt"),
+        MAA_NS::path_to_utf8_string(resource_dir / "docs/text.txt"),
+        std::string("docs/text.txt\0ignored", 21),
+        "docs",
+        "missing.txt",
+        "Plain welcome text",
+        std::string(300, 'x'),
+        "https://example.com/welcome.txt",
+        "file://" + MAA_NS::path_to_utf8_string(root / "secret.txt"),
+    };
+    auto expected = declared;
+    expected[0] = safe_content;
+    expected[1] = safe_content;
+
+    const auto add_symlink_case = [&](const auto& target, const std::string& name, bool directory, const std::string& resolved) {
+        std::error_code ec;
+        if (directory) {
+            std::filesystem::create_directory_symlink(target, resource_dir / name, ec);
+        }
+        else {
+            std::filesystem::create_symlink(target, resource_dir / name, ec);
+        }
+        if (ec) {
+#ifdef _WIN32
+            std::cerr << "SKIPPED: symlink case " << name << ": " << ec.message() << '\n';
+#else
+            require(false, "symlink fixture should be created: " + name + ": " + ec.message());
+#endif
+            return;
+        }
+        declared.emplace_back(name + (directory ? "/secret.txt" : ""));
+        expected.emplace_back(resolved.empty() ? declared.back() : resolved);
+    };
+    add_symlink_case(root / "secret.txt", "outside-link", false, "");
+    add_symlink_case(root / "resource-other", "outside-directory", true, "");
+    add_symlink_case(resource_dir / "docs/text.txt", "inside-link", false, safe_content);
+    add_symlink_case(root / "missing.txt", "dangling-link", false, "");
+
+    auto interface = json::parse(R"json({
+        "interface_version": 2,
+        "controller": [ { "name": "adb-controller", "type": "Adb" } ],
+        "resource": [ { "name": "default-resource", "path": [] } ],
+        "description": "../secret.txt"
+    })json")
+                         .value();
+    json::array welcome;
+    for (const auto& text : declared) {
+        welcome.emplace_back(text);
+    }
+    interface["welcome"] = std::move(welcome);
+    std::ofstream(resource_dir / "interface.json") << interface.dumps();
+    Configuration config;
+    config.controller.name = "adb-controller";
+    config.resource = "default-resource";
+    std::ofstream(user_dir / "config/maa_pi_config.json") << config.to_json().dumps();
+
+    {
+        StreamRedirector redirector;
+        Interactor interactor(user_dir);
+        require(interactor.load(resource_dir), "text path boundary fixture should load");
+        require(interactor.interact(), "text path boundary fixture should exit on EOF");
+        const auto output = redirector.output().str();
+        require(output.find(secret_content) == std::string::npos, "welcome and description must not disclose files outside resources");
+        require(output.find("Description: ../secret.txt") != std::string::npos, "an unsafe description should remain literal text");
+    }
+    const auto saved = Parser::parse_config(user_dir / "config/maa_pi_config.json");
+    require(saved && saved->last_welcome == declared, "declared welcome paths should remain unchanged");
+    require(saved && saved->last_resolved_welcome == expected, "only regular files reached by safe relative paths should be read");
+    std::filesystem::remove_all(root);
+}
+
 #if defined(__APPLE__)
 constexpr auto kTestAclType = ACL_TYPE_EXTENDED;
 
@@ -328,11 +464,19 @@ bool remove_configuration_acl(const std::filesystem::path& path)
 
 }
 
-int main()
+int main(int argc, char** argv)
 {
+    if (argc == 2 && std::string_view(argv[1]) == "--text-content-only") {
+        test_text_content_path_boundaries();
+        test_text_content_link_replacement();
+        return failures == 0 ? 0 : 1;
+    }
+
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
     test_preset_controller_filter(fixture_dir.parent_path() / "pi_extensions");
     test_path_inputs_and_agent_environment(fixture_dir.parent_path() / "pi_extensions");
+    test_text_content_path_boundaries();
+    test_text_content_link_replacement();
 
     const auto interface = MAA_PROJECT_INTERFACE_NS::Parser::parse_interface(fixture_dir / "interface.json");
     require(interface.has_value() && interface->controller.size() == 2, "the EOF fixture should contain two controllers");
