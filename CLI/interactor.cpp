@@ -288,6 +288,13 @@ Interactor::ElevationResult Interactor::check_and_elevate_if_needed()
 
 bool Interactor::run()
 {
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    // Configuration saves reload persisted fields without the derived controller type.
+    if (const auto* controller = find_current_controller()) {
+        config_.configuration().controller.type = controller->type;
+    }
+
     auto elevation_result = check_and_elevate_if_needed();
     if (elevation_result == ElevationResult::Failed) {
         return false;
@@ -313,7 +320,8 @@ bool Interactor::run()
     if (!ensure_pretask_options()) {
         return false;
     }
-    if (!save_config()) {
+    const bool is_macos = config_.configuration().controller.type == InterfaceData::Controller::Type::MacOS;
+    if (!is_macos && !save_config()) {
         return false;
     }
 
@@ -323,7 +331,22 @@ bool Interactor::run()
         return false;
     }
 
-    bool ret = MAA_PROJECT_INTERFACE_NS::Runner::run(runtime.value());
+    if (is_macos) {
+        if (!Runner::run_pretasks(runtime->pretask)) {
+            return false;
+        }
+        // Resolve windows after pretasks, and do not execute those pretasks again in Runner.
+        runtime->pretask.clear();
+        if (!check_macos_window()) {
+            return false;
+        }
+        std::get<RuntimeParam::MacOSParam>(runtime->controller_param).window_id = config_.configuration().macos.window_id;
+        if (!save_config()) {
+            return false;
+        }
+    }
+
+    bool ret = Runner::run(runtime.value());
 
     if (!ret) {
         std::cout << "### Failed to run tasks ###\n\n";
@@ -2155,34 +2178,6 @@ bool Interactor::check_validity()
         LogError << "MacOS controller is only supported on macOS";
         return false;
 #endif
-        auto& mac = config_.configuration().macos;
-        bool window_found = false;
-        if (mac.window_id != 0) {
-            auto list_handle = MaaToolkitDesktopWindowListCreate();
-            OnScopeLeave([&]() { MaaToolkitDesktopWindowListDestroy(list_handle); });
-
-            MaaToolkitDesktopWindowFindAll(list_handle);
-
-            for (MaaSize i = 0; i < MaaToolkitDesktopWindowListSize(list_handle); ++i) {
-                auto window = MaaToolkitDesktopWindowListAt(list_handle, i);
-                if (reinterpret_cast<uintptr_t>(MaaToolkitDesktopWindowGetHandle(window)) == mac.window_id) {
-                    window_found = true;
-                    break;
-                }
-            }
-        }
-        if (!window_found) {
-            auto& name = config_.configuration().controller.name;
-            auto controller_iter =
-                std::ranges::find(config_.interface_data().controller, name, std::mem_fn(&InterfaceData::Controller::name));
-
-            if (controller_iter == config_.interface_data().controller.end()) {
-                LogError << "Controller not found" << VAR(name);
-                return false;
-            }
-
-            return select_macos(controller_iter->macos) && mac.window_id != 0;
-        }
     }
 
     if (config_.configuration().controller.type == InterfaceData::Controller::Type::Linux) {
@@ -2260,6 +2255,39 @@ bool Interactor::check_validity()
                 select_gamepad(controller_iter->gamepad);
             }
         }
+    }
+
+    return true;
+}
+
+bool Interactor::check_macos_window()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& mac = config_.configuration().macos;
+    bool window_found = false;
+    if (mac.window_id != 0) {
+        auto list_handle = MaaToolkitDesktopWindowListCreate();
+        OnScopeLeave([&]() { MaaToolkitDesktopWindowListDestroy(list_handle); });
+
+        MaaToolkitDesktopWindowFindAll(list_handle);
+
+        for (MaaSize i = 0; i < MaaToolkitDesktopWindowListSize(list_handle); ++i) {
+            auto window = MaaToolkitDesktopWindowListAt(list_handle, i);
+            if (reinterpret_cast<uintptr_t>(MaaToolkitDesktopWindowGetHandle(window)) == mac.window_id) {
+                window_found = true;
+                break;
+            }
+        }
+    }
+    if (!window_found) {
+        const auto* controller = find_current_controller();
+        if (!controller) {
+            LogError << "Controller not found" << VAR(config_.configuration().controller.name);
+            return false;
+        }
+
+        return select_macos(controller->macos) && mac.window_id != 0;
     }
 
     return true;

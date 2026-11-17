@@ -224,7 +224,9 @@ int main()
 {
     "interface_version": 2,
     "controller": [ { "name": "macos-controller", "type": "MacOS" } ],
-    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ]
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "task": [ { "name": "main-task", "entry": "MainTask" } ],
+    "pretask": { "name": "prepare-window", "exec": "/bin/sh", "args": [ "-c", "echo run >> pretask-runs.txt" ] }
 }
 )json";
         }
@@ -233,7 +235,7 @@ int main()
             config_stream << R"json({
     "controller": { "name": "macos-controller" },
     "resource": "default-resource",
-    "task": [],
+    "task": [ { "name": "main-task" } ],
     "macos": { "window_id": )json"
                           << window_id << R"json(, "title": ")json" << (window_id == 0 ? "" : "stale-window") << R"json(" }
 })json";
@@ -247,7 +249,7 @@ int main()
             StreamRedirector redirector;
             Interactor interactor(macos_user_dir);
             require(interactor.load(resource_dir), "the macOS window fixture should load");
-            require(!interactor.run(), "the taskless macOS fixture should not start a controller");
+            require(!interactor.run(), "an unresolved macOS window should not start a controller");
             const bool prompted = redirector.output().str().find("Title regex:") != std::string::npos;
 #if defined(__APPLE__)
             require(prompted, "a missing or stale macOS window ID should request window selection");
@@ -260,6 +262,15 @@ int main()
         const std::string saved_config { std::istreambuf_iterator<char>(saved_stream), std::istreambuf_iterator<char>() };
         saved_stream.close();
         require(saved_config == original_config, "failed window selection should not save a stale window ID");
+
+        std::ifstream pretask_stream(resource_dir / "pretask-runs.txt");
+        const std::string pretask_runs { std::istreambuf_iterator<char>(pretask_stream), std::istreambuf_iterator<char>() };
+        pretask_stream.close();
+#if defined(__APPLE__)
+        require(pretask_runs == "run\n", "macOS pretasks should run once before window selection");
+#else
+        require(pretask_runs.empty(), "an unsupported macOS controller should not run pretasks");
+#endif
 
         std::filesystem::remove_all(resource_dir);
         std::filesystem::remove_all(macos_user_dir);
