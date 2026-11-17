@@ -1,5 +1,7 @@
 #include "ProjectInterface/Parser.h"
 
+#include "HotkeyMap.h"
+
 #include <exception>
 #include <filesystem>
 #include <iostream>
@@ -383,9 +385,76 @@ int main()
     require(
         !Parser::parse_interface(fixture_dir / "invalid_option_defaults.json").has_value(),
         "invalid or unknown checkbox defaults should be rejected");
-    require(
-        !Parser::parse_interface(fixture_dir / "invalid_hotkey.json").has_value(),
-        "a hotkey option in an import should be rejected as an unsupported option type");
+
+    // v2.8.0: hotkey options are supported and should round-trip through imports.
+    auto hotkey_interface = Parser::parse_interface(fixture_dir / "hotkey.json");
+    require(hotkey_interface.has_value(), "a hotkey option in an import should be accepted");
+    if (hotkey_interface) {
+        const auto hotkey_option = hotkey_interface->option.find("unsupported-hotkey");
+        require(hotkey_option != hotkey_interface->option.end(), "imported hotkey option should be present");
+        if (hotkey_option != hotkey_interface->option.end()) {
+            require(
+                hotkey_option->second.type == InterfaceData::Option::Type::Hotkey,
+                "imported hotkey option should keep the hotkey type");
+            require(
+                hotkey_option->second.hotkeys.size() == 1 && hotkey_option->second.hotkeys.front().name == "attack"
+                    && hotkey_option->second.hotkeys.front().default_ == "E",
+                "imported hotkey fields should be preserved");
+        }
+    }
+
+    if (auto fixture = json::open(fixture_dir / "hotkey_runtime/interface.json")) {
+        auto definition = *fixture;
+        auto& fields = definition["option"]["shortcut"]["hotkeys"].as_array();
+        const auto duplicate = fields.at(0);
+        fields.emplace_back(duplicate);
+        require(!Parser::parse_interface(definition), "duplicate hotkey field names should be rejected");
+        fields[1]["name"] = "second-shortcut";
+        require(Parser::parse_interface(definition).has_value(), "distinct hotkey fields should remain valid");
+    }
+
+    if (auto fixture = Parser::parse_interface(fixture_dir / "hotkey_runtime/interface.json")) {
+        for (bool nested : { false, true }) {
+            auto data = *fixture;
+            Configuration config;
+            config.controller.name = "controller";
+            config.resource = "resource";
+            Configuration::Option shortcut;
+            shortcut.name = "shortcut";
+            shortcut.hotkeys = { { "combo", "Ctrl+Alt+A" }, { "obsolete", "F1" } };
+            Configuration::Task task;
+            task.name = "task";
+            if (nested) {
+                InterfaceData::Option parent;
+                parent.cases.emplace_back().name = "on";
+                parent.cases.front().option = { "shortcut" };
+                data.option["parent"] = parent;
+                data.task.front().option = { "parent" };
+                Configuration::Option selection;
+                selection.name = "parent";
+                selection.value = "on";
+                task.option.emplace_back(selection);
+            }
+            task.option.emplace_back(shortcut);
+            config.task.emplace_back(task);
+            require(!Parser::check_configuration(data, config), "removing stale task hotkeys should report a configuration change");
+            const auto& cleaned = config.task.front().option.back().hotkeys;
+            require(
+                cleaned.size() == 1 && cleaned.at("combo") == "Ctrl+Alt+A",
+                "only removed fields should be pruned, including nested options");
+            require(Parser::check_configuration(data, config), "task hotkey cleanup should be idempotent");
+            auto saved = Parser::parse_config(config.to_json());
+            require(saved.has_value(), "cleaned task configuration should round-trip");
+            if (saved) {
+                data.option.at("shortcut").hotkeys.emplace_back(InterfaceData::Option::Hotkey { .name = "obsolete", .default_ = "E" });
+                auto& option = saved->task.front().option.back();
+                require(
+                    MaaPiCliHotkey::normalize_hotkeys(data.option.at("shortcut"), option, MaaPiCliHotkey::KeycodeSet::Android),
+                    "reintroduced fields should accept their current default");
+                require(option.hotkeys.at("obsolete") == "E", "reintroduced fields must not restore the removed shortcut");
+            }
+        }
+    }
 
     auto zero_max_json = json::parse(
         R"json({
@@ -758,6 +827,49 @@ int main()
                 legacy_roundtrip.contains("linux") && !legacy_roundtrip.contains("wlroots"),
                 "migrated Linux configuration should serialize only linux");
         }
+    }
+
+    {
+        using namespace MaaPiCliHotkey;
+        // Key code tables per controller family.
+        auto vk_a = find_keycode("a", KeycodeSet::Win32Vk);
+        require(vk_a && *vk_a == 0x41, "Win32 VK table should map A to 0x41");
+        auto android_a = find_keycode("A", KeycodeSet::Android);
+        require(android_a && *android_a == 29, "Android table should map A to 29");
+        auto mac_a = find_keycode("a", KeycodeSet::MacVirtual);
+        require(mac_a && *mac_a == 0x00, "macOS table should map A to 0x00");
+        auto evdev_a = find_keycode("a", KeycodeSet::LinuxEvdev);
+        require(evdev_a && *evdev_a == 30, "Linux evdev table should map A to 30");
+
+        // Modifiers resolve through aliases.
+        auto ctrl = find_keycode("Control", KeycodeSet::Win32Vk);
+        require(ctrl && *ctrl == 0x11, "Win32 VK table should resolve Control to VK_CONTROL");
+        auto option_key = find_keycode("Option", KeycodeSet::MacVirtual);
+        require(option_key && *option_key == 0x3A, "macOS table should resolve Option");
+        auto android_ctrl = find_keycode("Ctrl", KeycodeSet::Android);
+        require(android_ctrl && *android_ctrl == 113, "Android table should map Ctrl to KEYCODE_CTRL_LEFT (113)");
+
+        // Combos: modifiers first, primary last, at most two modifiers.
+        auto combo = parse("Ctrl+Shift+A", KeycodeSet::Win32Vk);
+        require(
+            combo && combo->canonical == "Ctrl+Shift+A" && combo->primary == 0x41 && combo->modifiers.size() == 2
+                && combo->modifiers[0] == 0x11 && combo->modifiers[1] == 0x10,
+            "combo parsing should split modifiers and primary key");
+        auto single = parse("f5", KeycodeSet::Win32Vk);
+        require(
+            single && single->canonical == "F5" && single->primary == 0x74 && single->modifiers.empty(),
+            "single-key combos should normalize case and resolve function keys");
+        auto android_combo = parse("Meta+E", KeycodeSet::Android);
+        require(
+            android_combo && android_combo->primary == 33 && android_combo->modifiers.size() == 1 && android_combo->modifiers[0] == 117,
+            "Android table should map Meta+E to keycode 117 + 33");
+        require(!parse("Ctrl+", KeycodeSet::Win32Vk), "empty combo tokens should be rejected");
+        require(!parse("A+B+C+D", KeycodeSet::Win32Vk), "more than two modifiers should be rejected");
+        require(!parse("Ctrl+A+B", KeycodeSet::Win32Vk), "non-modifier tokens before the primary key should be rejected");
+        require(!find_keycode("NoSuchKey", KeycodeSet::Win32Vk), "unknown keys should not resolve");
+        // Keys unavailable on a platform should not resolve on it.
+        require(!find_keycode("Insert", KeycodeSet::MacVirtual), "macOS table has no Insert key");
+        require(find_keycode("Insert", KeycodeSet::Win32Vk).has_value(), "Win32 VK table has an Insert key");
     }
 
     if (failures != 0) {

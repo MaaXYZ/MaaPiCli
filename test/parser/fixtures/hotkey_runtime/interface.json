@@ -1,0 +1,20 @@
+{
+    "interface_version": 2,
+    "controller": [{ "name": "controller", "type": "Adb" }],
+    "resource": [{ "name": "resource", "path": ["resource"] }],
+    "task": [{ "name": "task", "entry": "Main", "option": ["shortcut"] }],
+    "option": {
+        "shortcut": {
+            "type": "hotkey",
+            "hotkeys": [{ "name": "combo", "default": "Ctrl+Alt+A" }],
+            "pipeline_override": {
+                "Main": {
+                    "key": "{combo}",
+                    "primary": "{combo}.primary",
+                    "modifier1": "{combo}.modifier1",
+                    "modifier2": "{combo}.modifier2"
+                }
+            }
+        }
+    }
+}

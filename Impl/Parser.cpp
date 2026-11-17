@@ -148,6 +148,18 @@ bool validate_task_option_selection(
 
     case InterfaceData::Option::Type::Input:
         break;
+    case InterfaceData::Option::Type::Hotkey:
+        for (auto it = config_option.hotkeys.begin(); it != config_option.hotkeys.end();) {
+            if (std::ranges::any_of(data_option.hotkeys, [&](const auto& field) { return field.name == it->first; })) {
+                ++it;
+            }
+            else {
+                LogWarn << "Hotkey not found in interface, removing from task config" << VAR(config_option.name) << VAR(it->first);
+                it = config_option.hotkeys.erase(it);
+                changed = true;
+            }
+        }
+        break;
     }
 
     return true;
@@ -322,6 +334,15 @@ bool validate_interface(const InterfaceData& data)
     }
 
     for (const auto& [name, option] : data.option) {
+        if (option.type == InterfaceData::Option::Type::Hotkey) {
+            std::unordered_set<std::string> fields;
+            for (const auto& field : option.hotkeys) {
+                if (!fields.emplace(field.name).second) {
+                    LogError << "Duplicate hotkey field name" << VAR(name) << VAR(field.name);
+                    return false;
+                }
+            }
+        }
         if (!validate_checkbox_definition(option)) {
             LogError << "Invalid checkbox count constraint" << VAR(name);
             return false;
@@ -681,6 +702,21 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
                     else {
                         LogWarn << "Input not found in interface, removing from config" << VAR(it->name) << VAR(input_name);
                         input_it = it->inputs.erase(input_it);
+                        erased = true;
+                    }
+                }
+                break;
+            case InterfaceData::Option::Type::Hotkey:
+                for (auto hotkey_it = it->hotkeys.begin(); hotkey_it != it->hotkeys.end();) {
+                    const auto& hotkey_name = hotkey_it->first;
+                    const bool found =
+                        std::ranges::any_of(data_option.hotkeys, [&](const auto& hotkey) { return hotkey.name == hotkey_name; });
+                    if (found) {
+                        ++hotkey_it;
+                    }
+                    else {
+                        LogWarn << "Hotkey not found in interface, removing from config" << VAR(it->name) << VAR(hotkey_name);
+                        hotkey_it = it->hotkeys.erase(hotkey_it);
                         erased = true;
                     }
                 }

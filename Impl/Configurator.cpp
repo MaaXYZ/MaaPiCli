@@ -30,6 +30,7 @@
 #include <unistd.h>
 #endif
 
+#include "HotkeyMap.h"
 #include "MaaFramework/Utility/MaaUtility.h"
 #include "MaaUtils/Logger.h"
 #include "MaaUtils/Platform.h"
@@ -324,6 +325,42 @@ MaaMacOSInputMethod parse_macos_input_method(const std::string& method)
         return it->second;
     }
     return MaaMacOSInputMethod_None;
+}
+
+MaaIOSScreencapMethod parse_ios_screencap_method(const std::string& method)
+{
+    static const std::unordered_map<std::string, MaaIOSScreencapMethod> mapping = {
+        { "Stream", MaaIOSScreencapMethod_Stream },
+        { "ScreenshotService", MaaIOSScreencapMethod_ScreenshotService },
+        { "Service", MaaIOSScreencapMethod_ScreenshotService },
+    };
+
+    // Accept combined methods, e.g. "Stream|ScreenshotService".
+    MaaIOSScreencapMethod result = MaaIOSScreencapMethod_None;
+    std::vector<std::string> tokens;
+    for (auto&& pipe : string_split(method, '|')) {
+        for (auto&& comma : string_split(pipe, ',')) {
+            tokens.push_back(comma);
+        }
+    }
+
+    for (auto& token : tokens) {
+        string_trim_(token);
+        if (token.empty()) {
+            continue;
+        }
+        if (token == "All" || token == "Default") {
+            result |= MaaIOSScreencapMethod_All;
+            continue;
+        }
+        auto it = mapping.find(token);
+        if (it == mapping.end()) {
+            LogError << "Unknown iOS screencap method" << VAR(token);
+            return MaaIOSScreencapMethod_None;
+        }
+        result |= it->second;
+    }
+    return result;
 }
 
 MaaLinuxScreencapMethod parse_linux_screencap_method(const std::string& method)
@@ -846,6 +883,7 @@ public:
         }
 
         struct stat lock_status { };
+
         if (::fstat(descriptor_, &lock_status) != 0 || !S_ISREG(lock_status.st_mode)) {
             LogError << "Configuration lock is not a regular file" << VAR(lock_name) << VAR(errno);
             ::close(descriptor_);
@@ -1135,6 +1173,7 @@ private:
     PACL sacl_ = nullptr;
 #else
     int descriptor_ = -1;
+
     struct stat status_ { };
 #if defined(__APPLE__)
     acl_t acl_ = nullptr;
@@ -1433,6 +1472,24 @@ void merge_local_changes(const Configuration& baseline, const Configuration& loc
 
     merge_field(&Configuration::controller);
     merge_field(&Configuration::adb);
+    auto merge_ios_field = [&]<typename Field>(Field Configuration::IOSConfig::* field) {
+        if (local.ios.*field != baseline.ios.*field) {
+            persisted.ios.*field = local.ios.*field;
+        }
+    };
+    merge_ios_field(&Configuration::IOSConfig::udid);
+    merge_ios_field(&Configuration::IOSConfig::connection);
+    merge_ios_field(&Configuration::IOSConfig::screencap);
+    for (const auto& [key, value] : baseline.ios.config) {
+        if (!local.ios.config.contains(key)) {
+            persisted.ios.config.erase(key);
+        }
+    }
+    for (const auto& [key, value] : local.ios.config) {
+        if (!baseline.ios.config.contains(key) || baseline.ios.config.at(key) != value) {
+            persisted.ios.config[key] = value;
+        }
+    }
     merge_field(&Configuration::win32);
     merge_field(&Configuration::macos);
     merge_field(&Configuration::playcover);
@@ -1467,7 +1524,14 @@ bool Configurator::load(const std::filesystem::path& resource_dir, const std::fi
         return false;
     }
 
-    if (auto cfg_opt = Parser::parse_config(user_dir / kConfigPath)) {
+    std::error_code error;
+    user_dir_ = std::filesystem::absolute(user_dir, error);
+    if (error) {
+        LogError << "Failed to resolve user data directory" << VAR(user_dir) << VAR(error.message());
+        return false;
+    }
+
+    if (auto cfg_opt = Parser::parse_config(user_dir_ / kConfigPath)) {
         config_ = *std::move(cfg_opt);
         first_time_use_ = false;
         if (!transform_stored_passwords(data_.option, config_, SecretStore::decrypt)) {
@@ -1664,8 +1728,8 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
 
         auto task_opt = generate_runtime_task(config_task);
         if (!task_opt) {
-            LogWarn << "failed to generate runtime, ignore" << VAR(config_task.name);
-            continue;
+            LogError << "Failed to generate runtime task" << VAR(config_task.name);
+            return std::nullopt;
         }
         runtime.task.emplace_back(*std::move(task_opt));
     }
@@ -1684,6 +1748,46 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         adb.agent_path = MaaNS::path_to_utf8_string(resource_dir_ / "MaaAgentBinary");
 
         runtime.controller_param = std::move(adb);
+    } break;
+
+    case InterfaceData::Controller::Type::IOS: {
+        RuntimeParam::IOSParam ios;
+        ios.udid = config_.ios.udid.empty() ? controller.ios.udid : config_.ios.udid;
+        const auto& connection = config_.ios.connection.empty() ? controller.ios.connection : config_.ios.connection;
+        if (connection.empty() || connection == "Auto") {
+            ios.connection = MaaIOSConnectionMethod_Auto;
+        }
+        else if (connection == "USB") {
+            ios.connection = MaaIOSConnectionMethod_USB;
+        }
+        else if (connection == "WiFi") {
+            ios.connection = MaaIOSConnectionMethod_WiFi;
+        }
+        else {
+            LogError << "Invalid iOS connection method" << VAR(connection);
+            return std::nullopt;
+        }
+        auto options = controller.ios.config;
+        for (const auto& [key, value] : config_.ios.config) {
+            options[key] = value;
+        }
+        if (ios.connection == MaaIOSConnectionMethod_USB) {
+            options.erase("wifi_address");
+        }
+        ios.config = json::value(std::move(options)).to_string();
+        if (ios.udid.empty()) {
+            LogError << "iOS device UDID is empty";
+            return std::nullopt;
+        }
+        const auto& screencap = config_.ios.screencap.empty() ? controller.ios.screencap : config_.ios.screencap;
+        if (!screencap.empty()) {
+            ios.screencap = parse_ios_screencap_method(screencap);
+            if (ios.screencap == MaaIOSScreencapMethod_None) {
+                LogError << "Invalid iOS screencap method" << VAR(screencap);
+                return std::nullopt;
+            }
+        }
+        runtime.controller_param = std::move(ios);
     } break;
 
     case InterfaceData::Controller::Type::Win32: {
@@ -1867,11 +1971,15 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
 
     // v2.5.0: prepare PI_* env vars
     std::unordered_map<std::string, std::string> pi_env;
-    pi_env["PI_INTERFACE_VERSION"] = "v2.6.0";
+    pi_env["PI_INTERFACE_VERSION"] = "v2.11.0";
     pi_env["PI_CLIENT_NAME"] = "MaaPiCli";
-    pi_env["PI_CLIENT_VERSION"] = MaaVersion();
+#ifndef MAA_PI_CLI_VERSION
+#define MAA_PI_CLI_VERSION "unknown"
+#endif
+    pi_env["PI_CLIENT_VERSION"] = MAA_PI_CLI_VERSION;
     pi_env["PI_CLIENT_LANGUAGE"] = detect_system_language();
     pi_env["PI_CLIENT_MAAFW_VERSION"] = MaaVersion();
+    pi_env["PI_USER_DATA_DIR"] = MaaNS::path_to_utf8_string(user_dir_);
     if (!data_.version.empty()) {
         pi_env["PI_VERSION"] = data_.version;
     }
@@ -1940,7 +2048,7 @@ bool Configurator::is_task_applicable(const InterfaceData::Task& task) const
     return true;
 }
 
-void Configurator::merge_option_overrides(RuntimeParam::Task& runtime_task, const std::vector<Configuration::Option>& config_options) const
+bool Configurator::merge_option_overrides(RuntimeParam::Task& runtime_task, const std::vector<Configuration::Option>& config_options) const
 {
     for (const auto& config_option : config_options) {
         auto data_option_iter = data_.option.find(config_option.name);
@@ -1987,10 +2095,11 @@ void Configurator::merge_option_overrides(RuntimeParam::Task& runtime_task, cons
                 }
 
                 switch (input_def.pipeline_type) {
-                case InterfaceData::Option::Input::PipelineType::String:
-                    override_str = MaaNS::string_replace_all(override_str, "\"" + placeholder + "\"", "\"" + value + "\"");
-                    override_str = MaaNS::string_replace_all(override_str, placeholder, value);
-                    break;
+                case InterfaceData::Option::Input::PipelineType::String: {
+                    // Substitution happens inside serialized JSON, including embedded placeholders.
+                    const auto encoded = json::value(value).dumps();
+                    override_str = MaaNS::string_replace_all(override_str, placeholder, encoded.substr(1, encoded.size() - 2));
+                } break;
                 case InterfaceData::Option::Input::PipelineType::Int:
                 case InterfaceData::Option::Input::PipelineType::Bool:
                     override_str = MaaNS::string_replace_all(override_str, "\"" + placeholder + "\"", value);
@@ -2005,8 +2114,71 @@ void Configurator::merge_option_overrides(RuntimeParam::Task& runtime_task, cons
                 LogWarn << "Failed to parse pipeline override JSON for input option" << VAR(config_option.name);
             }
         } break;
+
+        case InterfaceData::Option::Type::Hotkey: {
+            const auto keycode_set = MaaPiCliHotkey::keycode_set(data_, config_);
+
+            std::string override_str = data_option.pipeline_override.dumps();
+            for (const auto& hotkey_def : data_option.hotkeys) {
+                std::string combo;
+                if (auto it = config_option.hotkeys.find(hotkey_def.name); it != config_option.hotkeys.end()) {
+                    combo = it->second;
+                }
+                else {
+                    combo = hotkey_def.default_;
+                }
+
+                auto parts = MaaPiCliHotkey::parse(combo, keycode_set);
+                if (!parts) {
+                    LogError << "Unresolvable hotkey combo" << VAR(config_option.name) << VAR(hotkey_def.name) << VAR(combo);
+                    return false;
+                }
+
+                // Referenced modifier placeholders must exist in the configured combo, otherwise
+                // the placeholder would reach the pipeline as a literal string.
+                const auto placeholder_referenced = [&](std::string_view suffix) {
+                    return override_str.find("{" + hotkey_def.name + "}" + std::string(suffix)) != std::string::npos;
+                };
+                bool modifier_missing = false;
+                for (size_t m = parts->modifiers.size(); m < 2; ++m) {
+                    if (placeholder_referenced(m == 0 ? ".modifier1" : ".modifier2")) {
+                        modifier_missing = true;
+                    }
+                }
+                if (modifier_missing) {
+                    LogError << "Combo has fewer modifiers than the override references" << VAR(config_option.name) << VAR(hotkey_def.name)
+                             << VAR(combo);
+                    return false;
+                }
+
+                // v2.8.0: hotkey placeholders are replaced with a single integer key code.
+                auto replace_with_code = [&](std::string_view placeholder, int code) {
+                    const std::string value = std::to_string(code);
+                    override_str = MaaNS::string_replace_all(override_str, "\"" + std::string(placeholder) + "\"", value);
+                    override_str = MaaNS::string_replace_all(override_str, std::string(placeholder), value);
+                };
+
+                const std::string name = hotkey_def.name;
+                replace_with_code("{" + name + "}.primary", parts->primary);
+                if (parts->modifiers.size() > 0) {
+                    replace_with_code("{" + name + "}.modifier1", parts->modifiers[0]);
+                }
+                if (parts->modifiers.size() > 1) {
+                    replace_with_code("{" + name + "}.modifier2", parts->modifiers[1]);
+                }
+                replace_with_code("{" + name + "}", parts->primary);
+            }
+            if (auto parsed = json::parse(override_str)) {
+                runtime_task.pipeline_override.emplace(parsed->as_object());
+            }
+            else {
+                LogError << "Failed to parse pipeline override JSON for hotkey option" << VAR(config_option.name);
+                return false;
+            }
+        } break;
         }
     }
+    return true;
 }
 
 std::optional<RuntimeParam::Task> Configurator::generate_runtime_task(const Configuration::Task& config_task) const
@@ -2022,15 +2194,11 @@ std::optional<RuntimeParam::Task> Configurator::generate_runtime_task(const Conf
                                       .entry = data_task.entry,
                                       .pipeline_override = json::array { data_task.pipeline_override } };
 
-    // v2.3.0: merge in priority order (later overrides earlier)
-    // 1. global_option (lowest priority)
-    merge_option_overrides(runtime_task, config_.global_option);
-    // 2. resource.option
-    merge_option_overrides(runtime_task, config_.resource_option);
-    // 3. controller.option
-    merge_option_overrides(runtime_task, config_.controller_option);
-    // 4. task.option (highest priority)
-    merge_option_overrides(runtime_task, config_task.option);
+    // v2.3.0: merge in priority order (later overrides earlier).
+    if (!merge_option_overrides(runtime_task, config_.global_option) || !merge_option_overrides(runtime_task, config_.resource_option)
+        || !merge_option_overrides(runtime_task, config_.controller_option) || !merge_option_overrides(runtime_task, config_task.option)) {
+        return std::nullopt;
+    }
 
     return runtime_task;
 }
@@ -2117,6 +2285,18 @@ bool Configurator::append_pretask_option(
             input_values[input_def.name] = std::move(value);
         }
         options[option_name] = std::move(input_values);
+    } break;
+
+    case InterfaceData::Option::Type::Hotkey: {
+        json::object hotkey_values;
+        for (const auto& hotkey_def : data_option.hotkeys) {
+            std::string value = hotkey_def.default_;
+            if (auto value_iter = config_option.hotkeys.find(hotkey_def.name); value_iter != config_option.hotkeys.end()) {
+                value = value_iter->second;
+            }
+            hotkey_values[hotkey_def.name] = std::move(value);
+        }
+        options[option_name] = std::move(hotkey_values);
     } break;
     }
 

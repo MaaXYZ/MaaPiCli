@@ -62,6 +62,8 @@ int main()
     Configuration::Option credentials;
     credentials.name = "credentials";
     credentials.inputs["token"] = "secret-token";
+    credentials.inputs["file"] = "C:\\future folder\\config.json";
+    credentials.inputs["directory"] = "/future folder/output";
 
     const auto& credentials_inputs = configurator.interface_data().option.at("credentials").inputs;
     require(
@@ -92,8 +94,11 @@ int main()
                     require(options->at("policy") == "fast", "select options should serialize as strings");
                     require(options->at("flags") == json::array { "alpha", "beta" }, "checkbox options should serialize as string arrays");
                     require(
-                        options->at("credentials") == json::object { { "token", "secret-token" } },
-                        "input options should serialize as field objects");
+                        options->at("credentials")
+                            == json::object { { "token", "secret-token" },
+                                              { "file", "C:\\future folder\\config.json" },
+                                              { "directory", "/future folder/output" } },
+                        "password and path inputs should serialize as unchanged strings in pretask field objects");
                     require(!options->contains("hidden-option"), "inapplicable options should be omitted");
                 }
             }
@@ -103,6 +108,40 @@ int main()
             require(second.cwd == runtime_fixture_dir, "pretask cwd should be the interface directory");
             require(second.args.empty(), "pretasks without options should not receive a JSON argument");
         }
+    }
+
+    {
+        Configurator hotkey_config;
+        require(hotkey_config.load(fixture_dir / "hotkey_runtime", fixture_dir / "hotkey-user"), "hotkey fixture should load");
+        auto& selected = hotkey_config.configuration();
+        selected.controller.name = "controller";
+        selected.resource = "resource";
+        Configuration::Option shortcut;
+        shortcut.name = "shortcut";
+        shortcut.hotkeys["combo"] = "Ctrl+Alt+A";
+        selected.task.emplace_back(Configuration::Task { .name = "task", .option = { shortcut } });
+        auto result = hotkey_config.generate_runtime();
+        require(result && result->task.size() == 1, "hotkey runtime should generate one task");
+        if (result && result->task.size() == 1) {
+            const auto& overrides = result->task.front().pipeline_override.as_array();
+            require(overrides.size() == 2, "hotkey override should be appended");
+            if (overrides.size() == 2) {
+                require(
+                    overrides.at(1).at("Main")
+                        == json::object { { "key", 29 }, { "primary", 29 }, { "modifier1", 113 }, { "modifier2", 57 } },
+                    "documented dotted placeholders and the base placeholder should become integer keycodes");
+            }
+        }
+        for (const auto& combo : { "A", "Ctrl+A" }) {
+            selected.task.front().option.front().hotkeys["combo"] = combo;
+            require(!hotkey_config.generate_runtime(), "missing referenced modifiers must prevent runtime generation");
+        }
+        selected.task.front().option.front().hotkeys["combo"] = "NoSuchKey";
+        require(!hotkey_config.generate_runtime(), "an invalid saved combo must prevent runtime generation");
+        selected.task.front().option.clear();
+        selected.global_option = { shortcut };
+        selected.global_option.front().hotkeys["combo"] = "NoSuchKey";
+        require(!hotkey_config.generate_runtime(), "invalid global hotkeys must also prevent runtime generation");
     }
 
 #if !defined(_WIN32)

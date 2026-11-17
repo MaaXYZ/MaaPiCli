@@ -95,12 +95,12 @@ jobs:
                       platform: ARM64
                       can-run: false
                     - os: linux
-                      runs-on: ubuntu-latest
+                      runs-on: ubuntu-24.04
                       arch: x86_64
                       platform: x86_64
                       can-run: true
                     - os: linux
-                      runs-on: ubuntu-latest
+                      runs-on: ubuntu-24.04
                       arch: aarch64
                       platform: aarch64
                       can-run: false

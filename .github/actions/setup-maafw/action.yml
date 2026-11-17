@@ -207,6 +207,7 @@ runs:
                 -DCMAKE_SYSTEM_VERSION="10.0.26100.0" \
                 -DBUILD_PICLI=OFF \
                 -DWITH_ADB_CONTROLLER=OFF \
+                -DWITH_IOS_CONTROLLER=OFF \
                 -DWITH_WIN32_CONTROLLER=OFF \
                 -DWITH_CUSTOM_CONTROLLER=OFF \
                 -DWITH_GAMEPAD_CONTROLLER=OFF \

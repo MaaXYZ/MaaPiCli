@@ -1,0 +1,6 @@
+{
+    "interface_version": 2,
+    "controller": [ { "name": "default-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "preset": [ { "name": "other-only", "controller": [ "other-controller" ], "task": [] } ]
+}

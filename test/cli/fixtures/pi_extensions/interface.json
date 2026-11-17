@@ -1,0 +1,41 @@
+{
+    "interface_version": 2,
+    "controller": [
+        { "name": "default-controller", "type": "Adb" },
+        { "name": "other-controller", "type": "Adb" }
+    ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "agent": [ { "child_exec": "first-agent" }, { "child_exec": "second-agent" } ],
+    "task": [
+        { "name": "original-task", "entry": "OriginalTask" },
+        { "name": "preset-task", "entry": "PresetTask" },
+        { "name": "path-task", "entry": "PathNode", "option": [ "paths" ] }
+    ],
+    "option": {
+        "paths": {
+            "type": "input",
+            "inputs": [
+                { "name": "file", "input_type": "file", "verify": ".*\\.json$", "pattern_msg": "Expected JSON file" },
+                { "name": "directory", "input_type": "directory" },
+                { "name": "note", "default": "keep \"quoted\" text" },
+                { "name": "count", "input_type": "text", "default": "42", "pipeline_type": "int" },
+                { "name": "enabled", "input_type": "text", "default": "true", "pipeline_type": "bool" }
+            ],
+            "pipeline_override": {
+                "PathNode": {
+                    "file": "{file}",
+                    "directory": "{directory}",
+                    "embedded": "prefix:{file}",
+                    "note": "{note}",
+                    "count": "{count}",
+                    "enabled": "{enabled}"
+                }
+            }
+        }
+    },
+    "preset": [
+        { "name": "other-only", "controller": [ "other-controller" ], "task": [ { "name": "original-task" } ] },
+        { "name": "unrestricted", "task": [ { "name": "preset-task" } ] }
+    ],
+    "import": [ "presets.json" ]
+}

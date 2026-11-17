@@ -33,6 +33,10 @@ private:
     bool select_adb_auto_detect();
     bool select_adb_manual_input();
 
+    bool select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config);
+    bool select_ios_device();
+    bool select_ios_auto_detect();
+
     bool select_win32_hwnd(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::Win32Config& win32_config);
     bool select_macos(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::MacOSConfig& macos_config);
     bool select_playcover(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::PlayCoverConfig& playcover_config);
@@ -49,6 +53,7 @@ private:
     void edit_task();
     bool delete_task();
     bool move_task();
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> applicable_presets() const;
     bool apply_preset();
 
     bool process_level_options(

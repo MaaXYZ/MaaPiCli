@@ -1,5 +1,7 @@
+#include "CLI/TextFile.h"
 #include "CLI/interactor.h"
 
+#include "MaaUtils/Platform.h"
 #include "ProjectInterface/Configurator.h"
 #include "ProjectInterface/Parser.h"
 
@@ -71,6 +73,284 @@ private:
     std::stringstream input_stream_;
     std::stringstream output_stream_;
 };
+
+void test_preset_controller_filter(const std::filesystem::path& fixture_dir)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto data = Parser::parse_interface(fixture_dir / "interface.json");
+    require(
+        data && data->preset.size() == 3 && data->preset.back().controller == std::vector<std::string> { "default-controller" },
+        "imported presets should retain controller restrictions");
+
+    const auto original_cwd = std::filesystem::current_path();
+    for (const auto& controller : { "default-controller", "other-controller" }) {
+        const auto root_dir = unique_temp_directory();
+        const auto user_dir = root_dir / "user";
+        const auto changed_cwd = root_dir / "changed-cwd";
+        std::filesystem::create_directories(user_dir / "config");
+        std::filesystem::create_directories(changed_cwd);
+        const bool is_default = std::string_view(controller) == "default-controller";
+        Configuration config;
+        config.controller.name = controller;
+        config.resource = "default-resource";
+        config.task.emplace_back().name = is_default ? "original-task" : "preset-task";
+        config.last_welcome = { "stale announcement" };
+        config.last_resolved_welcome = config.last_welcome;
+        {
+            std::ofstream stream(user_dir / "config/maa_pi_config.json");
+            stream << config.to_json().dumps();
+        }
+
+        {
+            StreamRedirector redirector("7\n1\n8\n");
+            std::filesystem::current_path(root_dir);
+            Interactor interactor("user");
+            require(interactor.load(fixture_dir), "controller-filtered preset fixture should load");
+            std::filesystem::current_path(changed_cwd);
+            require(interactor.interact(), "a visible preset should apply successfully");
+            std::filesystem::current_path(original_cwd);
+            const auto output = redirector.output().str();
+            require(output.find(is_default ? "other-only" : "default-only") == std::string::npos, "inapplicable presets should be hidden");
+            require(output.find(is_default ? "default-only" : "other-only") != std::string::npos, "applicable presets should be visible");
+            require(output.find("unrestricted") != std::string::npos, "presets without controller restrictions should remain visible");
+        }
+
+        const auto saved = Parser::parse_config(user_dir / "config/maa_pi_config.json");
+        const auto expected_task = is_default ? "preset-task" : "original-task";
+        require(
+            saved && saved->task.size() == 1 && saved->task.front().name == expected_task,
+            "preset numbering should refer to the filtered list");
+        require(
+            saved && saved->last_welcome.empty() && saved->last_resolved_welcome.empty(),
+            "welcome snapshots should update in the loaded user directory after cwd changes");
+        require(!std::filesystem::exists(changed_cwd / "user"), "saving should not create a user directory relative to the changed cwd");
+        std::filesystem::remove_all(root_dir);
+    }
+
+    const auto user_dir = unique_temp_directory();
+    std::filesystem::create_directories(user_dir / "config");
+    Configuration config;
+    config.controller.name = "default-controller";
+    config.resource = "default-resource";
+    {
+        std::ofstream stream(user_dir / "config/maa_pi_config.json");
+        stream << config.to_json().dumps();
+    }
+    {
+        StreamRedirector redirector("7\n");
+        Interactor interactor(user_dir);
+        require(interactor.load(fixture_dir / "no_match"), "a fixture with no applicable presets should load");
+        require(interactor.interact(), "exit should retain its original index when no presets apply");
+        require(redirector.output().str().find("Apply preset") == std::string::npos, "the menu should hide unavailable preset actions");
+    }
+    std::filesystem::remove_all(user_dir);
+}
+
+void test_path_inputs_and_agent_environment(const std::filesystem::path& fixture_dir)
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto user_dir = unique_temp_directory() / std::filesystem::path(u8"user 数据");
+    std::filesystem::create_directories(user_dir / "config");
+    Configuration config;
+    config.controller.name = "default-controller";
+    config.resource = "default-resource";
+    {
+        std::ofstream stream(user_dir / "config/maa_pi_config.json");
+        stream << config.to_json().dumps();
+    }
+
+    const std::string file = "C:\\future folder\\配置.json";
+    const auto directory = MAA_NS::path_to_utf8_string(user_dir / "future folder");
+    {
+        StreamRedirector redirector("3\n3\ninvalid.txt\n" + file + "\n" + directory + "\n\n\n\n8\n");
+        Interactor interactor(user_dir);
+        require(interactor.load(fixture_dir), "file and directory inputs should load without native dialogs");
+        require(interactor.interact(), "manual path inputs should save successfully");
+        const auto output = redirector.output().str();
+        require(
+            output.find("file path") != std::string::npos && output.find("directory path") != std::string::npos,
+            "path inputs should show hints");
+        require(output.find("Expected JSON file") != std::string::npos, "path inputs should retain regular expression validation");
+    }
+
+    Configurator reloaded;
+    const auto original_cwd = std::filesystem::current_path();
+    std::filesystem::current_path(user_dir.parent_path());
+    const bool loaded = reloaded.load(fixture_dir, user_dir.filename());
+    std::filesystem::current_path(original_cwd);
+    require(loaded, "saved paths and a relative user directory should load");
+    require(reloaded.configuration().task.size() == 1, "manual path input should add one task");
+    if (!reloaded.configuration().task.empty() && !reloaded.configuration().task.front().option.empty()) {
+        const auto& inputs = reloaded.configuration().task.front().option.front().inputs;
+        require(inputs.at("file") == file && inputs.at("directory") == directory, "saved path strings should remain unchanged");
+    }
+
+    std::filesystem::current_path(fixture_dir);
+    const auto runtime = reloaded.generate_runtime();
+    std::filesystem::current_path(original_cwd);
+    require(runtime.has_value(), "path inputs should generate a runtime without requiring paths to exist");
+    if (runtime) {
+        require(runtime->task.front().pipeline_override.as_array().size() == 2, "escaped path inputs should produce a pipeline override");
+        if (runtime->task.front().pipeline_override.as_array().size() == 2) {
+            const auto& node = runtime->task.front().pipeline_override.as_array().at(1).at("PathNode");
+            require(
+                node.at("file") == file && node.at("directory") == directory,
+                "pipeline substitution should preserve native path separators");
+            require(node.at("embedded") == "prefix:" + file, "embedded path placeholders should remain valid JSON");
+            require(node.at("note") == "keep \"quoted\" text", "text input quotes should remain valid JSON");
+            require(node.at("count") == 42 && node.at("enabled") == true, "input controls should retain pipeline type conversions");
+        }
+
+        require(runtime->agent.size() == 2, "all declared agents should be generated");
+        for (const auto& agent : runtime->agent) {
+            const auto directory_env = agent.env_vars.find("PI_USER_DATA_DIR");
+            const auto directory_path =
+                directory_env == agent.env_vars.end() ? std::filesystem::path { } : MAA_NS::path(directory_env->second);
+            require(
+                directory_path.is_absolute() && std::filesystem::equivalent(directory_path, user_dir),
+                "each agent should receive the absolute user directory captured at load, independent of its resource cwd");
+            require(agent.env_vars.at("PI_INTERFACE_VERSION") == "v2.11.0", "agents should receive the updated PI capability version");
+        }
+    }
+    std::filesystem::remove_all(user_dir.parent_path());
+}
+
+void test_text_content_link_replacement()
+{
+    const auto root = unique_temp_directory();
+    const auto resource = root / "resource";
+    const auto outside = root / "outside";
+    std::filesystem::create_directories(resource / "docs");
+    std::filesystem::create_directories(outside);
+    std::ofstream(resource / "docs/text.txt") << "safe text\n";
+    std::ofstream(outside / "text.txt") << "outside secret";
+    const auto resolved = std::filesystem::canonical(resource / "docs/text.txt");
+    require(MaaPiCliText::read_canonical_file(resolved) == "safe text\n", "the checked file handle should return normal text");
+
+    // Simulate replacement after canonicalization/boundary validation, before opening.
+    std::filesystem::rename(resource / "docs/text.txt", resource / "docs/original.txt");
+    std::error_code ec;
+    std::filesystem::create_symlink(outside / "text.txt", resource / "docs/text.txt", ec);
+    if (ec) {
+#ifdef _WIN32
+        std::cerr << "SKIPPED: replacement symlink fixtures: " << ec.message() << '\n';
+#else
+        require(false, "replacement symlink fixture should be created: " + ec.message());
+#endif
+        std::filesystem::remove_all(root);
+        return;
+    }
+    require(!MaaPiCliText::read_canonical_file(resolved), "a file replaced by a symlink after validation must not be read");
+    std::filesystem::remove(resource / "docs/text.txt");
+    std::filesystem::rename(resource / "docs/original.txt", resource / "docs/text.txt");
+
+    std::filesystem::rename(resource / "docs", resource / "original-docs");
+    std::filesystem::create_directory_symlink(outside, resource / "docs");
+    require(!MaaPiCliText::read_canonical_file(resolved), "a parent directory replaced after validation must not be followed");
+    std::filesystem::remove(resource / "docs");
+    std::filesystem::rename(resource / "original-docs", resource / "docs");
+
+    std::filesystem::rename(resource, root / "original-resource");
+    std::filesystem::create_directories(outside / "docs");
+    std::ofstream(outside / "docs/text.txt") << "outside root secret";
+    std::filesystem::create_directory_symlink(outside, resource);
+    require(!MaaPiCliText::read_canonical_file(resolved), "a resource root replaced after validation must not be followed");
+    std::filesystem::remove_all(root);
+}
+
+void test_text_content_path_boundaries()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto root = unique_temp_directory();
+    const auto resource_dir = root / "resource";
+    const auto user_dir = root / "user";
+    std::filesystem::create_directories(resource_dir / "docs");
+    std::filesystem::create_directories(root / "resource-other");
+    std::filesystem::create_directories(user_dir / "config");
+    const std::string safe_content = "Text inside the resource directory";
+    const std::string secret_content = "SECRET outside the resource directory";
+    std::ofstream(resource_dir / "docs/text.txt") << safe_content;
+    std::ofstream(root / "secret.txt") << secret_content;
+    std::ofstream(root / "resource-other/secret.txt") << secret_content;
+
+    std::vector<std::string> declared {
+        "docs/text.txt",
+        "docs/../docs/text.txt",
+        "../secret.txt",
+        "../resource-other/secret.txt",
+        MAA_NS::path_to_utf8_string(root / "secret.txt"),
+        MAA_NS::path_to_utf8_string(resource_dir / "docs/text.txt"),
+        std::string("docs/text.txt\0ignored", 21),
+        "docs",
+        "missing.txt",
+        "Plain welcome text",
+        std::string(300, 'x'),
+        "https://example.com/welcome.txt",
+        "file://" + MAA_NS::path_to_utf8_string(root / "secret.txt"),
+    };
+    auto expected = declared;
+    expected[0] = safe_content;
+    expected[1] = safe_content;
+
+    const auto add_symlink_case = [&](const auto& target, const std::string& name, bool directory, const std::string& resolved) {
+        std::error_code ec;
+        if (directory) {
+            std::filesystem::create_directory_symlink(target, resource_dir / name, ec);
+        }
+        else {
+            std::filesystem::create_symlink(target, resource_dir / name, ec);
+        }
+        if (ec) {
+#ifdef _WIN32
+            std::cerr << "SKIPPED: symlink case " << name << ": " << ec.message() << '\n';
+#else
+            require(false, "symlink fixture should be created: " + name + ": " + ec.message());
+#endif
+            return;
+        }
+        declared.emplace_back(name + (directory ? "/secret.txt" : ""));
+        expected.emplace_back(resolved.empty() ? declared.back() : resolved);
+    };
+    add_symlink_case(root / "secret.txt", "outside-link", false, "");
+    add_symlink_case(root / "resource-other", "outside-directory", true, "");
+    add_symlink_case(resource_dir / "docs/text.txt", "inside-link", false, safe_content);
+    add_symlink_case(root / "missing.txt", "dangling-link", false, "");
+
+    auto interface = json::parse(R"json({
+        "interface_version": 2,
+        "controller": [ { "name": "adb-controller", "type": "Adb" } ],
+        "resource": [ { "name": "default-resource", "path": [] } ],
+        "description": "../secret.txt"
+    })json")
+                         .value();
+    json::array welcome;
+    for (const auto& text : declared) {
+        welcome.emplace_back(text);
+    }
+    interface["welcome"] = std::move(welcome);
+    std::ofstream(resource_dir / "interface.json") << interface.dumps();
+    Configuration config;
+    config.controller.name = "adb-controller";
+    config.resource = "default-resource";
+    std::ofstream(user_dir / "config/maa_pi_config.json") << config.to_json().dumps();
+
+    {
+        StreamRedirector redirector;
+        Interactor interactor(user_dir);
+        require(interactor.load(resource_dir), "text path boundary fixture should load");
+        require(interactor.interact(), "text path boundary fixture should exit on EOF");
+        const auto output = redirector.output().str();
+        require(output.find(secret_content) == std::string::npos, "welcome and description must not disclose files outside resources");
+        require(output.find("Description: ../secret.txt") != std::string::npos, "an unsafe description should remain literal text");
+    }
+    const auto saved = Parser::parse_config(user_dir / "config/maa_pi_config.json");
+    require(saved && saved->last_welcome == declared, "declared welcome paths should remain unchanged");
+    require(saved && saved->last_resolved_welcome == expected, "only regular files reached by safe relative paths should be read");
+    std::filesystem::remove_all(root);
+}
 
 #if defined(__APPLE__)
 constexpr auto kTestAclType = ACL_TYPE_EXTENDED;
@@ -186,9 +466,20 @@ bool remove_configuration_acl(const std::filesystem::path& path)
 
 }
 
-int main()
+int main(int argc, char** argv)
 {
+    if (argc == 2 && std::string_view(argv[1]) == "--text-content-only") {
+        test_text_content_path_boundaries();
+        test_text_content_link_replacement();
+        return failures == 0 ? 0 : 1;
+    }
+
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
+    test_preset_controller_filter(fixture_dir.parent_path() / "pi_extensions");
+    test_path_inputs_and_agent_environment(fixture_dir.parent_path() / "pi_extensions");
+    test_text_content_path_boundaries();
+    test_text_content_link_replacement();
+
     const auto interface = MAA_PROJECT_INTERFACE_NS::Parser::parse_interface(fixture_dir / "interface.json");
     require(interface.has_value() && interface->controller.size() == 2, "the EOF fixture should contain two controllers");
 
@@ -985,6 +1276,191 @@ int main()
 
         std::filesystem::remove_all(resource_dir);
         std::filesystem::remove(user_dir);
+    }
+
+    {
+        using namespace MAA_PROJECT_INTERFACE_NS;
+        const auto resource_dir = unique_temp_directory();
+        const auto ios_user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        {
+            std::ofstream stream(resource_dir / "interface.json");
+            stream << R"json({
+                "interface_version": 2,
+                "controller": [{"name": "ios", "type": "IOS", "ios": {
+                    "udid": "test-iphone", "connection": "WiFi", "screencap": "Stream",
+                    "config": {"server_port": 17424, "wifi_address": "10.0.0.1"}
+                }}],
+                "resource": [{"name": "default", "path": ["resource"]}],
+                "task": [{"name": "capture", "entry": "Capture"}]
+            })json";
+        }
+        Configurator configurator;
+        require(configurator.load(resource_dir, ios_user_dir), "iOS project configuration should load");
+        auto& configuration = configurator.configuration();
+        configuration.controller.name = "ios";
+        configuration.resource = "default";
+        configuration.task.push_back({ "capture", { } });
+        require(configurator.check_configuration(), "iOS controller should be selected by name");
+        configuration.ios.screencap = "ScreenshotService";
+        const auto runtime = configurator.generate_runtime();
+        const auto* ios = runtime ? std::get_if<RuntimeParam::IOSParam>(&runtime->controller_param) : nullptr;
+        require(
+            ios && ios->udid == "test-iphone" && ios->connection == MaaIOSConnectionMethod_WiFi,
+            "iOS runtime should use project device defaults");
+        require(ios && ios->screencap == MaaIOSScreencapMethod_ScreenshotService, "saved iOS screencap choice should override the project");
+        require(ios && ios->config.find("17424") != std::string::npos, "iOS server configuration should reach the runtime");
+        configuration.ios.config = { { "max_fps", 15 } };
+        const auto merged_runtime = configurator.generate_runtime();
+        const auto* merged = merged_runtime ? std::get_if<RuntimeParam::IOSParam>(&merged_runtime->controller_param) : nullptr;
+        const auto merged_options = merged ? json::parse(merged->config) : std::nullopt;
+        require(
+            merged_options && merged_options->get("server_port", 0) == 17424 && merged_options->get("max_fps", 0) == 15,
+            "user fields must merge with project server settings");
+        configuration.ios.config = { };
+        configuration.ios.connection = "USB";
+        const auto usb_runtime = configurator.generate_runtime();
+        const auto* usb = usb_runtime ? std::get_if<RuntimeParam::IOSParam>(&usb_runtime->controller_param) : nullptr;
+        require(usb && usb->connection == MaaIOSConnectionMethod_USB, "saved USB connection should override project Wi-Fi");
+        const auto usb_options = usb ? json::parse(usb->config) : std::nullopt;
+        require(usb_options && !usb_options->contains("wifi_address"), "USB must ignore project Wi-Fi addresses");
+        configuration.ios.connection = "Auto";
+        const auto auto_runtime = configurator.generate_runtime();
+        const auto* automatic = auto_runtime ? std::get_if<RuntimeParam::IOSParam>(&auto_runtime->controller_param) : nullptr;
+        const auto auto_options = automatic ? json::parse(automatic->config) : std::nullopt;
+        require(
+            auto_options && auto_options->get("wifi_address", std::string()) == "10.0.0.1",
+            "Auto must preserve an explicit project Wi-Fi address");
+        for (const auto& address : { "10.0.0.99", "auto", "" }) {
+            configuration.ios.config = { { "wifi_address", address }, { "max_fps", 15 } };
+            const auto selected_runtime = configurator.generate_runtime();
+            const auto* selected = selected_runtime ? std::get_if<RuntimeParam::IOSParam>(&selected_runtime->controller_param) : nullptr;
+            const auto selected_options = selected ? json::parse(selected->config) : std::nullopt;
+            require(
+                selected && selected->connection == MaaIOSConnectionMethod_Auto && selected_options
+                    && selected_options->get("wifi_address", std::string("missing")) == address
+                    && selected_options->get("server_port", 0) == 17424 && selected_options->get("max_fps", 0) == 15,
+                "Auto must preserve explicit, discovery and empty Wi-Fi addresses alongside unrelated options");
+        }
+        configuration.ios.config = { };
+        configuration.ios.connection = "invalid";
+        require(!configurator.generate_runtime(), "unknown iOS transport must fail runtime generation");
+        configuration.ios.connection.clear();
+        configuration.ios.udid = "saved-iphone";
+        require(configurator.save(ios_user_dir), "iOS user configuration should save");
+        {
+            StreamRedirector redirector("1\n\n3\n10.0.0.99\n3\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir), "saved iOS configuration should load in the CLI");
+            require(interactor.interact(), "iOS device and screencap selection should complete");
+        }
+        auto saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->ios.udid == "saved-iphone" && saved->ios.screencap == "Stream|ScreenshotService",
+            "iOS selection should preserve the UDID and save the combined screencap method");
+        require(saved && saved->ios.config.get("wifi_address", std::string()) == "10.0.0.99", "Wi-Fi selection should save its address");
+        {
+            StreamRedirector redirector("1\n\n1\n\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "switching from Wi-Fi to Auto should complete");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->ios.connection == "Auto" && saved->ios.config.get("wifi_address", std::string()) == "10.0.0.99"
+                && saved->ios.config.get("server_port", 0) == 17424,
+            "Auto must preserve a supplied Wi-Fi address and server settings");
+        {
+            StreamRedirector redirector("1\n\n1\n-\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "clearing the Auto Wi-Fi address should complete");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->ios.connection == "Auto" && saved->ios.config.get("wifi_address", std::string("missing")).empty()
+                && saved->ios.config.get("server_port", 0) == 17424,
+            "an explicitly empty address must override the project address without losing server settings");
+        Configurator search_fixture;
+        require(search_fixture.load(resource_dir, ios_user_dir), "saved iOS device selection fixture should load");
+        search_fixture.configuration().ios.config["server_port"] = -1;
+        require(search_fixture.save(ios_user_dir), "unavailable discovery endpoint should save for the offline menu test");
+        {
+            StreamRedirector redirector("1\n2\nother-iphone\n1\n\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "saved iOS devices should allow another discovery attempt");
+            require(
+                redirector.output().str().find("Searching USB and Wi-Fi iOS devices") != std::string::npos,
+                "Search devices must invoke discovery even when a UDID is already saved");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(saved && saved->ios.udid == "other-iphone", "failed discovery should allow entering a different UDID");
+        {
+            StreamRedirector redirector("1\n3\nmanual-iphone\n1\n\n2\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "a saved device should allow direct manual replacement");
+            require(
+                redirector.output().str().find("Searching USB and Wi-Fi iOS devices") == std::string::npos,
+                "manual replacement must not require a discovery connection");
+        }
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(saved && saved->ios.udid == "manual-iphone", "manual device selection should replace the saved UDID");
+        require(search_fixture.load(resource_dir, ios_user_dir), "discovery fixture should reload after selection");
+        search_fixture.configuration().ios.config["server_port"] = 17424;
+        require(search_fixture.save(ios_user_dir), "discovery fixture should restore the server port");
+        saved = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        {
+            StreamRedirector redirector("1\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir), "iOS EOF fixture should load");
+            require(interactor.interact(), "EOF during iOS configuration should exit cleanly");
+            require(
+                redirector.output().str().find("Choose screencap method") == std::string::npos,
+                "EOF at the device menu should not advance to screencap selection");
+        }
+        const auto after_eof = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(after_eof && saved && after_eof->ios == saved->ios, "aborted iOS selection should not overwrite saved configuration");
+        Configurator first_writer, second_writer;
+        require(
+            first_writer.load(resource_dir, ios_user_dir) && second_writer.load(resource_dir, ios_user_dir),
+            "concurrent iOS configurations should load");
+        first_writer.configuration().ios.udid = "first-writer";
+        first_writer.configuration().ios.config["max_fps"] = 10;
+        second_writer.configuration().ios.screencap = "Stream";
+        second_writer.configuration().ios.config["hardware_decode"] = false;
+        require(first_writer.save(ios_user_dir) && second_writer.save(ios_user_dir), "independent iOS edits should save");
+        const auto combined = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            combined && combined->ios.udid == "first-writer" && combined->ios.screencap == "Stream"
+                && combined->ios.config.get("max_fps", 0) == 10 && combined->ios.config.contains("hardware_decode"),
+            "concurrent writers must preserve independent iOS fields and config keys");
+
+        std::filesystem::create_directories(resource_dir);
+        {
+            std::ofstream stream(resource_dir / "interface.json");
+            stream << R"json({
+                "interface_version": 2,
+                "controller": [
+                    {"name": "ios", "type": "IOS", "ios": {"udid": "phone-a"}},
+                    {"name": "second", "type": "IOS", "ios": {
+                        "udid": "phone-b", "connection": "USB", "screencap": "ScreenshotService",
+                        "config": {"server_port": 17425}
+                    }}
+                ],
+                "resource": [{"name": "default", "path": ["resource"]}],
+                "task": [{"name": "capture", "entry": "Capture"}]
+            })json";
+        }
+        {
+            StreamRedirector redirector("1\n2\n\n\n\n7\n");
+            Interactor interactor(ios_user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "switching iOS controllers should complete");
+        }
+        const auto second = Parser::parse_config(ios_user_dir / "config/maa_pi_config.json");
+        require(
+            second && second->controller.name == "second" && second->ios.udid == "phone-b" && second->ios.connection == "USB"
+                && second->ios.screencap == "ScreenshotService" && second->ios.config.get("server_port", 0) == 17425,
+            "new controller must use its own device, settings and default menu choices");
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(ios_user_dir);
     }
 
     if (failures != 0) {

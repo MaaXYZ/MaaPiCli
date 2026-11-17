@@ -27,7 +27,9 @@
         "credentials": {
             "type": "input",
             "inputs": [
-                { "name": "token", "default": "default-token", "password": true }
+                { "name": "token", "default": "default-token", "password": true },
+                { "name": "file", "input_type": "file" },
+                { "name": "directory", "input_type": "directory" }
             ]
         },
         "hidden-option": {

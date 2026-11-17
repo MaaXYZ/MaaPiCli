@@ -3,5 +3,5 @@
     "controller": [ { "name": "default-controller", "type": "Adb" } ],
     "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
     "agent": [ { "child_exec": "agent-server" } ],
-    "import": [ "invalid_hotkey_import.json" ]
+    "import": [ "hotkey_import.json" ]
 }

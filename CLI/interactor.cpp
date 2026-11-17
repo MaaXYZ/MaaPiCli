@@ -20,14 +20,18 @@
 #include <unistd.h>
 #endif
 
+#include "HotkeyMap.h"
 #include "MaaFramework/Utility/MaaBuffer.h"
 #include "MaaToolkit/AdbDevice/MaaToolkitAdbDevice.h"
 #include "MaaToolkit/DesktopWindow/MaaToolkitDesktopWindow.h"
+#include "MaaToolkit/IOSDevice/MaaToolkitIOSDevice.h"
 #include "MaaUtils/Encoding.h"
 #include "MaaUtils/Logger.h"
 #include "MaaUtils/Platform.h"
 #include "ProjectInterface/Parser.h"
 #include "ProjectInterface/Runner.h"
+#include "TerminalText.h"
+#include "TextFile.h"
 #include "input.h"
 
 #if defined(__APPLE__)
@@ -199,7 +203,7 @@ bool restart_self_as_admin()
 } // namespace
 
 Interactor::Interactor(std::filesystem::path user_path)
-    : user_path_(std::move(user_path))
+    : user_path_(std::filesystem::absolute(user_path))
 {
     LogDebug << VAR(user_path_);
 }
@@ -375,6 +379,11 @@ void Interactor::print_config()
         std::cout << MAA_NS::utf8_to_crt(
             std::format("\t\t{}\n\t\t{}\n", config_.configuration().adb.adb_path, config_.configuration().adb.address));
         break;
+    case InterfaceData::Controller::Type::IOS: {
+        const auto& ios = config_.configuration().ios;
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t\tUDID: {}\n\t\tScreencap: {}\n", ios.udid.empty() ? "(not configured)" : ios.udid, ios.screencap));
+    } break;
     case InterfaceData::Controller::Type::Win32:
         if (config_.configuration().win32.hwnd) {
             std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", format_win32_config(config_.configuration().win32)));
@@ -456,6 +465,13 @@ void Interactor::print_config()
                 for (const auto& [key, val] : opt.inputs) {
                     std::cout << "\t\t" << MAA_NS::utf8_to_crt(key) << ": " << MAA_NS::utf8_to_crt(display_input_value(opt.name, key, val))
                               << "\n";
+                }
+            }
+            else if (!opt.hotkeys.empty()) {
+                std::cout << "\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(opt.name)) << ":\n";
+                for (const auto& [key, val] : opt.hotkeys) {
+                    std::cout << "\t\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(key)) << ": "
+                              << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(val)) << "\n";
                 }
             }
         }
@@ -596,7 +612,7 @@ bool Interactor::show_welcome_if_changed()
 
 Interactor::ActionStatus Interactor::interact_once()
 {
-    bool has_presets = !config_.interface_data().preset.empty();
+    const bool has_presets = !applicable_presets().empty();
 
     std::cout << "### Select action ###\n\n";
     std::cout << "\t1. Switch controller\n";
@@ -711,6 +727,9 @@ bool Interactor::select_controller()
     }
     const auto& controller = all_controllers[index];
 
+    if (controller.type == InterfaceData::Controller::Type::IOS && config_.configuration().controller.name != controller.name) {
+        config_.configuration().ios = { };
+    }
     config_.configuration().controller.name = controller.name;
     config_.configuration().controller.type = controller.type;
 
@@ -718,6 +737,8 @@ bool Interactor::select_controller()
     case InterfaceData::Controller::Type::Adb:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Adb;
         return select_adb();
+    case InterfaceData::Controller::Type::IOS:
+        return select_ios(controller.ios);
     case InterfaceData::Controller::Type::Win32:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Win32;
         return select_win32_hwnd(controller.win32);
@@ -902,6 +923,150 @@ bool Interactor::select_playcover(const MAA_PROJECT_INTERFACE_NS::InterfaceData:
     pc.address = buffer->empty() ? default_address : *buffer;
     std::cout << "\n";
 
+    return true;
+}
+
+bool Interactor::select_ios_auto_detect()
+{
+    std::cout << "Searching USB and Wi-Fi iOS devices...\n";
+    auto* list = MaaToolkitIOSDeviceListCreate();
+    if (!list) {
+        return true;
+    }
+    OnScopeLeave([&]() { MaaToolkitIOSDeviceListDestroy(list); });
+    const auto options = json::value(config_.configuration().ios.config).to_string();
+    if (!MaaToolkitIOSDeviceFindWithOptions(MaaIOSConnectionMethod_Auto, options.c_str(), nullptr, nullptr, list)) {
+        std::cout << MaaToolkitIOSDeviceListGetWarnings(list) << "\n";
+        return true;
+    }
+    std::vector<const MaaToolkitIOSDevice*> devices;
+    for (MaaSize i = 0; i < MaaToolkitIOSDeviceListSize(list); ++i) {
+        const auto* device = MaaToolkitIOSDeviceListAt(list, i);
+        if (!device || !MaaToolkitIOSDeviceGetUdid(device)[0]) {
+            continue;
+        }
+        devices.push_back(device);
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t{}. {}  {}\n", devices.size(), MaaToolkitIOSDeviceGetName(device), MaaToolkitIOSDeviceGetUdid(device)));
+    }
+    if (devices.empty()) {
+        std::cout << "No selectable device. Pair and prepare the device with xdb, or enter a UDID manually.\n";
+        return true;
+    }
+    std::cout << std::format("\t{}. Enter a UDID manually\n", devices.size() + 1);
+    const auto choice = input(devices.size() + 1, "Select device");
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    if (*choice <= static_cast<int>(devices.size())) {
+        config_.configuration().ios.udid = MaaToolkitIOSDeviceGetUdid(devices[*choice - 1]);
+    }
+    return true;
+}
+
+bool Interactor::select_ios_device()
+{
+    auto& ios = config_.configuration().ios;
+    bool search = ios.udid.empty();
+    if (!ios.udid.empty()) {
+        std::cout << std::format("\n### Select iOS device ###\n\n\t1. Use current device: {}\n", ios.udid)
+                  << "\t2. Search devices\n"
+                     "\t3. Enter a UDID manually\n";
+        const auto choice = input(3, "Choose device action", 1);
+        if (!choice) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (*choice == 1) {
+            return true;
+        }
+        search = *choice == 2;
+    }
+    if (search && !select_ios_auto_detect()) {
+        return false;
+    }
+
+    std::cout << "Device UDID is required. Select a discovered device or enter its UDID.\n";
+    do {
+        const auto value = read_line(std::format("UDID [{}]: ", ios.udid));
+        if (!value) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (!value->empty()) {
+            ios.udid = *value;
+        }
+        if (ios.udid.empty()) {
+            std::cout << "Device UDID cannot be empty.\n";
+        }
+    } while (ios.udid.empty());
+    return true;
+}
+
+bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config)
+{
+    std::cout << "### Configure iOS device ###\n\n"
+                 "Pair and prepare the device with xdb before running tasks.\n";
+    auto& ios = config_.configuration().ios;
+    for (const auto& [key, value] : ios_config.config) {
+        if (!ios.config.contains(key)) {
+            ios.config[key] = value;
+        }
+    }
+    if (ios.connection.empty()) {
+        ios.connection = ios_config.connection;
+    }
+    if (ios.screencap.empty()) {
+        ios.screencap = ios_config.screencap;
+    }
+    if (ios.udid.empty()) {
+        ios.udid = ios_config.udid;
+    }
+    if (!select_ios_device()) {
+        return false;
+    }
+
+    std::cout << "\n### Select connection method ###\n\n"
+                 "\t1. Auto: prefer USB when no Wi-Fi address is set; otherwise Wi-Fi\n"
+                 "\t2. USB\n"
+                 "\t3. Wi-Fi\n";
+    const int default_transport = ios.connection == "USB" ? 2 : ios.connection == "WiFi" ? 3 : 1;
+    const auto transport = input(3, "Choose connection method", default_transport);
+    if (!transport) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.connection = *transport == 1 ? "Auto" : *transport == 2 ? "USB" : "WiFi";
+    if (ios.connection != "USB") {
+        std::cout << "Wi-Fi address: IP for direct connection, auto for Wi-Fi discovery.\n"
+                     "Enter - to clear it; Auto with an empty address prefers USB, then paired Wi-Fi.\n";
+        const auto current = ios.config.get("wifi_address", ios.connection == "WiFi" ? std::string("auto") : std::string());
+        const auto address = read_line(std::format("Wi-Fi address [{}]: ", current));
+        if (!address) {
+            input_aborted_ = true;
+            return false;
+        }
+        ios.config["wifi_address"] = *address == "-" ? std::string() : address->empty() ? current : *address;
+    }
+    else {
+        ios.config.erase("wifi_address");
+    }
+
+    std::cout << "\n### Select screencap method ###\n\n"
+                 "\t1. Stream: video frames, low latency, lossy, background decoding\n"
+                 "\t2. ScreenshotService: lossless screenshot RPC, no background decoding\n"
+                 "\t3. Both: stream first, fall back to the screenshot service\n";
+    const int default_screencap = ios.screencap == "Stream"                                            ? 1
+                                  : ios.screencap == "ScreenshotService" || ios.screencap == "Service" ? 2
+                                                                                                       : 3;
+    const auto choice = input(3, "Choose screencap method", default_screencap);
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.screencap = *choice == 1 ? "Stream" : *choice == 2 ? "ScreenshotService" : "Stream|ScreenshotService";
+    std::cout << "\n";
     return true;
 }
 
@@ -1894,6 +2059,12 @@ bool Interactor::process_option(
                 std::string input_desc = read_text_content(input_def.description);
                 std::cout << MAA_NS::utf8_to_crt(input_desc) << "\n";
             }
+            if (input_def.input_type == InterfaceData::Option::Input::InputType::File) {
+                input_display_name += " (file path)";
+            }
+            else if (input_def.input_type == InterfaceData::Option::Input::InputType::Directory) {
+                input_display_name += " (directory path)";
+            }
             std::cout << MAA_NS::utf8_to_crt(std::format("{} [{}]: ", input_display_name, input_def.password ? "********" : default_val));
 
             auto read_input_value = [&]() -> std::optional<std::string> {
@@ -1939,6 +2110,69 @@ bool Interactor::process_option(
             }
 
             config_opt.inputs[input_def.name] = value;
+        }
+        std::cout << "\n";
+    } break;
+
+    case InterfaceData::Option::Type::Hotkey: {
+        const auto keycode_set = MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration());
+
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format(
+                "\n\n## Hotkey option \"{}\" for \"{}\" ##\n\n",
+                MaaPiCliTerminal::sanitize(opt_display_name),
+                MaaPiCliTerminal::sanitize(task_display_name)));
+        if (!opt.description.empty()) {
+            std::string desc_text = read_text_content(opt.description);
+            std::cout << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(desc_text, true)) << "\n\n";
+        }
+
+        for (const auto& hotkey_def : opt.hotkeys) {
+            if (auto_accept_default) {
+                auto combo = MaaPiCliHotkey::parse(hotkey_def.default_, keycode_set);
+                if (!combo) {
+                    std::cout << "Cannot accept an invalid default hotkey for the selected controller.\n";
+                    return false;
+                }
+                config_opt.hotkeys[hotkey_def.name] = combo->canonical;
+                continue;
+            }
+
+            std::string hotkey_display_name = get_display_name(hotkey_def.name, hotkey_def.label);
+            if (!hotkey_def.description.empty()) {
+                std::string hotkey_desc = read_text_content(hotkey_def.description);
+                std::cout << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(hotkey_desc, true)) << "\n";
+            }
+            std::cout << MAA_NS::utf8_to_crt(
+                std::format(
+                    "{} [{}] (e.g. Ctrl+Alt+F1, press Enter to keep): ",
+                    MaaPiCliTerminal::sanitize(hotkey_display_name),
+                    MaaPiCliTerminal::sanitize(hotkey_def.default_)));
+
+            auto buffer = read_line();
+            if (!buffer) {
+                input_aborted_ = true;
+                return false;
+            }
+
+            std::string value = buffer->empty() ? hotkey_def.default_ : *buffer;
+
+            // Normalize and validate the combo; retry until it resolves on the current platform.
+            while (true) {
+                if (auto parts = MaaPiCliHotkey::parse(value, keycode_set)) {
+                    value = parts->canonical;
+                    break;
+                }
+                std::cout << MAA_NS::utf8_to_crt(std::format("Invalid hotkey \"{}\", please retry: ", MaaPiCliTerminal::sanitize(value)));
+                buffer = read_line();
+                if (!buffer) {
+                    input_aborted_ = true;
+                    return false;
+                }
+                value = buffer->empty() ? hotkey_def.default_ : *buffer;
+            }
+
+            config_opt.hotkeys[hotkey_def.name] = value;
         }
         std::cout << "\n";
     } break;
@@ -2086,6 +2320,13 @@ void Interactor::print_config_tasks(bool with_index) const
                 for (const auto& [key, val] : opt.inputs) {
                     std::cout << "\t\t\t" << MAA_NS::utf8_to_crt(key) << ": "
                               << MAA_NS::utf8_to_crt(display_input_value(opt.name, key, val)) << "\n";
+                }
+            }
+            else if (!opt.hotkeys.empty()) {
+                std::cout << "\t\t- " << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(opt.name)) << ":\n";
+                for (const auto& [key, val] : opt.hotkeys) {
+                    std::cout << "\t\t\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(key)) << ": "
+                              << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(val)) << "\n";
                 }
             }
         }
@@ -2485,8 +2726,8 @@ bool Interactor::ensure_declared_option_tree(
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
-    std::vector<Configuration::Option> existing_options = std::move(config_options);
-    config_options.clear();
+    auto existing_options = config_options;
+    std::vector<Configuration::Option> completed_options;
 
     std::function<bool(const std::string&)> ensure_option = [&](const std::string& option_name) -> bool {
         auto data_option_iter = config_.interface_data().option.find(option_name);
@@ -2508,7 +2749,7 @@ bool Interactor::ensure_declared_option_tree(
             std::ranges::find_if(existing_options, [&](const auto& config_option) { return config_option.name == option_name; });
         if (existing_option_iter == existing_options.end()) {
             // Interface changes may add a required option; automatic completion must not interrupt runtime setup.
-            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+            return process_option(option_name, context_display_name, completed_options, auto_accept_default);
         }
 
         if (data_option.type == InterfaceData::Option::Type::Input) {
@@ -2518,15 +2759,30 @@ bool Interactor::ensure_declared_option_tree(
                 }
             }
         }
+        else if (data_option.type == InterfaceData::Option::Type::Hotkey) {
+            for (const auto& hotkey_def : data_option.hotkeys) {
+                if (!existing_option_iter->hotkeys.contains(hotkey_def.name)) {
+                    existing_option_iter->hotkeys.emplace(hotkey_def.name, hotkey_def.default_);
+                }
+            }
+            if (!MaaPiCliHotkey::normalize_hotkeys(
+                    data_option,
+                    *existing_option_iter,
+                    MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                LogError << "Invalid configured hotkey" << VAR(option_name);
+                std::cout << "Cannot use the saved hotkey for the selected controller. Reconfigure the option before running tasks.\n";
+                return false;
+            }
+        }
 
         std::vector<const InterfaceData::Option::Case*> selected_cases;
         if (!select_runtime_option_cases(option_name, existing_options, selected_cases)) {
             LogWarn << "Invalid runtime option found, recreating it" << VAR(context_display_name) << VAR(option_name);
             existing_options.erase(existing_option_iter);
-            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+            return process_option(option_name, context_display_name, completed_options, auto_accept_default);
         }
 
-        config_options.push_back(*existing_option_iter);
+        completed_options.push_back(*existing_option_iter);
         for (const auto* selected_case : selected_cases) {
             for (const auto& active_option : selected_case->option) {
                 if (!ensure_option(active_option)) {
@@ -2544,6 +2800,7 @@ bool Interactor::ensure_declared_option_tree(
         }
     }
 
+    config_options = std::move(completed_options);
     return true;
 }
 
@@ -2645,11 +2902,23 @@ bool Interactor::mpause()
     return true;
 }
 
+std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> Interactor::applicable_presets() const
+{
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> presets;
+    const auto& controller = config_.configuration().controller.name;
+    for (const auto& preset : config_.interface_data().preset) {
+        if (preset.controller.empty() || std::ranges::find(preset.controller, controller) != preset.controller.end()) {
+            presets.emplace_back(&preset);
+        }
+    }
+    return presets;
+}
+
 bool Interactor::apply_preset()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
-    const auto& presets = config_.interface_data().preset;
+    const auto presets = applicable_presets();
     if (presets.empty()) {
         std::cout << "No presets available.\n\n";
         return false;
@@ -2657,7 +2926,7 @@ bool Interactor::apply_preset()
 
     std::cout << "### Apply preset ###\n\n";
     for (size_t i = 0; i < presets.size(); ++i) {
-        const auto& p = presets[i];
+        const auto& p = *presets[i];
         std::string display_name = get_display_name(p.name, p.label);
         std::cout << MAA_NS::utf8_to_crt(std::format("\t{}. {}\n", i + 1, display_name));
         if (!p.description.empty()) {
@@ -2672,7 +2941,7 @@ bool Interactor::apply_preset()
         input_aborted_ = true;
         return false;
     }
-    const auto& preset = presets.at(static_cast<size_t>(*selected - 1));
+    const auto& preset = *presets.at(static_cast<size_t>(*selected - 1));
 
     std::optional<std::vector<std::string>> preset_enabled_pretasks;
     std::vector<Configuration::Pretask> preset_pretask_config;
@@ -2786,6 +3055,27 @@ bool Interactor::apply_preset()
                         option.inputs.emplace(key, value.as_string());
                     }
                     break;
+                case InterfaceData::Option::Type::Hotkey:
+                    if (!option_value.is_object()) {
+                        LogError << "Invalid preset hotkey value" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    for (const auto& [key, value] : option_value.as_object()) {
+                        auto hotkey = std::ranges::find(data_option.hotkeys, key, &InterfaceData::Option::Hotkey::name);
+                        if (hotkey == data_option.hotkeys.end() || !value.is_string()) {
+                            LogError << "Invalid preset hotkey" << VAR(preset_pretask.name) << VAR(option_name) << VAR(key);
+                            return false;
+                        }
+                        option.hotkeys.emplace(key, value.as_string());
+                    }
+                    if (!MaaPiCliHotkey::normalize_hotkeys(
+                            data_option,
+                            option,
+                            MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                        LogError << "Invalid preset hotkey combo" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    break;
                 }
                 item.option.emplace_back(std::move(option));
             }
@@ -2868,6 +3158,27 @@ bool Interactor::apply_preset()
                     }
                 }
                 break;
+            case InterfaceData::Option::Type::Hotkey:
+                if (!opt_value.is_object()) {
+                    LogError << "Invalid preset hotkey value" << VAR(preset_task.name) << VAR(opt_name);
+                    return false;
+                }
+                for (const auto& [key, value] : opt_value.as_object()) {
+                    const auto field = std::ranges::find(opt_iter->second.hotkeys, key, &InterfaceData::Option::Hotkey::name);
+                    if (field == opt_iter->second.hotkeys.end() || !value.is_string()) {
+                        LogError << "Invalid preset hotkey field" << VAR(preset_task.name) << VAR(opt_name) << VAR(key);
+                        return false;
+                    }
+                    config_opt.hotkeys[key] = value.as_string();
+                }
+                if (!MaaPiCliHotkey::normalize_hotkeys(
+                        opt_iter->second,
+                        config_opt,
+                        MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                    LogError << "Invalid preset hotkey combo" << VAR(preset_task.name) << VAR(opt_name);
+                    return false;
+                }
+                break;
             }
 
             config_task.option.emplace_back(std::move(config_opt));
@@ -2930,16 +3241,31 @@ std::string Interactor::read_text_content(const std::string& text) const
     // 先翻译文本（如果以 $ 开头）
     std::string translated = config_.translate(text);
 
-    // 尝试作为文件路径读取
-    auto file_path = config_.resource_dir() / MAA_NS::path(translated);
+    // 只读取资源目录内的相对路径；翻译后的路径也必须通过边界校验。
+    const auto relative_path = MAA_NS::path(translated);
     constexpr size_t kMaxPath = 255;
-    if (MAA_NS::path_to_utf8_string(file_path).size() < kMaxPath && std::filesystem::exists(file_path)) {
-        std::ifstream ifs(file_path);
-        if (ifs.is_open()) {
-            std::stringstream buffer;
-            buffer << ifs.rdbuf();
-            return buffer.str();
-        }
+    if (relative_path.has_root_path() || translated.find('\0') != std::string::npos
+        || MAA_NS::path_to_utf8_string(config_.resource_dir() / relative_path).size() >= kMaxPath) {
+        return translated;
+    }
+
+    std::error_code ec;
+    const auto resource_dir = std::filesystem::weakly_canonical(config_.resource_dir(), ec);
+    if (ec) {
+        return translated;
+    }
+    const auto file_path = std::filesystem::weakly_canonical(resource_dir / relative_path, ec);
+    if (ec) {
+        return translated;
+    }
+    // 按目录组件比较，避免 resource-other 被当作 resource 的子目录；归一化会解析符号链接。
+    const auto [root_end, file_end] = std::mismatch(resource_dir.begin(), resource_dir.end(), file_path.begin(), file_path.end());
+    if (root_end != resource_dir.end()) {
+        return translated;
+    }
+
+    if (auto content = MaaPiCliText::read_canonical_file(file_path)) {
+        return std::move(*content);
     }
 
     // 不是文件，直接返回翻译后的文本
