@@ -72,6 +72,7 @@ ctest --test-dir build -C RelWithDebInfo --output-on-failure
 | option 及其子 option 的 controller/resource 适用性过滤 | ✅ 支持 |
 | 顶层 `group` 分组声明与 `task.group`；`import` 导入 group | ✅ 支持 |
 | Agent 子进程 `PI_*` 环境变量：Client/UI 版本、语言、项目版本、当前 controller/resource 等 | ✅ 支持 |
+| Win32 控制器 `win32.deferred_binding` | ✅ 支持：启用后由 Pipeline 的 `BindTarget` 选择窗口或桌面，需要提供延迟绑定接口的 MaaFramework 运行库 |
 | `resource.hash` 资源完整性校验；校验发生在 `resource.path` 加载后、`attach_resource_path` 加载前 | ✅ 支持 |
 | `pretask` 在 Controller 启动前执行自定义程序；可把 option 当前值序列化为最后一个参数；`import` 导入 pretask | ✅ 支持 |
 | `setting` 任务设置页 UI 声明；`hotkey` 快捷键 option；`import` 导入 `global_option` 与 `setting` | ⚠️ 部分支持：导入的 `global_option` 会合并并生效；`setting` 会解析与合并但不渲染；`hotkey` 通过文本输入组合键并映射虚拟按键码 |

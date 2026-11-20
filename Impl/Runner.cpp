@@ -38,6 +38,27 @@ MAA_PROJECT_INTERFACE_NS_BEGIN
 namespace
 {
 
+MaaController* create_win32_controller(const RuntimeParam::Win32Param& param)
+{
+    if (!param.deferred_binding) {
+        return MaaWin32ControllerCreate(param.hwnd, param.screencap, param.mouse, param.keyboard);
+    }
+#ifdef _WIN32
+    // The pinned SDK predates deferred binding. Resolve the optional export on the loaded runtime.
+    using CreateDeferred = MaaController* (*)(MaaWin32ScreencapMethod, MaaWin32InputMethod, MaaWin32InputMethod);
+    auto module = GetModuleHandleW(L"MaaFramework.dll");
+    auto create = module ? reinterpret_cast<CreateDeferred>(GetProcAddress(module, "MaaWin32ControllerCreateDeferred")) : nullptr;
+    if (!create) {
+        LogError << "win32.deferred_binding requires a MaaFramework runtime that exports MaaWin32ControllerCreateDeferred";
+        return nullptr;
+    }
+    return create(param.screencap, param.mouse, param.keyboard);
+#else
+    LogError << "Win32 deferred binding is only supported on Windows";
+    return nullptr;
+#endif
+}
+
 // v2.3.0 / v2.9.1: resolve pipeline `focus` message templates from tasker
 // notifications. CLI degrades every display channel to console output with a
 // channel prefix; `modal` cannot truly pause the pipeline in a CLI, so the
@@ -572,8 +593,7 @@ bool Runner::run(const RuntimeParam& param)
             MaaIOSControllerCreate(p_ios_param->udid.c_str(), p_ios_param->screencap, p_ios_param->connection, p_ios_param->config.c_str());
     }
     else if (const auto* p_win32_param = std::get_if<RuntimeParam::Win32Param>(&param.controller_param)) {
-        controller_handle =
-            MaaWin32ControllerCreate(p_win32_param->hwnd, p_win32_param->screencap, p_win32_param->mouse, p_win32_param->keyboard);
+        controller_handle = create_win32_controller(*p_win32_param);
     }
     else if (const auto* p_playcover_param = std::get_if<RuntimeParam::PlayCoverParam>(&param.controller_param)) {
 #if defined(__APPLE__)
