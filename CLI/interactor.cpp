@@ -1095,7 +1095,7 @@ bool Interactor::select_win32_hwnd(const MAA_PROJECT_INTERFACE_NS::InterfaceData
     using namespace MAA_PROJECT_INTERFACE_NS;
 
     if (win32_config.deferred_binding) {
-        config_.configuration().win32 = {};
+        config_.configuration().win32 = { };
         return true;
     }
 
