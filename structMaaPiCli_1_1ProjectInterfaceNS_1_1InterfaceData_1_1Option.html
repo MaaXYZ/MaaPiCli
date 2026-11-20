@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.15.0</span>
+   <div id="projectname">MaaPiCli<span id="projectnumber">&#160;(main) v5.16.0</span>
    </div>
    <div id="projectbrief">Command-line ProjectInterface client for MaaFramework</div>
   </td>
@@ -104,15 +104,21 @@ $(function(){ initResizable(false); });
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case.html">Case</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey.html">Hotkey</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input.html">Input</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a4d98381f50d946de17ba15c3b47d3791" id="r_a4d98381f50d946de17ba15c3b47d3791"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d98381f50d946de17ba15c3b47d3791">Type</a> { <a class="el" href="#a4d98381f50d946de17ba15c3b47d3791ae0626222614bdee31951d84c64e5e9ff">Select</a>
+<tr class="memitem:a4d98381f50d946de17ba15c3b47d3791" id="r_a4d98381f50d946de17ba15c3b47d3791"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d98381f50d946de17ba15c3b47d3791">Type</a> { <br />
+&#160;&#160;<a class="el" href="#a4d98381f50d946de17ba15c3b47d3791ae0626222614bdee31951d84c64e5e9ff">Select</a>
 , <a class="el" href="#a4d98381f50d946de17ba15c3b47d3791a324118a6721dd6b8a9b9f4e327df2bf5">Input</a>
 , <a class="el" href="#a4d98381f50d946de17ba15c3b47d3791abbc155fb2b111bf61c4f5ff892915e6b">Switch</a>
 , <a class="el" href="#a4d98381f50d946de17ba15c3b47d3791a4f8222964f9a317cef99dddc23a121bd">Checkbox</a>
+, <br />
+&#160;&#160;<a class="el" href="#a4d98381f50d946de17ba15c3b47d3791a8db21ee66d0ed1f6d24ce1b9c4274d4c">Hotkey</a>
+<br />
  }</td></tr>
 <tr class="separator:a4d98381f50d946de17ba15c3b47d3791"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -132,6 +138,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:abcf4748759fe6d9379ed2eabe5c9564c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addeb8dacf8dba6ad34bac9d116059c02" id="r_addeb8dacf8dba6ad34bac9d116059c02"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input.html">Input</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addeb8dacf8dba6ad34bac9d116059c02">inputs</a></td></tr>
 <tr class="separator:addeb8dacf8dba6ad34bac9d116059c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469444644920d9a56420a18cfde72661" id="r_a469444644920d9a56420a18cfde72661"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey.html">Hotkey</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a469444644920d9a56420a18cfde72661">hotkeys</a></td></tr>
+<tr class="separator:a469444644920d9a56420a18cfde72661"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2947bae9e35d66f5e8145e1e2a2d7b3b" id="r_a2947bae9e35d66f5e8145e1e2a2d7b3b"><td class="memItemLeft" align="right" valign="top">json::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2947bae9e35d66f5e8145e1e2a2d7b3b">pipeline_override</a></td></tr>
 <tr class="separator:a2947bae9e35d66f5e8145e1e2a2d7b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba4ec8921a566781e9660fdf1c2a0eb5" id="r_aba4ec8921a566781e9660fdf1c2a0eb5"><td class="memItemLeft" align="right" valign="top">std::variant&lt; std::string, std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba4ec8921a566781e9660fdf1c2a0eb5">default_case</a></td></tr>
@@ -166,6 +174,7 @@ Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="a4d98381f50d946de17ba15c3b47d3791a324118a6721dd6b8a9b9f4e327df2bf5" name="a4d98381f50d946de17ba15c3b47d3791a324118a6721dd6b8a9b9f4e327df2bf5"></a>Input&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4d98381f50d946de17ba15c3b47d3791abbc155fb2b111bf61c4f5ff892915e6b" name="a4d98381f50d946de17ba15c3b47d3791abbc155fb2b111bf61c4f5ff892915e6b"></a>Switch&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4d98381f50d946de17ba15c3b47d3791a4f8222964f9a317cef99dddc23a121bd" name="a4d98381f50d946de17ba15c3b47d3791a4f8222964f9a317cef99dddc23a121bd"></a>Checkbox&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4d98381f50d946de17ba15c3b47d3791a8db21ee66d0ed1f6d24ce1b9c4274d4c" name="a4d98381f50d946de17ba15c3b47d3791a8db21ee66d0ed1f6d24ce1b9c4274d4c"></a>Hotkey&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -263,6 +272,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input.html">Input</a>&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::inputs</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a469444644920d9a56420a18cfde72661" name="a469444644920d9a56420a18cfde72661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469444644920d9a56420a18cfde72661">&#9670;&#160;</a></span>hotkeys</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey.html">Hotkey</a>&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::hotkeys</td>
         </tr>
       </table>
 </div><div class="memdoc">

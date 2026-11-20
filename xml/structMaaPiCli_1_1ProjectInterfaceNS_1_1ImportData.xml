@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="391" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="391" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="417" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="417" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a1215d29be6221a3e29377114f6aba134" prot="public" static="no" mutable="no">
         <type>std::unordered_map&lt; std::string, <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option" kindref="compound">InterfaceData::Option</ref> &gt;</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="392" column="24" bodyfile="include/ProjectInterface/Types.h" bodystart="392" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="418" column="24" bodyfile="include/ProjectInterface/Types.h" bodystart="418" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a4a9ea0d46372139cd0be2ac560f0e658" prot="public" static="no" mutable="no">
         <type>std::vector&lt; std::string &gt;</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="393" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="393" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="419" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="419" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a571d5eca45d17098e9a5c8e32fb9e3b6" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group" kindref="compound">InterfaceData::Group</ref> &gt;</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="394" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="394" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="420" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="420" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a929905e7ca15f1b8f5b18c3accab2380" prot="public" static="no" mutable="no">
         <type>std::optional&lt; std::variant&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kindref="compound">InterfaceData::Pretask</ref>, std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Pretask" kindref="compound">InterfaceData::Pretask</ref> &gt; &gt; &gt;</type>
@@ -72,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="395" column="19" bodyfile="include/ProjectInterface/Types.h" bodystart="395" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="421" column="19" bodyfile="include/ProjectInterface/Types.h" bodystart="421" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1add4580dc9333fa35777c4b59a03f91c6" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset" kindref="compound">InterfaceData::Preset</ref> &gt;</type>
@@ -86,7 +86,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="396" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="396" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="422" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="422" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a6a5133e526517723c42923e078b264f4" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Setting" kindref="compound">InterfaceData::Setting</ref> &gt;</type>
@@ -100,7 +100,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="397" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="397" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="423" column="17" bodyfile="include/ProjectInterface/Types.h" bodystart="423" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -120,17 +120,17 @@
         <childnode refid="6" relation="usage">
           <edgelabel>global_option</edgelabel>
         </childnode>
-        <childnode refid="13" relation="usage">
+        <childnode refid="15" relation="usage">
           <edgelabel>group</edgelabel>
         </childnode>
-        <childnode refid="15" relation="usage">
+        <childnode refid="17" relation="usage">
           <edgelabel>preset</edgelabel>
         </childnode>
-        <childnode refid="19" relation="usage">
+        <childnode refid="21" relation="usage">
           <edgelabel>setting</edgelabel>
         </childnode>
       </node>
-      <node id="14">
+      <node id="16">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Group</label>
         <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Group"/>
         <childnode refid="4" relation="usage">
@@ -157,6 +157,9 @@
         <childnode refid="11" relation="usage">
           <edgelabel>inputs</edgelabel>
         </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>hotkeys</edgelabel>
+        </childnode>
       </node>
       <node id="10">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</label>
@@ -168,6 +171,16 @@
         </childnode>
         <childnode refid="6" relation="usage">
           <edgelabel>option</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Hotkey</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>default_</edgelabel>
+          <edgelabel>description</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
         </childnode>
       </node>
       <node id="12">
@@ -182,7 +195,7 @@
           <edgelabel>verify</edgelabel>
         </childnode>
       </node>
-      <node id="16">
+      <node id="18">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset</label>
         <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset"/>
         <childnode refid="4" relation="usage">
@@ -194,18 +207,18 @@
         <childnode refid="6" relation="usage">
           <edgelabel>controller</edgelabel>
         </childnode>
-        <childnode refid="17" relation="usage">
+        <childnode refid="19" relation="usage">
           <edgelabel>task</edgelabel>
         </childnode>
       </node>
-      <node id="18">
+      <node id="20">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask</label>
         <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetTask"/>
         <childnode refid="4" relation="usage">
           <edgelabel>name</edgelabel>
         </childnode>
       </node>
-      <node id="20">
+      <node id="22">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Setting</label>
         <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Setting"/>
         <childnode refid="4" relation="usage">
@@ -251,9 +264,9 @@
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="13">
+      <node id="15">
         <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Group &gt;</label>
-        <childnode refid="14" relation="usage">
+        <childnode refid="16" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
@@ -263,27 +276,33 @@
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
+      <node id="13">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Hotkey &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
       <node id="11">
         <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input &gt;</label>
         <childnode refid="12" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="15">
-        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset &gt;</label>
-        <childnode refid="16" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
       <node id="17">
-        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask &gt;</label>
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset &gt;</label>
         <childnode refid="18" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
       <node id="19">
-        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Setting &gt;</label>
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetTask &gt;</label>
         <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Setting &gt;</label>
+        <childnode refid="22" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
@@ -300,7 +319,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="389" column="1" bodyfile="include/ProjectInterface/Types.h" bodystart="390" bodyend="400"/>
+    <location file="include/ProjectInterface/Types.h" line="415" column="1" bodyfile="include/ProjectInterface/Types.h" bodystart="416" bodyend="426"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a4a9ea0d46372139cd0be2ac560f0e658" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::ImportData</scope><name>global_option</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1ImportData_1a571d5eca45d17098e9a5c8e32fb9e3b6" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::ImportData</scope><name>group</name></member>

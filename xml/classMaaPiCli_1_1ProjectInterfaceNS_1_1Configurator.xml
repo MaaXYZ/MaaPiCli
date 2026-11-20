@@ -375,9 +375,9 @@
         </inbodydescription>
         <location file="include/ProjectInterface/Configurator.h" line="48" column="10"/>
       </memberdef>
-      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</definition>
+      <memberdef kind="function" id="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a45abab7bc55841944d7525dea2fc495b" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</definition>
         <argsstring>(RuntimeParam::Task &amp;runtime_task, const std::vector&lt; Configuration::Option &gt; &amp;config_options) const</argsstring>
         <name>merge_option_overrides</name>
         <qualifiedname>MaaPiCli::ProjectInterfaceNS::Configurator::merge_option_overrides</qualifiedname>
@@ -481,7 +481,7 @@
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a1c637ef5765655bfd0921b6fd0fa4f93" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>load</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a5599e23f7350c742fe0a36a4176cd8b4" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>load_translations</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a04c08124db37d065b3212a348f8f1d16" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>loaded_config_</name></member>
-      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a953503bfd85c2241a4ff72ed0526263a" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>merge_option_overrides</name></member>
+      <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a45abab7bc55841944d7525dea2fc495b" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>merge_option_overrides</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1ac06c2c1f3765dbc38cf1f67103b22fed" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>resource_dir</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1af241e5ee11acf54976ea47d13f7aac3b" prot="private" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>resource_dir_</name></member>
       <member refid="classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator_1a844ed52b9cbd63221462daeb48de9f92" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::Configurator</scope><name>save</name></member>

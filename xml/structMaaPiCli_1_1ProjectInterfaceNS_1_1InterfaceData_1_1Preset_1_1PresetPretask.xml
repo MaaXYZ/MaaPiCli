@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="312" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="312" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="338" column="25" bodyfile="include/ProjectInterface/Types.h" bodystart="338" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1ae199795ca6393938f26a16da2f6bcd28" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="313" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="313" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="339" column="18" bodyfile="include/ProjectInterface/Types.h" bodystart="339" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1af56102fab78a8b56baf2fdc8e9cd990d" prot="public" static="no" mutable="no">
         <type>json::object</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="314" column="26" bodyfile="include/ProjectInterface/Types.h" bodystart="314" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="340" column="26" bodyfile="include/ProjectInterface/Types.h" bodystart="340" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -69,7 +69,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="310" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="311" bodyend="317"/>
+    <location file="include/ProjectInterface/Types.h" line="336" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="337" bodyend="343"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1ae199795ca6393938f26a16da2f6bcd28" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetPretask</scope><name>enabled</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Preset_1_1PresetPretask_1a51e71963d8c864f5316959f6796a27f9" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Preset::PresetPretask</scope><name>name</name></member>

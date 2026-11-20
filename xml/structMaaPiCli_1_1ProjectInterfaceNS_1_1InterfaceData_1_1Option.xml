@@ -4,6 +4,7 @@
     <compoundname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</compoundname>
     <includes refid="Types_8h" local="no">Types.h</includes>
     <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case" prot="public">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</innerclass>
+    <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey" prot="public">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Hotkey</innerclass>
     <innerclass refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input" prot="public">MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input</innerclass>
     <sectiondef kind="public-type">
       <memberdef kind="enum" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a4d98381f50d946de17ba15c3b47d3791" prot="public" static="no" strong="yes">
@@ -38,13 +39,20 @@
           <detaileddescription>
           </detaileddescription>
         </enumvalue>
+        <enumvalue id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a4d98381f50d946de17ba15c3b47d3791a8db21ee66d0ed1f6d24ce1b9c4274d4c" prot="public">
+          <name>Hotkey</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="169" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="170" bodyend="175"/>
+        <location file="include/ProjectInterface/Types.h" line="182" column="9" bodyfile="include/ProjectInterface/Types.h" bodystart="183" bodyend="189"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -61,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="226" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="226" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="250" column="14" bodyfile="include/ProjectInterface/Types.h" bodystart="250" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a7e6d0f4c6680f23e0c8dcfeae985b375" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -75,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="227" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="227" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="251" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="251" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a52844af5210158b51177c04b27fabaea" prot="public" static="no" mutable="no">
         <type>std::string</type>
@@ -89,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="228" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="228" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="252" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="252" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a72160072823e6c22fec8c83685212708" prot="public" static="no" mutable="no">
         <type>std::vector&lt; std::string &gt;</type>
@@ -103,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="229" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="229" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="253" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="253" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1af7c54afd59ee2860cb33ea33068808b9" prot="public" static="no" mutable="no">
         <type>std::vector&lt; std::string &gt;</type>
@@ -117,7 +125,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="230" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="230" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="254" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="254" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1abcf4748759fe6d9379ed2eabe5c9564c" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Case" kindref="compound">Case</ref> &gt;</type>
@@ -131,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="231" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="231" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="255" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="255" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1addeb8dacf8dba6ad34bac9d116059c02" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Input" kindref="compound">Input</ref> &gt;</type>
@@ -145,7 +153,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="232" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="232" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="256" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a469444644920d9a56420a18cfde72661" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey" kindref="compound">Hotkey</ref> &gt;</type>
+        <definition>std::vector&lt;Hotkey&gt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::hotkeys</definition>
+        <argsstring></argsstring>
+        <name>hotkeys</name>
+        <qualifiedname>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::hotkeys</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ProjectInterface/Types.h" line="257" column="21" bodyfile="include/ProjectInterface/Types.h" bodystart="257" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a2947bae9e35d66f5e8145e1e2a2d7b3b" prot="public" static="no" mutable="no">
         <type>json::object</type>
@@ -159,7 +181,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="233" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="233" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="258" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="258" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1aba4ec8921a566781e9660fdf1c2a0eb5" prot="public" static="no" mutable="no">
         <type>std::variant&lt; std::string, std::vector&lt; std::string &gt; &gt;</type>
@@ -173,7 +195,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="234" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="234" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="259" column="22" bodyfile="include/ProjectInterface/Types.h" bodystart="259" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a1ecda45c328febc3f730901e12c95130" prot="public" static="no" mutable="no">
         <type>std::optional&lt; size_t &gt;</type>
@@ -187,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="235" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="235" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="260" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="260" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a070b87364d6c2f9749dc59409b570c7d" prot="public" static="no" mutable="no">
         <type>std::optional&lt; size_t &gt;</type>
@@ -201,7 +223,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/ProjectInterface/Types.h" line="236" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="236" bodyend="-1"/>
+        <location file="include/ProjectInterface/Types.h" line="261" column="23" bodyfile="include/ProjectInterface/Types.h" bodystart="261" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -226,6 +248,9 @@
         <childnode refid="7" relation="usage">
           <edgelabel>inputs</edgelabel>
         </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>hotkeys</edgelabel>
+        </childnode>
       </node>
       <node id="6">
         <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Case</label>
@@ -237,6 +262,16 @@
         </childnode>
         <childnode refid="4" relation="usage">
           <edgelabel>option</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Hotkey</label>
+        <link refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1_1Hotkey"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>default_</edgelabel>
+          <edgelabel>description</edgelabel>
+          <edgelabel>label</edgelabel>
+          <edgelabel>name</edgelabel>
         </childnode>
       </node>
       <node id="8">
@@ -265,6 +300,12 @@
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
+      <node id="9">
+        <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Hotkey &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
       <node id="7">
         <label>std::vector&lt; MaaPiCli::ProjectInterfaceNS::InterfaceData::Option::Input &gt;</label>
         <childnode refid="8" relation="usage">
@@ -278,12 +319,13 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="include/ProjectInterface/Types.h" line="167" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="168" bodyend="250"/>
+    <location file="include/ProjectInterface/Types.h" line="180" column="5" bodyfile="include/ProjectInterface/Types.h" bodystart="181" bodyend="276"/>
     <listofallmembers>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1abcf4748759fe6d9379ed2eabe5c9564c" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>cases</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a72160072823e6c22fec8c83685212708" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>controller</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1aba4ec8921a566781e9660fdf1c2a0eb5" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>default_case</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a52844af5210158b51177c04b27fabaea" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>description</name></member>
+      <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a469444644920d9a56420a18cfde72661" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>hotkeys</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1addeb8dacf8dba6ad34bac9d116059c02" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>inputs</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a7e6d0f4c6680f23e0c8dcfeae985b375" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>label</name></member>
       <member refid="structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Option_1a070b87364d6c2f9749dc59409b570c7d" prot="public" virt="non-virtual"><scope>MaaPiCli::ProjectInterfaceNS::InterfaceData::Option</scope><name>max_count</name></member>

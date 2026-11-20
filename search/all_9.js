@@ -14,5 +14,9 @@ var searchData=
   ['interface_5fversion_11',['interface_version',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html#a3165777da8e2cebeb947d16789ebad99',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData']]],
   ['interfacedata_12',['InterfaceData',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData.html',1,'MaaPiCli::ProjectInterfaceNS']]],
   ['invalid_13',['Invalid',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller.html#ac94c85a98579e573f3d7a3774b6b7b19a4bbb8f967da6d1a610596d7257179c2b',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller']]],
-  ['is_5ffirst_5ftime_5fuse_14',['is_first_time_use',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#a6a8d3e108e503ba74da38e30aa9ab2f0',1,'MaaPiCli::ProjectInterfaceNS::Configurator']]]
+  ['ios_14',['IOS',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller.html#ac94c85a98579e573f3d7a3774b6b7b19aba3f2adea47b86b0d408de3f7e4d922c',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller']]],
+  ['ios_15',['ios',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller.html#a4089ebaf26d731b37d2dbcb1f86dbef7',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::ios'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration.html#a90255b25c11dd134b2717350d9118dba',1,'MaaPiCli::ProjectInterfaceNS::Configuration::ios']]],
+  ['iosconfig_16',['IOSConfig',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1Configuration_1_1IOSConfig.html',1,'MaaPiCli::ProjectInterfaceNS::Configuration::IOSConfig'],['../structMaaPiCli_1_1ProjectInterfaceNS_1_1InterfaceData_1_1Controller_1_1IOSConfig.html',1,'MaaPiCli::ProjectInterfaceNS::InterfaceData::Controller::IOSConfig']]],
+  ['iosparam_17',['IOSParam',['../structMaaPiCli_1_1ProjectInterfaceNS_1_1RuntimeParam_1_1IOSParam.html',1,'MaaPiCli::ProjectInterfaceNS::RuntimeParam']]],
+  ['is_5ffirst_5ftime_5fuse_18',['is_first_time_use',['../classMaaPiCli_1_1ProjectInterfaceNS_1_1Configurator.html#a6a8d3e108e503ba74da38e30aa9ab2f0',1,'MaaPiCli::ProjectInterfaceNS::Configurator']]]
 ];
