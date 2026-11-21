@@ -38,8 +38,15 @@ struct InterfaceData
             std::string screencap;
             std::string mouse;
             std::string keyboard;
+            bool deferred_binding = false;
 
-            MEO_JSONIZATION(MEO_OPT class_regex, MEO_OPT window_regex, MEO_OPT screencap, MEO_OPT mouse, MEO_OPT keyboard);
+            MEO_JSONIZATION(
+                MEO_OPT class_regex,
+                MEO_OPT window_regex,
+                MEO_OPT screencap,
+                MEO_OPT mouse,
+                MEO_OPT keyboard,
+                MEO_OPT deferred_binding);
         };
 
         struct MacOSConfig
@@ -632,6 +639,7 @@ struct RuntimeParam
         MaaWin32ScreencapMethod screencap = MaaWin32ScreencapMethod_None;
         MaaWin32InputMethod mouse = MaaWin32InputMethod_None;
         MaaWin32InputMethod keyboard = MaaWin32InputMethod_None;
+        bool deferred_binding = false;
     };
 
     struct MacOSParam

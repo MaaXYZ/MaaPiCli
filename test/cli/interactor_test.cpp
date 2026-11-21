@@ -74,6 +74,42 @@ private:
     std::stringstream output_stream_;
 };
 
+void test_deferred_win32_controller()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto root = unique_temp_directory();
+    const auto user_dir = root / "user";
+    std::filesystem::create_directories(root / "resource");
+    {
+        std::ofstream stream(root / "interface.json");
+        stream << R"json({
+            "interface_version": 2,
+            "controller": [{ "name": "win", "type": "Win32", "win32": {
+                "deferred_binding": true, "class_regex": "(?!)"
+            }}],
+            "resource": [{ "name": "resource", "path": ["resource"] }],
+            "task": [{ "name": "launch", "entry": "Launch", "default_check": true }]
+        })json";
+    }
+    {
+        StreamRedirector redirector;
+        Interactor interactor(user_dir);
+        require(interactor.load(root), "deferred Win32 interface should load");
+        require(interactor.interact(), "first-time setup should finish without a matching window");
+    }
+
+    Configurator config;
+    require(config.load(root, user_dir), "saved deferred configuration should load");
+    auto runtime = config.generate_runtime();
+    auto* win32 = runtime ? std::get_if<RuntimeParam::Win32Param>(&runtime->controller_param) : nullptr;
+    require(win32 && win32->deferred_binding && !win32->hwnd, "the saved configuration should create an unbound Win32 controller");
+    require(
+        win32 && win32->screencap == (MaaWin32ScreencapMethod_DXGI_DesktopDup | MaaWin32ScreencapMethod_DXGI_DesktopDup_Window),
+        "default deferred capture should cover both desktop and window targets");
+    std::filesystem::remove_all(root);
+}
+
 void test_preset_controller_filter(const std::filesystem::path& fixture_dir)
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
@@ -211,7 +247,7 @@ void test_path_inputs_and_agent_environment(const std::filesystem::path& fixture
             require(
                 directory_path.is_absolute() && std::filesystem::equivalent(directory_path, user_dir),
                 "each agent should receive the absolute user directory captured at load, independent of its resource cwd");
-            require(agent.env_vars.at("PI_INTERFACE_VERSION") == "v2.11.0", "agents should receive the updated PI capability version");
+            require(agent.env_vars.at("PI_INTERFACE_VERSION") == "v2.11.1", "agents should receive the updated PI capability version");
         }
     }
     std::filesystem::remove_all(user_dir.parent_path());
@@ -475,6 +511,7 @@ int main(int argc, char** argv)
     }
 
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
+    test_deferred_win32_controller();
     test_preset_controller_filter(fixture_dir.parent_path() / "pi_extensions");
     test_path_inputs_and_agent_environment(fixture_dir.parent_path() / "pi_extensions");
     test_text_content_path_boundaries();
