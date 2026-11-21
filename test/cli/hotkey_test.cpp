@@ -63,7 +63,7 @@ void check_preset(
         std::ofstream out(root / "user/config/maa_pi_config.json");
         out << config.to_json().dumps();
     }
-    std::istringstream input("7\n1\n8\n");
+    std::istringstream input("8\n1\n9\n");
     std::ostringstream output;
     const auto old_input = std::cin.rdbuf(input.rdbuf());
     const auto old_output = std::cout.rdbuf(output.rdbuf());
@@ -150,7 +150,7 @@ void check_failed_completion(const std::string& scope)
     }
     // Moving the only task to its current position performs a later successful
     // action and save, exposing any partial mutation left by the failed run.
-    std::istringstream input("4\n1\n1\n7\n");
+    std::istringstream input("5\n1\n1\n8\n");
     std::ostringstream output;
     const auto old_input = std::cin.rdbuf(input.rdbuf());
     const auto old_output = std::cout.rdbuf(output.rdbuf());
