@@ -196,6 +196,13 @@ bool restart_self_as_admin()
     return ret > kShellExecuteSuccessThreshold;
 }
 #endif
+
+const MAA_PROJECT_INTERFACE_NS::Configuration::Option*
+    find_config_option(const std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& options, const std::string& name)
+{
+    auto iter = std::ranges::find(options, name, std::mem_fn(&MAA_PROJECT_INTERFACE_NS::Configuration::Option::name));
+    return iter == options.end() ? nullptr : &(*iter);
+}
 } // namespace
 
 Interactor::Interactor(std::filesystem::path user_path)
@@ -1502,7 +1509,8 @@ bool Interactor::process_option(
     const std::string& option_name,
     const std::string& task_display_name,
     std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>& config_options,
-    bool auto_accept_default)
+    bool auto_accept_default,
+    const std::vector<MAA_PROJECT_INTERFACE_NS::Configuration::Option>* current_options)
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
@@ -1523,6 +1531,7 @@ bool Interactor::process_option(
 
     Configuration::Option config_opt;
     config_opt.name = option_name;
+    const Configuration::Option* current_config_opt = current_options ? find_config_option(*current_options, option_name) : nullptr;
 
     std::string opt_display_name = get_display_name(option_name, opt.label);
 
@@ -1541,6 +1550,13 @@ bool Interactor::process_option(
             LogWarn << "default_case not found in cases, ignoring it" << VAR(option_name) << VAR(*str);
         }
     }
+    const InterfaceData::Option::Case* initial_case_ptr = default_case_ptr;
+    if (current_config_opt && (opt.type == InterfaceData::Option::Type::Select || opt.type == InterfaceData::Option::Type::Switch)) {
+        auto current_case_iter = std::ranges::find(opt.cases, current_config_opt->value, std::mem_fn(&InterfaceData::Option::Case::name));
+        if (current_case_iter != opt.cases.end()) {
+            initial_case_ptr = &(*current_case_iter);
+        }
+    }
 
     switch (opt.type) {
     case InterfaceData::Option::Type::Select: {
@@ -1549,9 +1565,9 @@ bool Interactor::process_option(
             return false;
         }
 
-        if (default_case_ptr && auto_accept_default) {
-            config_opt.value = default_case_ptr->name;
-            selected_cases.push_back(default_case_ptr);
+        if (initial_case_ptr && auto_accept_default) {
+            config_opt.value = initial_case_ptr->name;
+            selected_cases.push_back(initial_case_ptr);
             break;
         }
 
@@ -1565,7 +1581,7 @@ bool Interactor::process_option(
         for (size_t i = 0; i < opt.cases.size(); ++i) {
             const auto& case_item = opt.cases[i];
             std::string case_display_name = get_display_name(case_item.name, case_item.label);
-            const bool is_default = default_case_ptr == &case_item;
+            const bool is_default = initial_case_ptr == &case_item;
             if (is_default) {
                 default_index = i + 1;
             }
@@ -1613,9 +1629,9 @@ bool Interactor::process_option(
         const auto* yes_case = find_named_case(yes_names);
         const auto* no_case = find_named_case(no_names);
 
-        if (default_case_ptr && auto_accept_default) {
-            config_opt.value = default_case_ptr->name;
-            selected_cases.push_back(default_case_ptr);
+        if (initial_case_ptr && auto_accept_default) {
+            config_opt.value = initial_case_ptr->name;
+            selected_cases.push_back(initial_case_ptr);
             break;
         }
 
@@ -1634,7 +1650,7 @@ bool Interactor::process_option(
             for (size_t i = 0; i < opt.cases.size(); ++i) {
                 const auto& case_item = opt.cases[i];
                 std::string case_display_name = get_display_name(case_item.name, case_item.label);
-                const bool is_default = default_case_ptr == &case_item;
+                const bool is_default = initial_case_ptr == &case_item;
                 if (is_default) {
                     fallback_default_index = i + 1;
                 }
@@ -1670,7 +1686,7 @@ bool Interactor::process_option(
         std::cout << "\n";
 
         // default_case 只在能被 Y/N 表达时作为预选值（指向第三个 case 时忽略）
-        const auto* default_yn_case = (default_case_ptr == yes_case || default_case_ptr == no_case) ? default_case_ptr : nullptr;
+        const auto* default_yn_case = (initial_case_ptr == yes_case || initial_case_ptr == no_case) ? initial_case_ptr : nullptr;
         if (default_yn_case) {
             std::cout << std::format("Input Y/N (default {}): ", default_yn_case == yes_case ? "Y" : "N");
         }
@@ -1725,12 +1741,26 @@ bool Interactor::process_option(
         // 与 select/switch 一致：default_case 只作为「初始选中值」解析成预选编号（1-based），
         // 交互流程中列出 cases（预选标 [x]，回车即保持预选）；仅自动补全流程直接采用。
         std::vector<int> default_indexes;
-        if (auto* vec = std::get_if<std::vector<std::string>>(&opt.default_case); vec && !vec->empty()) {
-            for (const auto& default_name : *vec) {
+        const std::vector<std::string>* initial_values = nullptr;
+        if (current_config_opt && selection_count_valid(current_config_opt->values)) {
+            const bool all_values_valid = std::ranges::all_of(current_config_opt->values, [&](const auto& value) {
+                return std::ranges::find(opt.cases, value, std::mem_fn(&InterfaceData::Option::Case::name)) != opt.cases.end();
+            });
+            if (all_values_valid) {
+                initial_values = &current_config_opt->values;
+            }
+        }
+        if (!initial_values) {
+            if (auto* vec = std::get_if<std::vector<std::string>>(&opt.default_case); vec && !vec->empty()) {
+                initial_values = vec;
+            }
+        }
+        if (initial_values) {
+            for (const auto& default_name : *initial_values) {
                 auto case_iter = std::ranges::find(opt.cases, default_name, std::mem_fn(&InterfaceData::Option::Case::name));
                 if (case_iter == opt.cases.end()) {
                     // 旧实现会把不存在的名字直接写进配置，随后被 check_task 判定失效而删掉整个任务
-                    LogWarn << "default_case not found in cases, ignoring it" << VAR(option_name) << VAR(default_name);
+                    LogWarn << "initial value not found in cases, ignoring it" << VAR(option_name) << VAR(default_name);
                     continue;
                 }
                 // 记录 1-based 预选编号，按 cases 顺序排序，与 Configurator 的应用顺序保持一致
@@ -1845,6 +1875,11 @@ bool Interactor::process_option(
             }
 
             std::string default_val = input_def.default_;
+            if (current_config_opt) {
+                if (auto value_iter = current_config_opt->inputs.find(input_def.name); value_iter != current_config_opt->inputs.end()) {
+                    default_val = value_iter->second;
+                }
+            }
             std::string input_display_name = get_display_name(input_def.name, input_def.label);
             if (!input_def.description.empty()) {
                 std::string input_desc = read_text_content(input_def.description);
@@ -1903,7 +1938,7 @@ bool Interactor::process_option(
     std::vector<Configuration::Option> nested_options;
     for (const auto* sc : selected_cases) {
         for (const auto& sub_option_name : sc->option) {
-            if (!process_option(sub_option_name, task_display_name, nested_options, auto_accept_default)) {
+            if (!process_option(sub_option_name, task_display_name, nested_options, auto_accept_default, current_options)) {
                 return false;
             }
         }
@@ -2196,28 +2231,11 @@ void Interactor::edit_task()
             const size_t oi = static_cast<size_t>(*opt_num - 1);
             const std::string edited_name = config_task.option[oi].name;
 
-            std::vector<Configuration::Option> edited_result;
-            bool ok = process_option(edited_name, task_display, edited_result, /*auto_accept_default=*/false);
-
-            if (!ok) {
-                LogError << "Failed to edit option" << VAR(edited_name);
-                std::cout << "Failed to edit option.\n\n";
-                continue; // 留在这个任务的选项列表
-            }
-
-            // 写回 config_task.option[oi]，并整体替换旧子树
-            auto new_iter = std::ranges::find_if(edited_result, [&](const auto& o) { return o.name == edited_name; });
-
-            if (new_iter == edited_result.end()) {
-                LogError << "Edited option not produced" << VAR(edited_name);
-                continue;
-            }
-
             // 定位旧子树范围 [subtree_begin, subtree_end)
             auto subtree_begin = config_task.option.begin() + static_cast<std::ptrdiff_t>(oi);
-            auto subtree_end = subtree_begin;
+            auto subtree_end = std::next(subtree_begin);
 
-            // active_names 保存当前已确认属于子树的选项的直接子选项名
+            // active_names 保存当前已确认属于子树的选项名
             std::unordered_set<std::string> active_names;
             auto collect_child_names = [&](const std::string& name) {
                 std::vector<const InterfaceData::Option::Case*> selected_cases;
@@ -2232,11 +2250,27 @@ void Interactor::edit_task()
             };
 
             collect_child_names(edited_name);
-            ++subtree_end;
-
             while (subtree_end != config_task.option.end() && active_names.contains(subtree_end->name)) {
                 collect_child_names(subtree_end->name);
                 ++subtree_end;
+            }
+
+            std::vector<Configuration::Option> current_subtree(subtree_begin, subtree_end);
+            std::vector<Configuration::Option> edited_result;
+            bool ok = process_option(edited_name, task_display, edited_result, /*auto_accept_default=*/false, &current_subtree);
+
+            if (!ok) {
+                LogError << "Failed to edit option" << VAR(edited_name);
+                std::cout << "Failed to edit option.\n\n";
+                continue; // 留在这个任务的选项列表
+            }
+
+            // 写回 config_task.option[oi]，并整体替换旧子树
+            auto new_iter = std::ranges::find_if(edited_result, [&](const auto& o) { return o.name == edited_name; });
+
+            if (new_iter == edited_result.end()) {
+                LogError << "Edited option not produced" << VAR(edited_name);
+                continue;
             }
 
             config_task.option.erase(subtree_begin, subtree_end);
