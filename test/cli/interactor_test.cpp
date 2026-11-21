@@ -1625,6 +1625,51 @@ int main(int argc, char** argv)
         std::filesystem::remove_all(user_dir);
     }
 
+    {
+        const auto resource_dir = unique_temp_directory();
+        const auto user_dir = unique_temp_directory();
+        std::filesystem::create_directories(resource_dir);
+        std::filesystem::create_directories(user_dir / "config");
+        {
+            std::ofstream out(resource_dir / "interface.json");
+            out << R"json({
+                "interface_version": 2,
+                "controller": [{"name":"controller","type":"Adb"}],
+                "resource": [{"name":"resource","path":["resource"]}],
+                "task": [{"name":"task","entry":"Main","option":["parent","new-option"]}],
+                "option": {
+                    "parent":{"type":"select","default_case":"on","cases":[{"name":"on","option":["shortcut"]}]},
+                    "shortcut":{"type":"hotkey","hotkeys":[{"name":"combo","default":"Ctrl+E"}]},
+                    "new-option":{"type":"input","inputs":[{"name":"value","default":"default"}]}
+                }
+            })json";
+        }
+        {
+            std::ofstream out(user_dir / "config/maa_pi_config.json");
+            out << R"json({"controller":{"name":"controller"},"resource":"resource","task":[{"name":"task","option":[
+                {"name":"parent","value":"on"},{"name":"shortcut","hotkeys":{"combo":"Ctrl+F"}}
+            ]}]})json";
+        }
+        {
+            // Configure the newly declared option, keep the parent and hotkey, then edit the new value and encounter EOF.
+            StreamRedirector redirector("4\n1\nconfigured\n1\n\n\n2\n\n3\nupdated\n");
+            Interactor interactor(user_dir);
+            require(interactor.load(resource_dir) && interactor.interact(), "editing and input interruption should complete");
+            require(redirector.output().str().find("combo=Ctrl+F") != std::string::npos, "the edit list should display saved hotkeys");
+        }
+        const auto saved = MAA_PROJECT_INTERFACE_NS::Parser::parse_config(user_dir / "config/maa_pi_config.json");
+        require(
+            saved && saved->task.size() == 1 && saved->task.front().option.size() == 3,
+            "missing options should be configured and saved");
+        if (saved && saved->task.size() == 1 && saved->task.front().option.size() == 3) {
+            const auto& options = saved->task.front().option;
+            require(options[1].hotkeys.at("combo") == "Ctrl+F", "editing a parent or hotkey should preserve the saved hotkey");
+            require(options[2].inputs.at("value") == "updated", "a completed edit should survive a subsequent EOF");
+        }
+        std::filesystem::remove_all(resource_dir);
+        std::filesystem::remove_all(user_dir);
+    }
+
     if (failures != 0) {
         std::cerr << failures << " interactor test assertion(s) failed\n";
         return 1;

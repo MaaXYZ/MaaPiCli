@@ -19,6 +19,7 @@ private:
         Complete,
         Exit,
         Aborted,
+        Failed,
     };
 
     bool interact_for_first_time_use();

@@ -247,6 +247,9 @@ bool Interactor::interact()
     while (true) {
         print_config();
         const auto status = interact_once();
+        if (status == ActionStatus::Failed) {
+            return false;
+        }
         if (status == ActionStatus::Aborted || status == ActionStatus::Exit) {
             return true;
         }
@@ -655,7 +658,10 @@ Interactor::ActionStatus Interactor::interact_once()
         return action_status(add_task());
     case 4:
         edit_task();
-        return input_aborted_ ? ActionStatus::Aborted : ActionStatus::Complete;
+        if (!save_config()) {
+            return ActionStatus::Failed;
+        }
+        return input_aborted_ ? ActionStatus::Aborted : ActionStatus::Incomplete;
     case 5:
         return action_status(move_task());
     case 6:
@@ -2177,6 +2183,12 @@ bool Interactor::process_option(
                 continue;
             }
 
+            std::string initial_value = hotkey_def.default_;
+            if (current_config_opt) {
+                if (auto iter = current_config_opt->hotkeys.find(hotkey_def.name); iter != current_config_opt->hotkeys.end()) {
+                    initial_value = iter->second;
+                }
+            }
             std::string hotkey_display_name = get_display_name(hotkey_def.name, hotkey_def.label);
             if (!hotkey_def.description.empty()) {
                 std::string hotkey_desc = read_text_content(hotkey_def.description);
@@ -2186,7 +2198,7 @@ bool Interactor::process_option(
                 std::format(
                     "{} [{}] (e.g. Ctrl+Alt+F1, press Enter to keep): ",
                     MaaPiCliTerminal::sanitize(hotkey_display_name),
-                    MaaPiCliTerminal::sanitize(hotkey_def.default_)));
+                    MaaPiCliTerminal::sanitize(initial_value)));
 
             auto buffer = read_line();
             if (!buffer) {
@@ -2194,7 +2206,7 @@ bool Interactor::process_option(
                 return false;
             }
 
-            std::string value = buffer->empty() ? hotkey_def.default_ : *buffer;
+            std::string value = buffer->empty() ? initial_value : *buffer;
 
             // Normalize and validate the combo; retry until it resolves on the current platform.
             while (true) {
@@ -2208,7 +2220,7 @@ bool Interactor::process_option(
                     input_aborted_ = true;
                     return false;
                 }
-                value = buffer->empty() ? hotkey_def.default_ : *buffer;
+                value = buffer->empty() ? initial_value : *buffer;
             }
 
             config_opt.hotkeys[hotkey_def.name] = value;
@@ -2406,31 +2418,21 @@ void Interactor::edit_task()
             std::cout << MAA_NS::utf8_to_crt(task_desc) << "\n\n";
         }
 
-        // 空 option 的任务:补全一次
-        if (config_task.option.empty()) {
-            if (data_task_iter == config_.interface_data().task.end() || data_task_iter->option.empty()) {
-                std::cout << "This task has no options.\n\n";
-                continue; // 回到任务选择
-            }
-
-            std::cout << "This task has no configured options yet.\n";
-            std::cout << "Configure all " << data_task_iter->option.size() << " option(s) now:\n";
-
-            std::vector<Configuration::Option> config_options;
-            bool ok = true;
-            for (const auto& option_name : data_task_iter->option) {
-                if (!process_option(option_name, task_display, config_options, /*auto_accept_default=*/false)) {
-                    LogError << "Failed to process option" << VAR(option_name);
-                    std::cout << "Failed to configure option.\n\n";
-                    ok = false;
-                    break;
+        // 补全当前活动分支中缺失的选项，同时保留已有配置。
+        if (data_task_iter != config_.interface_data().task.end() && !data_task_iter->option.empty()) {
+            auto completed_options = config_task.option;
+            if (!ensure_declared_option_tree(data_task_iter->option, task_display, completed_options, /*auto_accept_default=*/false)) {
+                if (input_aborted_) {
+                    return;
                 }
+                std::cout << "Failed to configure task options.\n\n";
+                continue;
             }
-            if (!ok) {
-                continue; // 回到任务选择
-            }
-            config_task.option = std::move(config_options);
-            std::cout << "\nTask configured with " << config_task.option.size() << " option(s).\n\n";
+            config_task.option = std::move(completed_options);
+        }
+        else if (config_task.option.empty()) {
+            std::cout << "This task has no options.\n\n";
+            continue; // 回到任务选择
         }
 
         // 选择选项
@@ -2476,6 +2478,16 @@ void Interactor::edit_task()
                         val_str += "=";
                         val_str += display_input_value(opt.name, k, v);
                         first = false;
+                    }
+                    val_str += "}";
+                }
+                else if (!opt.hotkeys.empty()) {
+                    val_str = "{";
+                    for (const auto& [key, value] : opt.hotkeys) {
+                        if (val_str.size() > 1) {
+                            val_str += ", ";
+                        }
+                        val_str += MaaPiCliTerminal::sanitize(key) + "=" + MaaPiCliTerminal::sanitize(value);
                     }
                     val_str += "}";
                 }
@@ -2985,6 +2997,7 @@ bool Interactor::select_runtime_option_cases(
     } break;
 
     case InterfaceData::Option::Type::Input:
+    case InterfaceData::Option::Type::Hotkey:
         break;
     }
 
@@ -3038,7 +3051,8 @@ bool Interactor::ensure_declared_option_tree(
                     existing_option_iter->hotkeys.emplace(hotkey_def.name, hotkey_def.default_);
                 }
             }
-            if (!MaaPiCliHotkey::normalize_hotkeys(
+            if (auto_accept_default
+                && !MaaPiCliHotkey::normalize_hotkeys(
                     data_option,
                     *existing_option_iter,
                     MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
