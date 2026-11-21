@@ -19,6 +19,8 @@ public:
     static std::vector<InterfaceData::Pretask>
         flatten_pretask(const std::optional<std::variant<InterfaceData::Pretask, std::vector<InterfaceData::Pretask>>>& pretask);
 
+    static std::vector<std::string> welcome_items(const std::optional<InterfaceData::Welcome>& welcome);
+
     static std::optional<InterfaceData> parse_interface(const std::filesystem::path& path);
     static std::optional<InterfaceData> parse_interface(const json::value& json);
     static std::optional<Configuration> parse_config(const std::filesystem::path& path);

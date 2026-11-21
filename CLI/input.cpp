@@ -2,9 +2,69 @@
 
 #include <algorithm>
 #include <format>
+#include <iostream>
 #include <limits>
 #include <ranges>
 #include <sstream>
+#include <string>
+
+#include "MaaUtils/Platform.h"
+
+#ifdef _WIN32
+namespace
+{
+bool has_invalid_code_page_mapping(std::wstring_view wide)
+{
+    return std::ranges::any_of(wide, [](wchar_t c) { return c == 0xFFFD || (c >= 0xF8F0 && c <= 0xF8FF); });
+}
+}
+
+std::string code_page_to_utf8(std::string_view bytes, unsigned int code_page)
+{
+    if (code_page == CP_UTF8) {
+        return std::string(bytes);
+    }
+
+    if (bytes.empty()) {
+        return std::string();
+    }
+
+    const int bytes_size = static_cast<int>(bytes.size());
+
+    const DWORD flags = (code_page == 54936) ? MB_ERR_INVALID_CHARS : 0;
+
+    const int wlen = MultiByteToWideChar(code_page, flags, bytes.data(), bytes_size, nullptr, 0);
+    if (wlen <= 0) {
+        return std::string(bytes);
+    }
+
+    std::wstring wbuf(static_cast<size_t>(wlen), L'\0');
+    const int converted = MultiByteToWideChar(code_page, flags, bytes.data(), bytes_size, wbuf.data(), wlen);
+    if (converted <= 0) {
+        return std::string(bytes);
+    }
+
+    if (flags == 0 && has_invalid_code_page_mapping(wbuf)) {
+        return std::string(bytes);
+    }
+
+    const int wbuf_size = static_cast<int>(wbuf.size());
+
+    const int u8len = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wbuf.data(), wbuf_size, nullptr, 0, nullptr, nullptr);
+    if (u8len <= 0) {
+        return std::string(bytes);
+    }
+
+    std::string result(static_cast<size_t>(u8len), '\0');
+    const int converted8 =
+        WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wbuf.data(), wbuf_size, result.data(), u8len, nullptr, nullptr);
+    if (converted8 <= 0) {
+        return std::string(bytes);
+    }
+
+    return result;
+}
+#endif
 
 namespace
 {
@@ -42,6 +102,41 @@ std::optional<std::vector<int>> parse_multi_selection(const std::string& buffer,
 bool has_valid_default(std::span<const int> defaults, size_t size)
 {
     return !defaults.empty() && std::ranges::all_of(defaults, [&](int value) { return value >= 1 && static_cast<size_t>(value) <= size; });
+}
+
+bool is_stdin_stream(std::istream& input_stream)
+{
+    return input_stream.rdbuf() == std::cin.rdbuf();
+}
+
+#ifdef _WIN32
+bool is_stdin_console()
+{
+    HANDLE handle = GetStdHandle(STD_INPUT_HANDLE);
+    if (handle == INVALID_HANDLE_VALUE || handle == nullptr) {
+        return false;
+    }
+
+    DWORD mode = 0;
+    return GetConsoleMode(handle, &mode) != 0;
+}
+
+std::string console_input_to_utf8(std::string_view bytes)
+{
+    return code_page_to_utf8(bytes, GetConsoleCP());
+}
+#endif
+
+std::string normalize_input_line(std::string line, std::istream& input_stream)
+{
+#ifdef _WIN32
+    if (is_stdin_stream(input_stream) && is_stdin_console()) {
+        return console_input_to_utf8(line);
+    }
+#else
+    (void)input_stream;
+#endif
+    return line;
 }
 
 std::optional<std::vector<int>> input_multi_impl(
@@ -93,7 +188,7 @@ std::optional<std::string> read_line(std::string_view prompt, std::istream& inpu
     if (!input_stream) {
         return std::nullopt;
     }
-    return line;
+    return normalize_input_line(std::move(line), input_stream);
 }
 
 std::optional<std::vector<int>> input_multi(

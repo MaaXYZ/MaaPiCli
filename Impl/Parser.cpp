@@ -148,6 +148,18 @@ bool validate_task_option_selection(
 
     case InterfaceData::Option::Type::Input:
         break;
+    case InterfaceData::Option::Type::Hotkey:
+        for (auto it = config_option.hotkeys.begin(); it != config_option.hotkeys.end();) {
+            if (std::ranges::any_of(data_option.hotkeys, [&](const auto& field) { return field.name == it->first; })) {
+                ++it;
+            }
+            else {
+                LogWarn << "Hotkey not found in interface, removing from task config" << VAR(config_option.name) << VAR(it->first);
+                it = config_option.hotkeys.erase(it);
+                changed = true;
+            }
+        }
+        break;
     }
 
     return true;
@@ -270,6 +282,12 @@ bool validate_interface(const InterfaceData& data)
         return false;
     }
 
+    if (data.welcome && std::holds_alternative<std::vector<std::string>>(*data.welcome)
+        && std::get<std::vector<std::string>>(*data.welcome).empty()) {
+        LogError << "Welcome array is empty";
+        return false;
+    }
+
     auto check_option_refs = [&](const std::vector<std::string>& options) {
         for (const auto& option : options) {
             if (!data.option.contains(option)) {
@@ -316,6 +334,15 @@ bool validate_interface(const InterfaceData& data)
     }
 
     for (const auto& [name, option] : data.option) {
+        if (option.type == InterfaceData::Option::Type::Hotkey) {
+            std::unordered_set<std::string> fields;
+            for (const auto& field : option.hotkeys) {
+                if (!fields.emplace(field.name).second) {
+                    LogError << "Duplicate hotkey field name" << VAR(name) << VAR(field.name);
+                    return false;
+                }
+            }
+        }
         if (!validate_checkbox_definition(option)) {
             LogError << "Invalid checkbox count constraint" << VAR(name);
             return false;
@@ -397,6 +424,26 @@ std::vector<InterfaceData::Pretask>
             }
         },
         *pretask);
+}
+
+std::vector<std::string> Parser::welcome_items(const std::optional<InterfaceData::Welcome>& welcome)
+{
+    if (!welcome) {
+        return { };
+    }
+
+    return std::visit(
+        [](const auto& value) -> std::vector<std::string> {
+            using value_t = std::decay_t<decltype(value)>;
+
+            if constexpr (std::is_same_v<value_t, std::string>) {
+                return value.empty() ? std::vector<std::string> { } : std::vector<std::string> { value };
+            }
+            else {
+                return value;
+            }
+        },
+        *welcome);
 }
 
 std::optional<InterfaceData> Parser::parse_interface(const std::filesystem::path& path)
@@ -524,6 +571,12 @@ std::optional<Configuration> Parser::parse_config(const json::value& json)
 
     json::value normalized_json = json;
     normalize_legacy_wlroots(normalized_json);
+
+    // An unset selection serializes as null. Treat it as an absent override,
+    // preserving [] as the explicit selection that disables every pretask.
+    if (normalized_json.is_object() && normalized_json.contains("enabled_pretask") && normalized_json["enabled_pretask"].is_null()) {
+        normalized_json.erase("enabled_pretask");
+    }
 
     std::string error_key;
     if (!Configuration().check_json(normalized_json, error_key)) {
@@ -653,6 +706,21 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
                     }
                 }
                 break;
+            case InterfaceData::Option::Type::Hotkey:
+                for (auto hotkey_it = it->hotkeys.begin(); hotkey_it != it->hotkeys.end();) {
+                    const auto& hotkey_name = hotkey_it->first;
+                    const bool found =
+                        std::ranges::any_of(data_option.hotkeys, [&](const auto& hotkey) { return hotkey.name == hotkey_name; });
+                    if (found) {
+                        ++hotkey_it;
+                    }
+                    else {
+                        LogWarn << "Hotkey not found in interface, removing from config" << VAR(it->name) << VAR(hotkey_name);
+                        hotkey_it = it->hotkeys.erase(hotkey_it);
+                        erased = true;
+                    }
+                }
+                break;
             }
 
             if (valid) {
@@ -686,6 +754,25 @@ bool Parser::check_configuration(const InterfaceData& data, Configuration& confi
         }
 
         ++pretask_iter;
+    }
+
+    if (config.enabled_pretask) {
+        const auto data_pretasks = Parser::flatten_pretask(data.pretask);
+        for (auto it = config.enabled_pretask->begin(); it != config.enabled_pretask->end();) {
+            if (std::ranges::none_of(data_pretasks, [&](const auto& pretask) { return pretask_identifier(pretask) == *it; })) {
+                LogWarn << "Enabled pretask not found in interface, removing from config" << VAR(*it);
+                it = config.enabled_pretask->erase(it);
+                erased = true;
+            }
+            else {
+                ++it;
+            }
+        }
+        auto enabled = unique_values(*config.enabled_pretask);
+        if (enabled.size() != config.enabled_pretask->size()) {
+            config.enabled_pretask = std::move(enabled);
+            erased = true;
+        }
     }
 
     return !erased;

@@ -8,7 +8,7 @@ public:
     explicit Interactor(std::filesystem::path user_path);
 
     bool load(const std::filesystem::path& resource_path);
-    void print_config() const;
+    void print_config();
     bool interact();
     bool run();
 
@@ -23,7 +23,8 @@ private:
 
     bool interact_for_first_time_use();
 
-    void welcome() const;
+    void welcome();
+    bool show_welcome_if_changed();
     ActionStatus interact_once();
     ActionStatus action_status(bool completed) const;
 
@@ -31,6 +32,10 @@ private:
     bool select_adb();
     bool select_adb_auto_detect();
     bool select_adb_manual_input();
+
+    bool select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config);
+    bool select_ios_device();
+    bool select_ios_auto_detect();
 
     bool select_win32_hwnd(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::Win32Config& win32_config);
     bool select_macos(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::MacOSConfig& macos_config);
@@ -48,6 +53,7 @@ private:
     void edit_task();
     bool delete_task();
     bool move_task();
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> applicable_presets() const;
     bool apply_preset();
 
     bool process_level_options(
@@ -86,6 +92,7 @@ private:
     void print_config_tasks(bool with_index = true) const;
 
     bool check_validity();
+    bool check_macos_window();
 
     bool save_config();
 

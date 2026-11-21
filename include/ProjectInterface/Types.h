@@ -17,8 +17,20 @@ MAA_PROJECT_INTERFACE_NS_BEGIN
 
 struct InterfaceData
 {
+    using Welcome = std::variant<std::string, std::vector<std::string>>;
+
     struct Controller
     {
+        struct IOSConfig
+        {
+            std::string udid;
+            std::string connection;
+            std::string screencap;
+            json::object config;
+
+            MEO_JSONIZATION(MEO_OPT udid, MEO_OPT connection, MEO_OPT screencap, MEO_OPT config);
+        };
+
         struct Win32Config
         {
             std::string class_regex;
@@ -71,6 +83,7 @@ struct InterfaceData
         {
             Invalid,
             Adb,
+            IOS,
             Win32,
             MacOS,
             PlayCover,
@@ -98,6 +111,7 @@ struct InterfaceData
         // v2.3.0: 控制器级选项
         std::vector<std::string> option;
 
+        IOSConfig ios;
         Win32Config win32;
         MacOSConfig macos;
         PlayCoverConfig playcover;
@@ -116,6 +130,7 @@ struct InterfaceData
             MEO_OPT display_raw,
             MEO_OPT attach_resource_path,
             MEO_OPT option,
+            MEO_OPT ios,
             MEO_OPT win32,
             MEO_OPT macos,
             MEO_OPT playcover,
@@ -170,6 +185,7 @@ struct InterfaceData
             Input,
             Switch,
             Checkbox,
+            Hotkey, // v2.8.0
         };
 
         struct Case
@@ -185,6 +201,13 @@ struct InterfaceData
 
         struct Input
         {
+            enum class InputType
+            {
+                Text,
+                File,
+                Directory,
+            };
+
             enum class PipelineType
             {
                 String,
@@ -196,6 +219,7 @@ struct InterfaceData
             std::string label;
             std::string description;
             std::string default_;
+            InputType input_type = InputType::Text;
             PipelineType pipeline_type = PipelineType::String;
             std::string verify;      // regex
             std::string pattern_msg; // 验证失败提示
@@ -206,10 +230,21 @@ struct InterfaceData
                 MEO_OPT label,
                 MEO_OPT description,
                 MEO_OPT MEO_KEY("default") default_,
+                MEO_OPT input_type,
                 MEO_OPT pipeline_type,
                 MEO_OPT verify,
                 MEO_OPT pattern_msg,
                 MEO_OPT password);
+        };
+
+        struct Hotkey // v2.8.0
+        {
+            std::string name;
+            std::string label;
+            std::string description;
+            std::string default_; // human-readable combo, e.g. "Ctrl+A"
+
+            MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT MEO_KEY("default") default_);
         };
 
         Type type = Type::Select;
@@ -219,7 +254,8 @@ struct InterfaceData
         std::vector<std::string> resource;   // v2.3.0: applicable resources
         std::vector<Case> cases;
         std::vector<Input> inputs;
-        json::object pipeline_override;                                   // for input type
+        std::vector<Hotkey> hotkeys;                                      // v2.8.0: for hotkey type
+        json::object pipeline_override;                                   // for input/hotkey type
         std::variant<std::string, std::vector<std::string>> default_case; // string for select/switch, array for checkbox
         std::optional<size_t> min_count;                                  // v2.10.1: for checkbox
         std::optional<size_t> max_count;                                  // v2.10.1: for checkbox
@@ -232,6 +268,7 @@ struct InterfaceData
             MEO_OPT resource,
             MEO_OPT cases,
             MEO_OPT inputs,
+            MEO_OPT hotkeys,
             MEO_OPT pipeline_override,
             MEO_OPT default_case,
             MEO_OPT min_count,
@@ -296,6 +333,15 @@ struct InterfaceData
 
     struct Preset
     {
+        struct PresetPretask
+        {
+            std::string name;
+            bool enabled = true;
+            json::object option;
+
+            MEO_JSONIZATION(name, MEO_OPT enabled, MEO_OPT option);
+        };
+
         struct PresetTask
         {
             std::string name;
@@ -309,9 +355,11 @@ struct InterfaceData
         std::string label;
         std::string description;
         std::string icon;
+        std::vector<std::string> controller; // v2.10.4: applicable controllers
+        std::optional<std::vector<PresetPretask>> pretask;
         std::vector<PresetTask> task;
 
-        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, task);
+        MEO_JSONIZATION(name, MEO_OPT label, MEO_OPT description, MEO_OPT icon, MEO_OPT controller, MEO_OPT pretask, task);
     };
 
     int interface_version = 2;
@@ -320,7 +368,7 @@ struct InterfaceData
     std::string label;
     std::string title;
     std::string version;
-    std::string welcome;
+    std::optional<Welcome> welcome; // v2.10.2: string or ordered non-empty string array
     std::string description;
     std::string contact;
     std::string license;
@@ -386,6 +434,8 @@ struct Configuration
         std::string name;
         std::vector<Option> option;
 
+        bool operator==(const Pretask&) const = default;
+
         MEO_JSONIZATION(name, MEO_OPT option);
     };
 
@@ -393,6 +443,8 @@ struct Configuration
     {
         std::string name;
         InterfaceData::Controller::Type type = InterfaceData::Controller::Type::Adb;
+
+        bool operator==(const Controller&) const = default;
 
         MEO_JSONIZATION(name);
     };
@@ -405,6 +457,8 @@ struct Configuration
 
         int _placeholder = 0;
 
+        bool operator==(const Win32Config&) const = default;
+
         MEO_JSONIZATION(MEO_OPT _placeholder);
     };
 
@@ -415,6 +469,8 @@ struct Configuration
         std::string screencap;
         std::string input;
 
+        bool operator==(const MacOSConfig&) const = default;
+
         MEO_JSONIZATION(MEO_OPT window_id, MEO_OPT title, MEO_OPT screencap, MEO_OPT input);
     };
 
@@ -424,13 +480,29 @@ struct Configuration
         std::string adb_path;
         std::string address;
 
+        bool operator==(const AdbConfig&) const = default;
+
         MEO_JSONIZATION(name, adb_path, address);
+    };
+
+    struct IOSConfig
+    {
+        std::string udid;
+        std::string connection;
+        std::string screencap;
+        json::object config;
+
+        bool operator==(const IOSConfig&) const = default;
+
+        MEO_JSONIZATION(MEO_OPT udid, MEO_OPT connection, MEO_OPT screencap, MEO_OPT config);
     };
 
     struct PlayCoverConfig
     {
         std::string address;
         std::string uuid;
+
+        bool operator==(const PlayCoverConfig&) const = default;
 
         MEO_JSONIZATION(MEO_OPT address, MEO_OPT uuid);
     };
@@ -444,6 +516,8 @@ struct Configuration
 
         int _placeholder = 0;
 
+        bool operator==(const GamepadConfig&) const = default;
+
         MEO_JSONIZATION(MEO_OPT _placeholder, MEO_OPT gamepad_type);
     };
 
@@ -454,6 +528,8 @@ struct Configuration
         int uinput_screen_height = 0;
         std::string eis_socket_path;
 
+        bool operator==(const LinuxConfig&) const = default;
+
         MEO_JSONIZATION(MEO_OPT wlr_socket_path, MEO_OPT uinput_screen_width, MEO_OPT uinput_screen_height, MEO_OPT eis_socket_path);
     };
 
@@ -463,8 +539,12 @@ struct Configuration
         std::string value;                                   // for select/switch
         std::vector<std::string> values;                     // for checkbox
         std::unordered_map<std::string, std::string> inputs; // for input type
+        // v2.8.0: for hotkey type; human-readable combo per hotkey field name
+        std::unordered_map<std::string, std::string> hotkeys;
 
-        MEO_JSONIZATION(name, MEO_OPT value, MEO_OPT values, MEO_OPT inputs);
+        bool operator==(const Option&) const = default;
+
+        MEO_JSONIZATION(name, MEO_OPT value, MEO_OPT values, MEO_OPT inputs, MEO_OPT hotkeys);
     };
 
     struct Task
@@ -472,11 +552,14 @@ struct Configuration
         std::string name;
         std::vector<Option> option;
 
+        bool operator==(const Task&) const = default;
+
         MEO_JSONIZATION(name, MEO_OPT option);
     };
 
     Controller controller;
     AdbConfig adb;
+    IOSConfig ios;
     Win32Config win32;
     MacOSConfig macos;
     PlayCoverConfig playcover;
@@ -485,14 +568,18 @@ struct Configuration
     std::string resource;
     std::vector<Task> task;
 
-    std::vector<Option> global_option;     // v2.3.0
-    std::vector<Option> resource_option;   // v2.3.0
-    std::vector<Option> controller_option; // v2.3.0
+    std::vector<Option> global_option;                       // v2.3.0
+    std::vector<Option> resource_option;                     // v2.3.0
+    std::vector<Option> controller_option;                   // v2.3.0
     std::vector<Pretask> pretask;
+    std::optional<std::vector<std::string>> enabled_pretask; // v2.10.3: nullopt keeps legacy all-enabled behavior
+    std::vector<std::string> last_welcome;                   // v2.10.2; empty means no snapshot
+    std::vector<std::string> last_resolved_welcome;          // v2.10.2; empty means no snapshot
 
     MEO_JSONIZATION(
         controller,
         MEO_OPT adb,
+        MEO_OPT ios,
         MEO_OPT win32,
         MEO_OPT macos,
         MEO_OPT playcover,
@@ -503,7 +590,10 @@ struct Configuration
         MEO_OPT global_option,
         MEO_OPT resource_option,
         MEO_OPT controller_option,
-        MEO_OPT pretask);
+        MEO_OPT pretask,
+        MEO_OPT enabled_pretask,
+        MEO_OPT last_welcome,
+        MEO_OPT last_resolved_welcome);
 };
 
 struct RuntimeParam
@@ -526,6 +616,14 @@ struct RuntimeParam
         MaaAdbInputMethod input = MaaAdbInputMethod_None;
         std::string config;
         std::string agent_path;
+    };
+
+    struct IOSParam
+    {
+        std::string udid;
+        MaaIOSConnectionMethod connection = MaaIOSConnectionMethod_Auto;
+        MaaIOSScreencapMethod screencap = MaaIOSScreencapMethod_Default;
+        std::string config;
     };
 
     struct Win32Param
@@ -592,7 +690,7 @@ struct RuntimeParam
         std::filesystem::path cwd;
     };
 
-    std::variant<std::monostate, AdbParam, Win32Param, MacOSParam, PlayCoverParam, GamepadParam, LinuxParam> controller_param;
+    std::variant<std::monostate, AdbParam, IOSParam, Win32Param, MacOSParam, PlayCoverParam, GamepadParam, LinuxParam> controller_param;
     std::vector<std::filesystem::path> resource_path;
     size_t primary_resource_count = 0; // resource.path 加载数量，加载完成后、附加资源前校验 hash
     std::string resource_hash;

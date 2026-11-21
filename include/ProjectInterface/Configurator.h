@@ -4,6 +4,7 @@
 #include <optional>
 #include <string_view>
 #include <unordered_set>
+#include <vector>
 
 #include "Types.h"
 
@@ -20,6 +21,10 @@ public:
     bool load(const std::filesystem::path& project_dir, const std::filesystem::path& user_dir);
     bool check_configuration();
     bool save(const std::filesystem::path& user_dir);
+    std::optional<bool> update_welcome_snapshots(
+        const std::filesystem::path& user_dir,
+        std::vector<std::string> declared,
+        std::vector<std::string> resolved);
 
     std::optional<RuntimeParam> generate_runtime() const;
 
@@ -41,7 +46,7 @@ private:
 
     bool is_option_applicable(const InterfaceData::Option& opt) const;
     bool is_task_applicable(const InterfaceData::Task& task) const;
-    void merge_option_overrides(RuntimeParam::Task& runtime_task, const std::vector<Configuration::Option>& config_options) const;
+    bool merge_option_overrides(RuntimeParam::Task& runtime_task, const std::vector<Configuration::Option>& config_options) const;
     bool append_pretask_option(
         const std::string& option_name,
         const Configuration::Pretask& config_pretask,
@@ -52,10 +57,12 @@ private:
     std::string detect_system_language() const;
 
     std::filesystem::path resource_dir_;
+    std::filesystem::path user_dir_;
 
     InterfaceData data_;
     bool first_time_use_ = false;
     Configuration config_;
+    Configuration loaded_config_;                               // Decrypted state used to identify local edits.
     std::unordered_map<std::string, std::string> translations_; // 翻译表
 };
 

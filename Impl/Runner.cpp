@@ -1,5 +1,6 @@
 #include "ProjectInterface/Runner.h"
 
+#include <algorithm>
 #include <format>
 #include <iostream>
 #include <memory>
@@ -24,17 +25,95 @@
 #include "MaaFramework/MaaAPI.h"
 #include "MaaToolkit/MaaToolkitAPI.h"
 
-#include "Common/MaaTypes.h"
 #include "MaaUtils/Encoding.h"
 #include "MaaUtils/Logger.h"
 #include "MaaUtils/Platform.h"
 #include "MaaUtils/ScopeLeave.hpp"
 #include "MaaUtils/StringMisc.hpp"
+#include "TerminalText.h"
 
 MAA_PROJECT_INTERFACE_NS_BEGIN
 
 namespace
 {
+
+// v2.3.0 / v2.9.1: resolve pipeline `focus` message templates from tasker
+// notifications. CLI degrades every display channel to console output with a
+// channel prefix; `modal` cannot truly pause the pipeline in a CLI, so the
+// message is printed prominently instead.
+void MAA_CALL on_tasker_event(void* /*view*/, const char* message, const char* details_json, void* /*trans_arg*/)
+{
+    if (!message || !details_json) {
+        return;
+    }
+
+    auto details = json::parse(details_json);
+    if (!details || !details->is_object() || !details->contains("focus")) {
+        return;
+    }
+    const auto& focus = details->at("focus");
+    if (!focus.is_object() || !focus.contains(message)) {
+        return;
+    }
+
+    const auto& template_value = focus.at(message);
+    std::string content;
+    std::vector<std::string> display_channels = { "log" };
+    if (template_value.is_string()) {
+        content = template_value.as_string();
+    }
+    else if (template_value.is_object()) {
+        if (template_value.contains("content") && template_value.at("content").is_string()) {
+            content = template_value.at("content").as_string();
+        }
+        if (template_value.contains("display")) {
+            const auto& display = template_value.at("display");
+            if (display.is_string()) {
+                display_channels = { display.as_string() };
+            }
+            else if (display.is_array()) {
+                display_channels.clear();
+                for (const auto& channel : display.as_array()) {
+                    if (channel.is_string()) {
+                        display_channels.push_back(channel.as_string());
+                    }
+                }
+            }
+        }
+        // `trace` (v2.9.1) only affects telemetry upload; MaaPiCli has no telemetry, skip it.
+    }
+
+    if (content.empty()) {
+        return;
+    }
+
+    // Replace {placeholder} with values from the notification details.
+    if (details->is_object()) {
+        for (const auto& [key, value] : details->as_object()) {
+            if (key == "focus") {
+                continue;
+            }
+            std::string text = value.is_string() ? value.as_string() : value.dumps();
+            content = MaaNS::string_replace_all(content, "{" + key + "}", text);
+        }
+    }
+
+    // Preserve message formatting while removing complete terminal commands.
+    content = MaaPiCliTerminal::sanitize(content, true);
+    for (auto& channel : display_channels) {
+        channel = MaaPiCliTerminal::sanitize(channel);
+    }
+
+    for (const auto& channel : display_channels) {
+        const std::string line = std::format("[focus:{}] {}", channel, content);
+        if (channel == "log") {
+            LogInfo << line;
+        }
+        else {
+            std::cout << "\n" << MAA_NS::utf8_to_crt(line) << "\n" << std::flush;
+        }
+    }
+}
 
 #ifdef _WIN32
 std::wstring quote_argument(const std::wstring& arg)
@@ -487,6 +566,10 @@ bool Runner::run(const RuntimeParam& param)
             adb_param.config.c_str(),
             adb_param.agent_path.c_str());
     }
+    else if (const auto* p_ios_param = std::get_if<RuntimeParam::IOSParam>(&param.controller_param)) {
+        controller_handle =
+            MaaIOSControllerCreate(p_ios_param->udid.c_str(), p_ios_param->screencap, p_ios_param->connection, p_ios_param->config.c_str());
+    }
     else if (const auto* p_win32_param = std::get_if<RuntimeParam::Win32Param>(&param.controller_param)) {
         controller_handle =
             MaaWin32ControllerCreate(p_win32_param->hwnd, p_win32_param->screencap, p_win32_param->mouse, p_win32_param->keyboard);
@@ -545,6 +628,9 @@ bool Runner::run(const RuntimeParam& param)
     MaaTasker* tasker_handle = MaaTaskerCreate();
     MaaResource* resource_handle = MaaResourceCreate();
 
+    // v2.3.0: focus message templates arrive through tasker notifications.
+    MaaTaskerAddSink(tasker_handle, &on_tasker_event, nullptr);
+
     OnScopeLeave([&]() {
         MaaTaskerDestroy(tasker_handle);
         MaaResourceDestroy(resource_handle);
@@ -574,21 +660,21 @@ bool Runner::run(const RuntimeParam& param)
         MaaControllerSetOption(controller_handle, MaaCtrlOption_ScreenshotTargetShortSide, &short_side, sizeof(short_side));
     }
 
-    MaaId cid = controller_handle->post_connection();
+    MaaId cid = MaaControllerPostConnection(controller_handle);
     const auto primary_count = std::min(param.primary_resource_count, param.resource_path.size());
     const auto primary_end = param.resource_path.begin() + static_cast<std::ptrdiff_t>(primary_count);
 
     auto post_resources = [resource_handle](const auto& paths) {
         MaaId rid = 0;
         for (const auto& path : paths) {
-            rid = resource_handle->post_bundle(path);
+            rid = MaaResourcePostBundle(resource_handle, MaaNS::path_to_utf8_string(path).c_str());
         }
         return rid;
     };
 
     MaaId rid = post_resources(std::ranges::subrange(param.resource_path.begin(), primary_end));
     if (rid != 0) {
-        if (MaaStatus_Failed == resource_handle->wait(rid)) {
+        if (MaaStatus_Failed == MaaResourceWait(resource_handle, rid)) {
             LogError << "Failed to load resource";
             return false;
         }
@@ -597,30 +683,42 @@ bool Runner::run(const RuntimeParam& param)
     // PI v2.6.0: 校验值基于 resource.path，必须在 attach_resource_path 之前获取。
     if (!param.resource_hash.empty()) {
         auto expected_hash = param.resource_hash;
-        auto actual_hash = resource_handle->get_hash();
-        tolowers_(expected_hash);
-        tolowers_(actual_hash);
+        std::string actual_hash;
+        if (auto* hash_buffer = MaaStringBufferCreate()) {
+            if (MaaResourceGetHash(resource_handle, hash_buffer)) {
+                actual_hash = MaaStringBufferGet(hash_buffer);
+            }
+            MaaStringBufferDestroy(hash_buffer);
+        }
 
-        if (expected_hash != actual_hash) {
-            LogWarn << "Resource hash mismatch" << VAR(param.resource_hash) << VAR(actual_hash);
+        if (actual_hash.empty()) {
+            LogError << "Failed to get resource hash" << VAR(param.resource_hash);
+        }
+        else {
+            tolowers_(expected_hash);
+            tolowers_(actual_hash);
+
+            if (expected_hash != actual_hash) {
+                LogWarn << "Resource hash mismatch" << VAR(param.resource_hash) << VAR(actual_hash);
+            }
         }
     }
 
     rid = post_resources(std::ranges::subrange(primary_end, param.resource_path.end()));
-    if (rid != 0 && MaaStatus_Failed == resource_handle->wait(rid)) {
+    if (rid != 0 && MaaStatus_Failed == MaaResourceWait(resource_handle, rid)) {
         LogError << "Failed to load resource";
         return false;
     }
 
-    tasker_handle->bind_controller(controller_handle);
-    tasker_handle->bind_resource(resource_handle);
+    MaaTaskerBindController(tasker_handle, controller_handle);
+    MaaTaskerBindResource(tasker_handle, resource_handle);
 
-    if (MaaStatus_Failed == controller_handle->wait(cid)) {
+    if (MaaStatus_Failed == MaaControllerWait(controller_handle, cid)) {
         LogError << "Failed to connect controller";
         return false;
     }
 
-    if (MaaStatus_Failed == resource_handle->wait(rid)) {
+    if (MaaStatus_Failed == MaaResourceWait(resource_handle, rid)) {
         LogError << "Failed to load resource";
         return false;
     }
@@ -665,19 +763,28 @@ bool Runner::run(const RuntimeParam& param)
         agents.emplace_back(agent);
     }
 
+    bool task_post_failed = false;
     MaaId tid = 0;
     for (const auto& task : param.task) {
-        tid = tasker_handle->post_task(task.entry, task.pipeline_override);
+        const std::string pipeline_override = task.pipeline_override.dumps();
+        tid = MaaTaskerPostTask(tasker_handle, task.entry.c_str(), pipeline_override.c_str());
+        if (tid == MaaInvalidId) {
+            LogError << "Failed to post task" << VAR(task.name) << VAR(task.entry);
+            task_post_failed = true;
+            break;
+        }
     }
 
-    tasker_handle->wait(tid);
+    if (!task_post_failed) {
+        MaaTaskerWait(tasker_handle, tid);
+    }
 
     for (auto* agent : agents) {
         MaaAgentClientDisconnect(agent);
         MaaAgentClientDestroy(agent);
     }
 
-    return true;
+    return !task_post_failed;
 }
 
 bool Runner::run_pretasks(const std::vector<RuntimeParam::Pretask>& pretasks)

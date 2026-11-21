@@ -14,7 +14,7 @@ inputs:
     maadeps-version:
         description: MaaDeps release tag used to build Linux OpenSSL
         required: false
-        default: v2.12.6
+        default: v3.0.0
 
 outputs:
     install-prefix:
@@ -101,7 +101,7 @@ runs:
           uses: actions/cache@v6
           with:
               path: maafw-prefix
-              key: maafw-runtime-${{ runner.os }}-${{ inputs.arch }}-${{ steps.resolve.outputs.cache-repository }}-${{ inputs.version }}
+              key: maafw-runtime-${{ runner.os }}-${{ inputs.arch }}-${{ steps.resolve.outputs.cache-repository }}-${{ inputs.version }}-exact
 
         - name: Download precompiled MaaFramework
           if: steps.cache-maafw.outputs.cache-hit != 'true'
@@ -116,6 +116,7 @@ runs:
               archive="$RUNNER_TEMP/$asset"
               curl --fail --location --retry 3 --output "$archive" \
                 "https://github.com/$REPOSITORY/releases/download/$VERSION/$asset"
+              rm -rf "$GITHUB_WORKSPACE/maafw-prefix"
               mkdir -p "$GITHUB_WORKSPACE/maafw-prefix"
               unzip -q "$archive" -d "$GITHUB_WORKSPACE/maafw-prefix"
 
@@ -124,7 +125,7 @@ runs:
           uses: actions/cache@v6
           with:
               path: MaaFramework/source/MaaUtils/MaaDeps
-              key: maadeps-${{ runner.os }}-${{ inputs.arch }}-${{ steps.resolve.outputs.cache-repository }}-${{ inputs.version }}
+              key: maadeps-${{ runner.os }}-${{ inputs.arch }}-${{ steps.resolve.outputs.cache-repository }}-${{ inputs.version }}-exact
 
         - name: Bootstrap MaaDeps
           if: steps.cache-maadeps.outputs.cache-hit != 'true'
@@ -207,6 +208,7 @@ runs:
                 -DCMAKE_SYSTEM_VERSION="10.0.26100.0" \
                 -DBUILD_PICLI=OFF \
                 -DWITH_ADB_CONTROLLER=OFF \
+                -DWITH_IOS_CONTROLLER=OFF \
                 -DWITH_WIN32_CONTROLLER=OFF \
                 -DWITH_CUSTOM_CONTROLLER=OFF \
                 -DWITH_GAMEPAD_CONTROLLER=OFF \

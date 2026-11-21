@@ -1,0 +1,7 @@
+{
+    "interface_version": 2,
+    "controller": [ { "name": "default-controller", "type": "Adb" } ],
+    "resource": [ { "name": "default-resource", "path": [ "resource" ] } ],
+    "agent": [ { "child_exec": "agent-server" } ],
+    "import": [ "hotkey_import.json" ]
+}

@@ -15,6 +15,8 @@ on:
             - 'include/**'
             - 'maafw-version.txt'
             - 'test/package/maapicli/**'
+            - 'test/package/smoke.py'
+            - 'test/cli/fixtures/eof/**'
             - 'cmake/**'
             - 'CMakeLists.txt'
             - 'README.md'
@@ -31,6 +33,8 @@ on:
             - 'include/**'
             - 'maafw-version.txt'
             - 'test/package/maapicli/**'
+            - 'test/package/smoke.py'
+            - 'test/cli/fixtures/eof/**'
             - 'cmake/**'
             - 'CMakeLists.txt'
             - 'README.md'
@@ -91,12 +95,12 @@ jobs:
                       platform: ARM64
                       can-run: false
                     - os: linux
-                      runs-on: ubuntu-latest
+                      runs-on: ubuntu-24.04
                       arch: x86_64
                       platform: x86_64
                       can-run: true
                     - os: linux
-                      runs-on: ubuntu-latest
+                      runs-on: ubuntu-24.04
                       arch: aarch64
                       platform: aarch64
                       can-run: false
@@ -268,6 +272,15 @@ jobs:
                   fi
                   packaged_version="$(cat package/maafw-version.txt)"
                   test "$packaged_version" = "$RESOLVED_MAAFW_VERSION"
+
+            - name: Check packaged inference libraries
+              shell: bash
+              run: python test/package/smoke.py package --check-only
+
+            - name: Test packaged runtime
+              if: matrix.can-run
+              shell: bash
+              run: python test/package/smoke.py package --arch "${{ matrix.arch }}"
 
             - uses: actions/upload-artifact@v7
               with:

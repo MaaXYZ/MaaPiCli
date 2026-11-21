@@ -1,0 +1,10 @@
+{
+    "option": {
+        "unsupported-hotkey": {
+            "type": "hotkey",
+            "hotkeys": [
+                { "name": "attack", "default": "E" }
+            ]
+        }
+    }
+}

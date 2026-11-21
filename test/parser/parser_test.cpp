@@ -1,7 +1,11 @@
 #include "ProjectInterface/Parser.h"
 
+#include "HotkeyMap.h"
+
+#include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -53,6 +57,43 @@ int main()
     using namespace MAA_PROJECT_INTERFACE_NS;
 
     const std::filesystem::path fixture_dir = MAAPICLI_TEST_FIXTURE_DIR;
+    {
+        // Configuration saves must preserve the difference between legacy defaults,
+        // explicitly disabling all pretasks, and selecting named pretasks.
+        const std::vector<std::optional<std::vector<std::string>>> selections {
+            std::nullopt,
+            std::vector<std::string> { },
+            std::vector<std::string> { "prepare" },
+        };
+        for (const auto& selection : selections) {
+            Configuration config;
+            config.enabled_pretask = selection;
+            const auto serialized = json::parse(config.to_json().dumps());
+            require(serialized.has_value(), "serialized configuration should be valid JSON");
+            if (!serialized) {
+                continue;
+            }
+            try {
+                const auto restored = Parser::parse_config(*serialized);
+                require(restored.has_value(), "pretask selections should survive configuration serialization");
+                if (restored) {
+                    require(restored->enabled_pretask == selection, "configuration round-trip should preserve pretask selection state");
+                }
+            }
+            catch (const std::exception& error) {
+                require(false, std::string("configuration round-trip should not throw: ") + error.what());
+            }
+        }
+
+        auto legacy = Configuration().to_json();
+        legacy.erase("enabled_pretask");
+        const auto restored_legacy = Parser::parse_config(legacy);
+        require(restored_legacy && !restored_legacy->enabled_pretask, "legacy configurations should keep all pretasks enabled");
+
+        auto invalid = legacy;
+        invalid["enabled_pretask"] = "prepare";
+        require(!Parser::parse_config(invalid), "a non-array pretask selection should be rejected");
+    }
     {
         InterfaceData data;
         data.interface_version = 2;
@@ -345,6 +386,76 @@ int main()
         !Parser::parse_interface(fixture_dir / "invalid_option_defaults.json").has_value(),
         "invalid or unknown checkbox defaults should be rejected");
 
+    // v2.8.0: hotkey options are supported and should round-trip through imports.
+    auto hotkey_interface = Parser::parse_interface(fixture_dir / "hotkey.json");
+    require(hotkey_interface.has_value(), "a hotkey option in an import should be accepted");
+    if (hotkey_interface) {
+        const auto hotkey_option = hotkey_interface->option.find("unsupported-hotkey");
+        require(hotkey_option != hotkey_interface->option.end(), "imported hotkey option should be present");
+        if (hotkey_option != hotkey_interface->option.end()) {
+            require(
+                hotkey_option->second.type == InterfaceData::Option::Type::Hotkey,
+                "imported hotkey option should keep the hotkey type");
+            require(
+                hotkey_option->second.hotkeys.size() == 1 && hotkey_option->second.hotkeys.front().name == "attack"
+                    && hotkey_option->second.hotkeys.front().default_ == "E",
+                "imported hotkey fields should be preserved");
+        }
+    }
+
+    if (auto fixture = json::open(fixture_dir / "hotkey_runtime/interface.json")) {
+        auto definition = *fixture;
+        auto& fields = definition["option"]["shortcut"]["hotkeys"].as_array();
+        const auto duplicate = fields.at(0);
+        fields.emplace_back(duplicate);
+        require(!Parser::parse_interface(definition), "duplicate hotkey field names should be rejected");
+        fields[1]["name"] = "second-shortcut";
+        require(Parser::parse_interface(definition).has_value(), "distinct hotkey fields should remain valid");
+    }
+
+    if (auto fixture = Parser::parse_interface(fixture_dir / "hotkey_runtime/interface.json")) {
+        for (bool nested : { false, true }) {
+            auto data = *fixture;
+            Configuration config;
+            config.controller.name = "controller";
+            config.resource = "resource";
+            Configuration::Option shortcut;
+            shortcut.name = "shortcut";
+            shortcut.hotkeys = { { "combo", "Ctrl+Alt+A" }, { "obsolete", "F1" } };
+            Configuration::Task task;
+            task.name = "task";
+            if (nested) {
+                InterfaceData::Option parent;
+                parent.cases.emplace_back().name = "on";
+                parent.cases.front().option = { "shortcut" };
+                data.option["parent"] = parent;
+                data.task.front().option = { "parent" };
+                Configuration::Option selection;
+                selection.name = "parent";
+                selection.value = "on";
+                task.option.emplace_back(selection);
+            }
+            task.option.emplace_back(shortcut);
+            config.task.emplace_back(task);
+            require(!Parser::check_configuration(data, config), "removing stale task hotkeys should report a configuration change");
+            const auto& cleaned = config.task.front().option.back().hotkeys;
+            require(
+                cleaned.size() == 1 && cleaned.at("combo") == "Ctrl+Alt+A",
+                "only removed fields should be pruned, including nested options");
+            require(Parser::check_configuration(data, config), "task hotkey cleanup should be idempotent");
+            auto saved = Parser::parse_config(config.to_json());
+            require(saved.has_value(), "cleaned task configuration should round-trip");
+            if (saved) {
+                data.option.at("shortcut").hotkeys.emplace_back(InterfaceData::Option::Hotkey { .name = "obsolete", .default_ = "E" });
+                auto& option = saved->task.front().option.back();
+                require(
+                    MaaPiCliHotkey::normalize_hotkeys(data.option.at("shortcut"), option, MaaPiCliHotkey::KeycodeSet::Android),
+                    "reintroduced fields should accept their current default");
+                require(option.hotkeys.at("obsolete") == "E", "reintroduced fields must not restore the removed shortcut");
+            }
+        }
+    }
+
     auto zero_max_json = json::parse(
         R"json({
             "interface_version": 2,
@@ -363,6 +474,81 @@ int main()
     require(
         zero_max_json && Parser::parse_interface(*zero_max_json).has_value(),
         "max_count zero should accept an empty checkbox selection");
+
+    auto interception_keyboard_json = json::parse(
+        R"json({
+            "interface_version": 2,
+            "controller": [{
+                "name": "win32-controller",
+                "type": "Win32",
+                "win32": {
+                    "keyboard": "Interception"
+                }
+            }],
+            "resource": [{ "name": "default-resource", "path": ["resource"] }]
+        })json");
+    require(interception_keyboard_json.has_value(), "Interception keyboard fixture should parse as JSON");
+    auto interception_keyboard = interception_keyboard_json ? Parser::parse_interface(*interception_keyboard_json) : std::nullopt;
+    require(interception_keyboard.has_value(), "the v5.14.0 Win32 keyboard method should parse");
+    require(
+        interception_keyboard && interception_keyboard->controller.front().win32.keyboard == "Interception",
+        "the Interception keyboard method should be preserved");
+
+    {
+        auto single_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": "welcome"
+            })json");
+        require(single_welcome_json.has_value(), "single welcome fixture should parse as JSON");
+        auto single_welcome = single_welcome_json ? Parser::parse_interface(*single_welcome_json) : std::nullopt;
+        require(single_welcome.has_value(), "a legacy string welcome should parse");
+        require(
+            single_welcome && Parser::welcome_items(single_welcome->welcome) == std::vector<std::string> { "welcome" },
+            "a legacy string welcome should flatten to one ordered item");
+
+        auto empty_welcome_string_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": ""
+            })json");
+        require(empty_welcome_string_json.has_value(), "empty legacy welcome fixture should parse as JSON");
+        auto empty_welcome_string = empty_welcome_string_json ? Parser::parse_interface(*empty_welcome_string_json) : std::nullopt;
+        require(empty_welcome_string.has_value(), "an empty legacy string welcome should parse");
+        require(
+            empty_welcome_string && Parser::welcome_items(empty_welcome_string->welcome).empty(),
+            "an empty legacy string welcome should flatten to no items");
+
+        auto multiple_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": ["first", "second"]
+            })json");
+        require(multiple_welcome_json.has_value(), "multiple welcome fixture should parse as JSON");
+        auto multiple_welcome = multiple_welcome_json ? Parser::parse_interface(*multiple_welcome_json) : std::nullopt;
+        require(multiple_welcome.has_value(), "an ordered welcome array should parse");
+        require(
+            multiple_welcome && Parser::welcome_items(multiple_welcome->welcome) == std::vector<std::string> { "first", "second" },
+            "welcome items should retain declaration order");
+
+        auto empty_welcome_json = json::parse(
+            R"json({
+                "interface_version": 2,
+                "controller": [{ "name": "default-controller", "type": "Adb" }],
+                "resource": [{ "name": "default-resource", "path": ["resource"] }],
+                "welcome": []
+            })json");
+        require(empty_welcome_json.has_value(), "empty welcome fixture should parse as JSON");
+        require(
+            !(empty_welcome_json && Parser::parse_interface(*empty_welcome_json).has_value()),
+            "an empty welcome array should be rejected");
+    }
 
     auto linux_interface_json = json::parse(
         R"json({
@@ -557,6 +743,37 @@ int main()
             "legacy WlRoots controller settings should migrate to linux");
     }
 
+    auto welcome_config_json = json::parse(
+        R"json({
+            "controller": { "name": "default-controller" },
+            "resource": "",
+            "task": [],
+            "last_welcome": ["first", "second"],
+            "last_resolved_welcome": ["First", "Second"]
+        })json");
+    require(welcome_config_json.has_value(), "welcome config fixture should parse as JSON");
+    auto welcome_config = welcome_config_json ? Parser::parse_config(*welcome_config_json) : std::nullopt;
+    require(welcome_config.has_value(), "ordered welcome snapshots should parse");
+    if (welcome_config) {
+        require(
+            welcome_config->last_welcome == std::vector<std::string> { "first", "second" }
+                && welcome_config->last_resolved_welcome == std::vector<std::string> { "First", "Second" },
+            "welcome snapshots should retain order");
+        auto roundtrip = welcome_config->to_json();
+        const auto serialized_items = [](const json::value& value) {
+            std::vector<std::string> items;
+            for (const auto& item : value.as_array()) {
+                items.push_back(item.as_string());
+            }
+            return items;
+        };
+        require(
+            roundtrip.contains("last_welcome") && roundtrip.contains("last_resolved_welcome")
+                && serialized_items(roundtrip["last_welcome"]) == std::vector<std::string> { "first", "second" }
+                && serialized_items(roundtrip["last_resolved_welcome"]) == std::vector<std::string> { "First", "Second" },
+            "ordered welcome snapshots should serialize exactly");
+    }
+
     auto linux_config_json = json::parse(
         R"json({
             "controller": { "name": "linux-controller", "type": "linux" },
@@ -610,6 +827,49 @@ int main()
                 legacy_roundtrip.contains("linux") && !legacy_roundtrip.contains("wlroots"),
                 "migrated Linux configuration should serialize only linux");
         }
+    }
+
+    {
+        using namespace MaaPiCliHotkey;
+        // Key code tables per controller family.
+        auto vk_a = find_keycode("a", KeycodeSet::Win32Vk);
+        require(vk_a && *vk_a == 0x41, "Win32 VK table should map A to 0x41");
+        auto android_a = find_keycode("A", KeycodeSet::Android);
+        require(android_a && *android_a == 29, "Android table should map A to 29");
+        auto mac_a = find_keycode("a", KeycodeSet::MacVirtual);
+        require(mac_a && *mac_a == 0x00, "macOS table should map A to 0x00");
+        auto evdev_a = find_keycode("a", KeycodeSet::LinuxEvdev);
+        require(evdev_a && *evdev_a == 30, "Linux evdev table should map A to 30");
+
+        // Modifiers resolve through aliases.
+        auto ctrl = find_keycode("Control", KeycodeSet::Win32Vk);
+        require(ctrl && *ctrl == 0x11, "Win32 VK table should resolve Control to VK_CONTROL");
+        auto option_key = find_keycode("Option", KeycodeSet::MacVirtual);
+        require(option_key && *option_key == 0x3A, "macOS table should resolve Option");
+        auto android_ctrl = find_keycode("Ctrl", KeycodeSet::Android);
+        require(android_ctrl && *android_ctrl == 113, "Android table should map Ctrl to KEYCODE_CTRL_LEFT (113)");
+
+        // Combos: modifiers first, primary last, at most two modifiers.
+        auto combo = parse("Ctrl+Shift+A", KeycodeSet::Win32Vk);
+        require(
+            combo && combo->canonical == "Ctrl+Shift+A" && combo->primary == 0x41 && combo->modifiers.size() == 2
+                && combo->modifiers[0] == 0x11 && combo->modifiers[1] == 0x10,
+            "combo parsing should split modifiers and primary key");
+        auto single = parse("f5", KeycodeSet::Win32Vk);
+        require(
+            single && single->canonical == "F5" && single->primary == 0x74 && single->modifiers.empty(),
+            "single-key combos should normalize case and resolve function keys");
+        auto android_combo = parse("Meta+E", KeycodeSet::Android);
+        require(
+            android_combo && android_combo->primary == 33 && android_combo->modifiers.size() == 1 && android_combo->modifiers[0] == 117,
+            "Android table should map Meta+E to keycode 117 + 33");
+        require(!parse("Ctrl+", KeycodeSet::Win32Vk), "empty combo tokens should be rejected");
+        require(!parse("A+B+C+D", KeycodeSet::Win32Vk), "more than two modifiers should be rejected");
+        require(!parse("Ctrl+A+B", KeycodeSet::Win32Vk), "non-modifier tokens before the primary key should be rejected");
+        require(!find_keycode("NoSuchKey", KeycodeSet::Win32Vk), "unknown keys should not resolve");
+        // Keys unavailable on a platform should not resolve on it.
+        require(!find_keycode("Insert", KeycodeSet::MacVirtual), "macOS table has no Insert key");
+        require(find_keycode("Insert", KeycodeSet::Win32Vk).has_value(), "Win32 VK table has an Insert key");
     }
 
     if (failures != 0) {

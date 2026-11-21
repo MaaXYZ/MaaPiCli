@@ -112,6 +112,5 @@ jobs:
               with:
                   files: assets/MAA-MaaPiCli-*.zip
                   tag_name: ${{ needs.meta.outputs.tag }}
-                  target_commitish: ${{ needs.meta.outputs.commit-sha }}
                   prerelease: ${{ needs.meta.outputs.is-prerelease == 'true' }}
                   body: ${{ needs.changelog.outputs.release_body }}

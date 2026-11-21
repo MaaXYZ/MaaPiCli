@@ -20,14 +20,18 @@
 #include <unistd.h>
 #endif
 
+#include "HotkeyMap.h"
 #include "MaaFramework/Utility/MaaBuffer.h"
 #include "MaaToolkit/AdbDevice/MaaToolkitAdbDevice.h"
 #include "MaaToolkit/DesktopWindow/MaaToolkitDesktopWindow.h"
+#include "MaaToolkit/IOSDevice/MaaToolkitIOSDevice.h"
 #include "MaaUtils/Encoding.h"
 #include "MaaUtils/Logger.h"
 #include "MaaUtils/Platform.h"
 #include "ProjectInterface/Parser.h"
 #include "ProjectInterface/Runner.h"
+#include "TerminalText.h"
+#include "TextFile.h"
 #include "input.h"
 
 #if defined(__APPLE__)
@@ -130,7 +134,7 @@ namespace
 constexpr DWORD kMaxPathBuffer = 32768;
 
 // ShellExecuteW return value threshold: values > 32 indicate success, <= 32 indicate error codes.
-// See: https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutew
+// See: https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutew
 constexpr intptr_t kShellExecuteSuccessThreshold = 32;
 
 bool is_running_as_admin()
@@ -206,7 +210,7 @@ const MAA_PROJECT_INTERFACE_NS::Configuration::Option*
 } // namespace
 
 Interactor::Interactor(std::filesystem::path user_path)
-    : user_path_(std::move(user_path))
+    : user_path_(std::filesystem::absolute(user_path))
 {
     LogDebug << VAR(user_path_);
 }
@@ -295,6 +299,13 @@ Interactor::ElevationResult Interactor::check_and_elevate_if_needed()
 
 bool Interactor::run()
 {
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    // Configuration saves reload persisted fields without the derived controller type.
+    if (const auto* controller = find_current_controller()) {
+        config_.configuration().controller.type = controller->type;
+    }
+
     auto elevation_result = check_and_elevate_if_needed();
     if (elevation_result == ElevationResult::Failed) {
         return false;
@@ -320,7 +331,8 @@ bool Interactor::run()
     if (!ensure_pretask_options()) {
         return false;
     }
-    if (!save_config()) {
+    const bool is_macos = config_.configuration().controller.type == InterfaceData::Controller::Type::MacOS;
+    if (!is_macos && !save_config()) {
         return false;
     }
 
@@ -330,7 +342,22 @@ bool Interactor::run()
         return false;
     }
 
-    bool ret = MAA_PROJECT_INTERFACE_NS::Runner::run(runtime.value());
+    if (is_macos) {
+        if (!Runner::run_pretasks(runtime->pretask)) {
+            return false;
+        }
+        // Resolve windows after pretasks, and do not execute those pretasks again in Runner.
+        runtime->pretask.clear();
+        if (!check_macos_window()) {
+            return false;
+        }
+        std::get<RuntimeParam::MacOSParam>(runtime->controller_param).window_id = config_.configuration().macos.window_id;
+        if (!save_config()) {
+            return false;
+        }
+    }
+
+    bool ret = Runner::run(runtime.value());
 
     if (!ret) {
         std::cout << "### Failed to run tasks ###\n\n";
@@ -342,7 +369,7 @@ bool Interactor::run()
     return ret;
 }
 
-void Interactor::print_config() const
+void Interactor::print_config()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
@@ -359,6 +386,11 @@ void Interactor::print_config() const
         std::cout << MAA_NS::utf8_to_crt(
             std::format("\t\t{}\n\t\t{}\n", config_.configuration().adb.adb_path, config_.configuration().adb.address));
         break;
+    case InterfaceData::Controller::Type::IOS: {
+        const auto& ios = config_.configuration().ios;
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t\tUDID: {}\n\t\tScreencap: {}\n", ios.udid.empty() ? "(not configured)" : ios.udid, ios.screencap));
+    } break;
     case InterfaceData::Controller::Type::Win32:
         if (config_.configuration().win32.hwnd) {
             std::cout << MAA_NS::utf8_to_crt(std::format("\t\t{}\n", format_win32_config(config_.configuration().win32)));
@@ -442,6 +474,13 @@ void Interactor::print_config() const
                               << "\n";
                 }
             }
+            else if (!opt.hotkeys.empty()) {
+                std::cout << "\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(opt.name)) << ":\n";
+                for (const auto& [key, val] : opt.hotkeys) {
+                    std::cout << "\t\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(key)) << ": "
+                              << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(val)) << "\n";
+                }
+            }
         }
         std::cout << "\n";
     };
@@ -502,7 +541,7 @@ bool Interactor::interact_for_first_time_use()
     return true;
 }
 
-void Interactor::welcome() const
+void Interactor::welcome()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
@@ -523,11 +562,7 @@ void Interactor::welcome() const
         }
     }
 
-    // 显示欢迎信息
-    if (!data.welcome.empty()) {
-        std::string welcome_text = read_text_content(data.welcome);
-        std::cout << MAA_NS::utf8_to_crt(welcome_text) << "\n\n";
-    }
+    show_welcome_if_changed();
 
     // 显示项目描述
     if (!data.description.empty()) {
@@ -553,9 +588,38 @@ void Interactor::welcome() const
     }
 }
 
+bool Interactor::show_welcome_if_changed()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    const auto declared_welcome = Parser::welcome_items(config_.interface_data().welcome);
+    std::vector<std::string> resolved_welcome;
+    resolved_welcome.reserve(declared_welcome.size());
+    for (const auto& item : declared_welcome) {
+        resolved_welcome.emplace_back(read_text_content(item));
+    }
+
+    const auto changed = config_.update_welcome_snapshots(user_path_, std::move(declared_welcome), std::move(resolved_welcome));
+    if (!changed.has_value()) {
+        LogError << "Failed to save welcome snapshots";
+        std::cout << "\nFailed to save welcome announcements.\n\n";
+        return false;
+    }
+    if (!*changed) {
+        return false;
+    }
+
+    auto& config = config_.configuration();
+    for (const auto& welcome_text : config.last_resolved_welcome) {
+        std::cout << MAA_NS::utf8_to_crt(welcome_text) << "\n\n";
+    }
+
+    return true;
+}
+
 Interactor::ActionStatus Interactor::interact_once()
 {
-    bool has_presets = !config_.interface_data().preset.empty();
+    const bool has_presets = !applicable_presets().empty();
 
     std::cout << "### Select action ###\n\n";
     std::cout << "\t1. Switch controller\n";
@@ -674,6 +738,9 @@ bool Interactor::select_controller()
     }
     const auto& controller = all_controllers[index];
 
+    if (controller.type == InterfaceData::Controller::Type::IOS && config_.configuration().controller.name != controller.name) {
+        config_.configuration().ios = { };
+    }
     config_.configuration().controller.name = controller.name;
     config_.configuration().controller.type = controller.type;
 
@@ -681,6 +748,8 @@ bool Interactor::select_controller()
     case InterfaceData::Controller::Type::Adb:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Adb;
         return select_adb();
+    case InterfaceData::Controller::Type::IOS:
+        return select_ios(controller.ios);
     case InterfaceData::Controller::Type::Win32:
         config_.configuration().controller.type = InterfaceData::Controller::Type::Win32;
         return select_win32_hwnd(controller.win32);
@@ -865,6 +934,150 @@ bool Interactor::select_playcover(const MAA_PROJECT_INTERFACE_NS::InterfaceData:
     pc.address = buffer->empty() ? default_address : *buffer;
     std::cout << "\n";
 
+    return true;
+}
+
+bool Interactor::select_ios_auto_detect()
+{
+    std::cout << "Searching USB and Wi-Fi iOS devices...\n";
+    auto* list = MaaToolkitIOSDeviceListCreate();
+    if (!list) {
+        return true;
+    }
+    OnScopeLeave([&]() { MaaToolkitIOSDeviceListDestroy(list); });
+    const auto options = json::value(config_.configuration().ios.config).to_string();
+    if (!MaaToolkitIOSDeviceFindWithOptions(MaaIOSConnectionMethod_Auto, options.c_str(), nullptr, nullptr, list)) {
+        std::cout << MaaToolkitIOSDeviceListGetWarnings(list) << "\n";
+        return true;
+    }
+    std::vector<const MaaToolkitIOSDevice*> devices;
+    for (MaaSize i = 0; i < MaaToolkitIOSDeviceListSize(list); ++i) {
+        const auto* device = MaaToolkitIOSDeviceListAt(list, i);
+        if (!device || !MaaToolkitIOSDeviceGetUdid(device)[0]) {
+            continue;
+        }
+        devices.push_back(device);
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format("\t{}. {}  {}\n", devices.size(), MaaToolkitIOSDeviceGetName(device), MaaToolkitIOSDeviceGetUdid(device)));
+    }
+    if (devices.empty()) {
+        std::cout << "No selectable device. Pair and prepare the device with xdb, or enter a UDID manually.\n";
+        return true;
+    }
+    std::cout << std::format("\t{}. Enter a UDID manually\n", devices.size() + 1);
+    const auto choice = input(devices.size() + 1, "Select device");
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    if (*choice <= static_cast<int>(devices.size())) {
+        config_.configuration().ios.udid = MaaToolkitIOSDeviceGetUdid(devices[*choice - 1]);
+    }
+    return true;
+}
+
+bool Interactor::select_ios_device()
+{
+    auto& ios = config_.configuration().ios;
+    bool search = ios.udid.empty();
+    if (!ios.udid.empty()) {
+        std::cout << std::format("\n### Select iOS device ###\n\n\t1. Use current device: {}\n", ios.udid)
+                  << "\t2. Search devices\n"
+                     "\t3. Enter a UDID manually\n";
+        const auto choice = input(3, "Choose device action", 1);
+        if (!choice) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (*choice == 1) {
+            return true;
+        }
+        search = *choice == 2;
+    }
+    if (search && !select_ios_auto_detect()) {
+        return false;
+    }
+
+    std::cout << "Device UDID is required. Select a discovered device or enter its UDID.\n";
+    do {
+        const auto value = read_line(std::format("UDID [{}]: ", ios.udid));
+        if (!value) {
+            input_aborted_ = true;
+            return false;
+        }
+        if (!value->empty()) {
+            ios.udid = *value;
+        }
+        if (ios.udid.empty()) {
+            std::cout << "Device UDID cannot be empty.\n";
+        }
+    } while (ios.udid.empty());
+    return true;
+}
+
+bool Interactor::select_ios(const MAA_PROJECT_INTERFACE_NS::InterfaceData::Controller::IOSConfig& ios_config)
+{
+    std::cout << "### Configure iOS device ###\n\n"
+                 "Pair and prepare the device with xdb before running tasks.\n";
+    auto& ios = config_.configuration().ios;
+    for (const auto& [key, value] : ios_config.config) {
+        if (!ios.config.contains(key)) {
+            ios.config[key] = value;
+        }
+    }
+    if (ios.connection.empty()) {
+        ios.connection = ios_config.connection;
+    }
+    if (ios.screencap.empty()) {
+        ios.screencap = ios_config.screencap;
+    }
+    if (ios.udid.empty()) {
+        ios.udid = ios_config.udid;
+    }
+    if (!select_ios_device()) {
+        return false;
+    }
+
+    std::cout << "\n### Select connection method ###\n\n"
+                 "\t1. Auto: prefer USB when no Wi-Fi address is set; otherwise Wi-Fi\n"
+                 "\t2. USB\n"
+                 "\t3. Wi-Fi\n";
+    const int default_transport = ios.connection == "USB" ? 2 : ios.connection == "WiFi" ? 3 : 1;
+    const auto transport = input(3, "Choose connection method", default_transport);
+    if (!transport) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.connection = *transport == 1 ? "Auto" : *transport == 2 ? "USB" : "WiFi";
+    if (ios.connection != "USB") {
+        std::cout << "Wi-Fi address: IP for direct connection, auto for Wi-Fi discovery.\n"
+                     "Enter - to clear it; Auto with an empty address prefers USB, then paired Wi-Fi.\n";
+        const auto current = ios.config.get("wifi_address", ios.connection == "WiFi" ? std::string("auto") : std::string());
+        const auto address = read_line(std::format("Wi-Fi address [{}]: ", current));
+        if (!address) {
+            input_aborted_ = true;
+            return false;
+        }
+        ios.config["wifi_address"] = *address == "-" ? std::string() : address->empty() ? current : *address;
+    }
+    else {
+        ios.config.erase("wifi_address");
+    }
+
+    std::cout << "\n### Select screencap method ###\n\n"
+                 "\t1. Stream: video frames, low latency, lossy, background decoding\n"
+                 "\t2. ScreenshotService: lossless screenshot RPC, no background decoding\n"
+                 "\t3. Both: stream first, fall back to the screenshot service\n";
+    const int default_screencap = ios.screencap == "Stream"                                            ? 1
+                                  : ios.screencap == "ScreenshotService" || ios.screencap == "Service" ? 2
+                                                                                                       : 3;
+    const auto choice = input(3, "Choose screencap method", default_screencap);
+    if (!choice) {
+        input_aborted_ = true;
+        return false;
+    }
+    ios.screencap = *choice == 1 ? "Stream" : *choice == 2 ? "ScreenshotService" : "Stream|ScreenshotService";
+    std::cout << "\n";
     return true;
 }
 
@@ -1885,6 +2098,12 @@ bool Interactor::process_option(
                 std::string input_desc = read_text_content(input_def.description);
                 std::cout << MAA_NS::utf8_to_crt(input_desc) << "\n";
             }
+            if (input_def.input_type == InterfaceData::Option::Input::InputType::File) {
+                input_display_name += " (file path)";
+            }
+            else if (input_def.input_type == InterfaceData::Option::Input::InputType::Directory) {
+                input_display_name += " (directory path)";
+            }
             std::cout << MAA_NS::utf8_to_crt(std::format("{} [{}]: ", input_display_name, input_def.password ? "********" : default_val));
 
             auto read_input_value = [&]() -> std::optional<std::string> {
@@ -1930,6 +2149,69 @@ bool Interactor::process_option(
             }
 
             config_opt.inputs[input_def.name] = value;
+        }
+        std::cout << "\n";
+    } break;
+
+    case InterfaceData::Option::Type::Hotkey: {
+        const auto keycode_set = MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration());
+
+        std::cout << MAA_NS::utf8_to_crt(
+            std::format(
+                "\n\n## Hotkey option \"{}\" for \"{}\" ##\n\n",
+                MaaPiCliTerminal::sanitize(opt_display_name),
+                MaaPiCliTerminal::sanitize(task_display_name)));
+        if (!opt.description.empty()) {
+            std::string desc_text = read_text_content(opt.description);
+            std::cout << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(desc_text, true)) << "\n\n";
+        }
+
+        for (const auto& hotkey_def : opt.hotkeys) {
+            if (auto_accept_default) {
+                auto combo = MaaPiCliHotkey::parse(hotkey_def.default_, keycode_set);
+                if (!combo) {
+                    std::cout << "Cannot accept an invalid default hotkey for the selected controller.\n";
+                    return false;
+                }
+                config_opt.hotkeys[hotkey_def.name] = combo->canonical;
+                continue;
+            }
+
+            std::string hotkey_display_name = get_display_name(hotkey_def.name, hotkey_def.label);
+            if (!hotkey_def.description.empty()) {
+                std::string hotkey_desc = read_text_content(hotkey_def.description);
+                std::cout << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(hotkey_desc, true)) << "\n";
+            }
+            std::cout << MAA_NS::utf8_to_crt(
+                std::format(
+                    "{} [{}] (e.g. Ctrl+Alt+F1, press Enter to keep): ",
+                    MaaPiCliTerminal::sanitize(hotkey_display_name),
+                    MaaPiCliTerminal::sanitize(hotkey_def.default_)));
+
+            auto buffer = read_line();
+            if (!buffer) {
+                input_aborted_ = true;
+                return false;
+            }
+
+            std::string value = buffer->empty() ? hotkey_def.default_ : *buffer;
+
+            // Normalize and validate the combo; retry until it resolves on the current platform.
+            while (true) {
+                if (auto parts = MaaPiCliHotkey::parse(value, keycode_set)) {
+                    value = parts->canonical;
+                    break;
+                }
+                std::cout << MAA_NS::utf8_to_crt(std::format("Invalid hotkey \"{}\", please retry: ", MaaPiCliTerminal::sanitize(value)));
+                buffer = read_line();
+                if (!buffer) {
+                    input_aborted_ = true;
+                    return false;
+                }
+                value = buffer->empty() ? hotkey_def.default_ : *buffer;
+            }
+
+            config_opt.hotkeys[hotkey_def.name] = value;
         }
         std::cout << "\n";
     } break;
@@ -2313,6 +2595,13 @@ void Interactor::print_config_tasks(bool with_index) const
                               << MAA_NS::utf8_to_crt(display_input_value(opt.name, key, val)) << "\n";
                 }
             }
+            else if (!opt.hotkeys.empty()) {
+                std::cout << "\t\t- " << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(opt.name)) << ":\n";
+                for (const auto& [key, val] : opt.hotkeys) {
+                    std::cout << "\t\t\t" << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(key)) << ": "
+                              << MAA_NS::utf8_to_crt(MaaPiCliTerminal::sanitize(val)) << "\n";
+                }
+            }
         }
     };
 
@@ -2399,20 +2688,10 @@ bool Interactor::check_validity()
     }
 
     if (config_.configuration().controller.type == InterfaceData::Controller::Type::MacOS) {
-        auto& mac = config_.configuration().macos;
-        if (mac.window_id == 0 || mac.title.empty()) {
-            auto& name = config_.configuration().controller.name;
-            auto controller_iter =
-                std::ranges::find(config_.interface_data().controller, name, std::mem_fn(&InterfaceData::Controller::name));
-
-            if (controller_iter == config_.interface_data().controller.end()) {
-                LogError << "Controller not found" << VAR(name);
-                return false;
-            }
-
-            select_macos(controller_iter->macos);
-            return mac.window_id != 0;
-        }
+#if !defined(__APPLE__)
+        LogError << "MacOS controller is only supported on macOS";
+        return false;
+#endif
     }
 
     if (config_.configuration().controller.type == InterfaceData::Controller::Type::Linux) {
@@ -2490,6 +2769,39 @@ bool Interactor::check_validity()
                 select_gamepad(controller_iter->gamepad);
             }
         }
+    }
+
+    return true;
+}
+
+bool Interactor::check_macos_window()
+{
+    using namespace MAA_PROJECT_INTERFACE_NS;
+
+    auto& mac = config_.configuration().macos;
+    bool window_found = false;
+    if (mac.window_id != 0) {
+        auto list_handle = MaaToolkitDesktopWindowListCreate();
+        OnScopeLeave([&]() { MaaToolkitDesktopWindowListDestroy(list_handle); });
+
+        MaaToolkitDesktopWindowFindAll(list_handle);
+
+        for (MaaSize i = 0; i < MaaToolkitDesktopWindowListSize(list_handle); ++i) {
+            auto window = MaaToolkitDesktopWindowListAt(list_handle, i);
+            if (reinterpret_cast<uintptr_t>(MaaToolkitDesktopWindowGetHandle(window)) == mac.window_id) {
+                window_found = true;
+                break;
+            }
+        }
+    }
+    if (!window_found) {
+        const auto* controller = find_current_controller();
+        if (!controller) {
+            LogError << "Controller not found" << VAR(config_.configuration().controller.name);
+            return false;
+        }
+
+        return select_macos(controller->macos) && mac.window_id != 0;
     }
 
     return true;
@@ -2687,8 +2999,8 @@ bool Interactor::ensure_declared_option_tree(
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
-    std::vector<Configuration::Option> existing_options = std::move(config_options);
-    config_options.clear();
+    auto existing_options = config_options;
+    std::vector<Configuration::Option> completed_options;
 
     std::function<bool(const std::string&)> ensure_option = [&](const std::string& option_name) -> bool {
         auto data_option_iter = config_.interface_data().option.find(option_name);
@@ -2710,7 +3022,7 @@ bool Interactor::ensure_declared_option_tree(
             std::ranges::find_if(existing_options, [&](const auto& config_option) { return config_option.name == option_name; });
         if (existing_option_iter == existing_options.end()) {
             // Interface changes may add a required option; automatic completion must not interrupt runtime setup.
-            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+            return process_option(option_name, context_display_name, completed_options, auto_accept_default);
         }
 
         if (data_option.type == InterfaceData::Option::Type::Input) {
@@ -2720,15 +3032,30 @@ bool Interactor::ensure_declared_option_tree(
                 }
             }
         }
+        else if (data_option.type == InterfaceData::Option::Type::Hotkey) {
+            for (const auto& hotkey_def : data_option.hotkeys) {
+                if (!existing_option_iter->hotkeys.contains(hotkey_def.name)) {
+                    existing_option_iter->hotkeys.emplace(hotkey_def.name, hotkey_def.default_);
+                }
+            }
+            if (!MaaPiCliHotkey::normalize_hotkeys(
+                    data_option,
+                    *existing_option_iter,
+                    MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                LogError << "Invalid configured hotkey" << VAR(option_name);
+                std::cout << "Cannot use the saved hotkey for the selected controller. Reconfigure the option before running tasks.\n";
+                return false;
+            }
+        }
 
         std::vector<const InterfaceData::Option::Case*> selected_cases;
         if (!select_runtime_option_cases(option_name, existing_options, selected_cases)) {
             LogWarn << "Invalid runtime option found, recreating it" << VAR(context_display_name) << VAR(option_name);
             existing_options.erase(existing_option_iter);
-            return process_option(option_name, context_display_name, config_options, auto_accept_default);
+            return process_option(option_name, context_display_name, completed_options, auto_accept_default);
         }
 
-        config_options.push_back(*existing_option_iter);
+        completed_options.push_back(*existing_option_iter);
         for (const auto* selected_case : selected_cases) {
             for (const auto& active_option : selected_case->option) {
                 if (!ensure_option(active_option)) {
@@ -2746,6 +3073,7 @@ bool Interactor::ensure_declared_option_tree(
         }
     }
 
+    config_options = std::move(completed_options);
     return true;
 }
 
@@ -2794,11 +3122,15 @@ bool Interactor::ensure_pretask_options()
             && std::ranges::find(data_pretask.controller, current_controller) == data_pretask.controller.end()) {
             continue;
         }
+        const std::string identifier = data_pretask.name.empty() ? data_pretask.exec : data_pretask.name;
+        if (config_.configuration().enabled_pretask
+            && std::ranges::find(*config_.configuration().enabled_pretask, identifier) == config_.configuration().enabled_pretask->end()) {
+            continue;
+        }
         if (data_pretask.option.empty()) {
             continue;
         }
 
-        const std::string identifier = data_pretask.name.empty() ? data_pretask.exec : data_pretask.name;
         const std::string display_name = get_display_name(identifier, data_pretask.label);
         auto& config_pretasks = config_.configuration().pretask;
         auto config_pretask_iter =
@@ -2843,11 +3175,23 @@ bool Interactor::mpause()
     return true;
 }
 
+std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> Interactor::applicable_presets() const
+{
+    std::vector<const MAA_PROJECT_INTERFACE_NS::InterfaceData::Preset*> presets;
+    const auto& controller = config_.configuration().controller.name;
+    for (const auto& preset : config_.interface_data().preset) {
+        if (preset.controller.empty() || std::ranges::find(preset.controller, controller) != preset.controller.end()) {
+            presets.emplace_back(&preset);
+        }
+    }
+    return presets;
+}
+
 bool Interactor::apply_preset()
 {
     using namespace MAA_PROJECT_INTERFACE_NS;
 
-    const auto& presets = config_.interface_data().preset;
+    const auto presets = applicable_presets();
     if (presets.empty()) {
         std::cout << "No presets available.\n\n";
         return false;
@@ -2855,7 +3199,7 @@ bool Interactor::apply_preset()
 
     std::cout << "### Apply preset ###\n\n";
     for (size_t i = 0; i < presets.size(); ++i) {
-        const auto& p = presets[i];
+        const auto& p = *presets[i];
         std::string display_name = get_display_name(p.name, p.label);
         std::cout << MAA_NS::utf8_to_crt(std::format("\t{}. {}\n", i + 1, display_name));
         if (!p.description.empty()) {
@@ -2870,7 +3214,160 @@ bool Interactor::apply_preset()
         input_aborted_ = true;
         return false;
     }
-    const auto& preset = presets.at(static_cast<size_t>(*selected - 1));
+    const auto& preset = *presets.at(static_cast<size_t>(*selected - 1));
+
+    std::optional<std::vector<std::string>> preset_enabled_pretasks;
+    std::vector<Configuration::Pretask> preset_pretask_config;
+    if (preset.pretask) {
+        const auto declared_pretasks = Parser::flatten_pretask(config_.interface_data().pretask);
+        preset_enabled_pretasks.emplace();
+        std::unordered_set<std::string> seen_pretasks;
+        for (const auto& preset_pretask : *preset.pretask) {
+            if (!seen_pretasks.emplace(preset_pretask.name).second) {
+                LogError << "Duplicate pretask in preset" << VAR(preset_pretask.name);
+                std::cout << "Failed to apply preset: duplicate pretask \"" << MAA_NS::utf8_to_crt(preset_pretask.name) << "\".\n\n";
+                return false;
+            }
+            auto declared = std::ranges::find_if(declared_pretasks, [&](const auto& item) {
+                return (item.name.empty() ? item.exec : item.name) == preset_pretask.name;
+            });
+            if (declared == declared_pretasks.end()) {
+                LogError << "Preset references unknown pretask" << VAR(preset_pretask.name);
+                std::cout << "Failed to apply preset: unknown pretask \"" << MAA_NS::utf8_to_crt(preset_pretask.name) << "\".\n\n";
+                return false;
+            }
+            if ((!declared->resource.empty()
+                 && std::ranges::find(declared->resource, config_.configuration().resource) == declared->resource.end())
+                || (!declared->controller.empty()
+                    && std::ranges::find(declared->controller, config_.configuration().controller.name) == declared->controller.end())) {
+                continue;
+            }
+            if (!preset_pretask.enabled) {
+                continue;
+            }
+
+            Configuration::Pretask item;
+            item.name = preset_pretask.name;
+            for (const auto& [option_name, option_value] : preset_pretask.option) {
+                auto definition = config_.interface_data().option.find(option_name);
+                if (definition == config_.interface_data().option.end()) {
+                    LogError << "Preset pretask references unknown option" << VAR(preset_pretask.name) << VAR(option_name);
+                    std::cout << "Failed to apply preset: unknown option \"" << MAA_NS::utf8_to_crt(option_name) << "\".\n\n";
+                    return false;
+                }
+                const auto& data_option = definition->second;
+                if ((!data_option.resource.empty()
+                     && std::ranges::find(data_option.resource, config_.configuration().resource) == data_option.resource.end())
+                    || (!data_option.controller.empty()
+                        && std::ranges::find(data_option.controller, config_.configuration().controller.name)
+                               == data_option.controller.end())) {
+                    LogError << "Preset pretask references inapplicable option" << VAR(preset_pretask.name) << VAR(option_name);
+                    std::cout << "Failed to apply preset: option \"" << MAA_NS::utf8_to_crt(option_name)
+                              << "\" is unavailable for the selected resource or controller.\n\n";
+                    return false;
+                }
+                Configuration::Option option;
+                option.name = option_name;
+                switch (definition->second.type) {
+                case InterfaceData::Option::Type::Select:
+                case InterfaceData::Option::Type::Switch:
+                    if (!option_value.is_string()
+                        || std::ranges::none_of(data_option.cases, [&](const auto& c) { return c.name == option_value.as_string(); })) {
+                        LogError << "Invalid preset option value" << VAR(preset_pretask.name) << VAR(option_name);
+                        std::cout << "Failed to apply preset: invalid value for option \"" << MAA_NS::utf8_to_crt(option_name) << "\".\n\n";
+                        return false;
+                    }
+                    option.value = option_value.as_string();
+                    break;
+                case InterfaceData::Option::Type::Checkbox:
+                    if (!option_value.is_array()) {
+                        LogError << "Invalid preset checkbox value" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    {
+                        std::unordered_set<std::string> selected_values;
+                        for (const auto& value : option_value.as_array()) {
+                            if (!value.is_string()
+                                || std::ranges::none_of(data_option.cases, [&](const auto& c) { return c.name == value.as_string(); })) {
+                                LogError << "Invalid preset checkbox case" << VAR(preset_pretask.name) << VAR(option_name);
+                                return false;
+                            }
+                            if (!selected_values.emplace(value.as_string()).second) {
+                                LogError << "Duplicate preset checkbox case" << VAR(preset_pretask.name) << VAR(option_name);
+                                return false;
+                            }
+                            option.values.emplace_back(value.as_string());
+                        }
+                        if ((data_option.min_count && option.values.size() < *data_option.min_count)
+                            || (data_option.max_count && option.values.size() > *data_option.max_count)) {
+                            LogError << "Invalid preset checkbox count" << VAR(preset_pretask.name) << VAR(option_name);
+                            return false;
+                        }
+                    }
+                    break;
+                case InterfaceData::Option::Type::Input:
+                    if (!option_value.is_object()) {
+                        LogError << "Invalid preset input value" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    for (const auto& [key, value] : option_value.as_object()) {
+                        auto input = std::ranges::find(data_option.inputs, key, &InterfaceData::Option::Input::name);
+                        if (input == data_option.inputs.end() || input->password || !value.is_string()) {
+                            LogError << "Invalid or secret preset input" << VAR(preset_pretask.name) << VAR(option_name) << VAR(key);
+                            return false;
+                        }
+                        if (!input->verify.empty()) {
+                            if (auto pattern = MAA_NS::regex_valid(MAA_NS::to_u16(input->verify))) {
+                                if (!boost::regex_match(MAA_NS::to_u16(value.as_string()), *pattern)) {
+                                    LogError << "Preset input does not match its validation pattern" << VAR(preset_pretask.name)
+                                             << VAR(option_name) << VAR(key);
+                                    return false;
+                                }
+                            }
+                        }
+                        option.inputs.emplace(key, value.as_string());
+                    }
+                    break;
+                case InterfaceData::Option::Type::Hotkey:
+                    if (!option_value.is_object()) {
+                        LogError << "Invalid preset hotkey value" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    for (const auto& [key, value] : option_value.as_object()) {
+                        auto hotkey = std::ranges::find(data_option.hotkeys, key, &InterfaceData::Option::Hotkey::name);
+                        if (hotkey == data_option.hotkeys.end() || !value.is_string()) {
+                            LogError << "Invalid preset hotkey" << VAR(preset_pretask.name) << VAR(option_name) << VAR(key);
+                            return false;
+                        }
+                        option.hotkeys.emplace(key, value.as_string());
+                    }
+                    if (!MaaPiCliHotkey::normalize_hotkeys(
+                            data_option,
+                            option,
+                            MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                        LogError << "Invalid preset hotkey combo" << VAR(preset_pretask.name) << VAR(option_name);
+                        return false;
+                    }
+                    break;
+                }
+                item.option.emplace_back(std::move(option));
+            }
+
+            if (!ensure_declared_option_tree(declared->option, get_display_name(item.name, declared->label), item.option, true)) {
+                return false;
+            }
+            for (const auto& [option_name, _] : preset_pretask.option) {
+                if (std::ranges::none_of(item.option, [&](const auto& option) { return option.name == option_name; })) {
+                    LogError << "Preset pretask option is inactive or unavailable" << VAR(preset_pretask.name) << VAR(option_name);
+                    std::cout << "Failed to apply preset: option \"" << MAA_NS::utf8_to_crt(option_name)
+                              << "\" is inactive or unavailable.\n\n";
+                    return false;
+                }
+            }
+            preset_enabled_pretasks->emplace_back(item.name);
+            preset_pretask_config.emplace_back(std::move(item));
+        }
+    }
 
     std::vector<Configuration::Task> preset_tasks;
     for (const auto& preset_task : preset.task) {
@@ -2886,6 +3383,19 @@ bool Interactor::apply_preset()
 
         Configuration::Task config_task;
         config_task.name = preset_task.name;
+
+        if (preset_task.option.empty() && !data_iter->option.empty()) {
+            std::string preset_task_display = get_display_name(data_iter->name, data_iter->label);
+            for (const auto& option_name : data_iter->option) {
+                if (!process_option(option_name, preset_task_display, config_task.option, /*auto_accept_default=*/true)) {
+                    LogError << "Failed to process option for preset task" << VAR(preset_task.name) << VAR(option_name);
+                    std::cout << "Failed to apply preset: cannot configure option \"" << MAA_NS::utf8_to_crt(option_name)
+                              << "\" for task \"" << MAA_NS::utf8_to_crt(preset_task.name) << "\".\n"
+                              << "Preset application aborted; existing configuration is unchanged.\n\n";
+                    return false;
+                }
+            }
+        }
 
         for (const auto& [opt_name, opt_value] : preset_task.option) {
             auto opt_iter = config_.interface_data().option.find(opt_name);
@@ -2921,6 +3431,27 @@ bool Interactor::apply_preset()
                     }
                 }
                 break;
+            case InterfaceData::Option::Type::Hotkey:
+                if (!opt_value.is_object()) {
+                    LogError << "Invalid preset hotkey value" << VAR(preset_task.name) << VAR(opt_name);
+                    return false;
+                }
+                for (const auto& [key, value] : opt_value.as_object()) {
+                    const auto field = std::ranges::find(opt_iter->second.hotkeys, key, &InterfaceData::Option::Hotkey::name);
+                    if (field == opt_iter->second.hotkeys.end() || !value.is_string()) {
+                        LogError << "Invalid preset hotkey field" << VAR(preset_task.name) << VAR(opt_name) << VAR(key);
+                        return false;
+                    }
+                    config_opt.hotkeys[key] = value.as_string();
+                }
+                if (!MaaPiCliHotkey::normalize_hotkeys(
+                        opt_iter->second,
+                        config_opt,
+                        MaaPiCliHotkey::keycode_set(config_.interface_data(), config_.configuration()))) {
+                    LogError << "Invalid preset hotkey combo" << VAR(preset_task.name) << VAR(opt_name);
+                    return false;
+                }
+                break;
             }
 
             config_task.option.emplace_back(std::move(config_opt));
@@ -2932,9 +3463,17 @@ bool Interactor::apply_preset()
     Configuration preset_config;
     preset_config.resource = config_.configuration().resource;
     preset_config.controller = config_.configuration().controller;
+    preset_config.pretask = preset.pretask ? std::move(preset_pretask_config) : config_.configuration().pretask;
+    preset_config.enabled_pretask = preset.pretask ? std::move(preset_enabled_pretasks) : config_.configuration().enabled_pretask;
     preset_config.task = std::move(preset_tasks);
-    Parser::check_configuration(config_.interface_data(), preset_config);
+    if (!Parser::check_configuration(config_.interface_data(), preset_config)) {
+        LogError << "Preset configuration failed validation" << VAR(preset.name);
+        std::cout << "Failed to apply preset: its configuration is invalid. Existing configuration is unchanged.\n\n";
+        return false;
+    }
 
+    config_.configuration().pretask = std::move(preset_config.pretask);
+    config_.configuration().enabled_pretask = std::move(preset_config.enabled_pretask);
     config_.configuration().task = std::move(preset_config.task);
     std::string preset_display = get_display_name(preset.name, preset.label);
     std::cout << "Applied preset: " << MAA_NS::utf8_to_crt(preset_display) << "\n\n";
@@ -2975,16 +3514,31 @@ std::string Interactor::read_text_content(const std::string& text) const
     // 先翻译文本（如果以 $ 开头）
     std::string translated = config_.translate(text);
 
-    // 尝试作为文件路径读取
-    auto file_path = config_.resource_dir() / MAA_NS::path(translated);
+    // 只读取资源目录内的相对路径；翻译后的路径也必须通过边界校验。
+    const auto relative_path = MAA_NS::path(translated);
     constexpr size_t kMaxPath = 255;
-    if (MAA_NS::path_to_utf8_string(file_path).size() < kMaxPath && std::filesystem::exists(file_path)) {
-        std::ifstream ifs(file_path);
-        if (ifs.is_open()) {
-            std::stringstream buffer;
-            buffer << ifs.rdbuf();
-            return buffer.str();
-        }
+    if (relative_path.has_root_path() || translated.find('\0') != std::string::npos
+        || MAA_NS::path_to_utf8_string(config_.resource_dir() / relative_path).size() >= kMaxPath) {
+        return translated;
+    }
+
+    std::error_code ec;
+    const auto resource_dir = std::filesystem::weakly_canonical(config_.resource_dir(), ec);
+    if (ec) {
+        return translated;
+    }
+    const auto file_path = std::filesystem::weakly_canonical(resource_dir / relative_path, ec);
+    if (ec) {
+        return translated;
+    }
+    // 按目录组件比较，避免 resource-other 被当作 resource 的子目录；归一化会解析符号链接。
+    const auto [root_end, file_end] = std::mismatch(resource_dir.begin(), resource_dir.end(), file_path.begin(), file_path.end());
+    if (root_end != resource_dir.end()) {
+        return translated;
+    }
+
+    if (auto content = MaaPiCliText::read_canonical_file(file_path)) {
+        return std::move(*content);
     }
 
     // 不是文件，直接返回翻译后的文本
