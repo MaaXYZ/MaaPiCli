@@ -24,7 +24,7 @@ Windows 下使用 `MaaPiCli.exe`。程序以 MaaFramework 运行库所在目录�
 
 仓库根目录的 `maafw-version.txt` 锁定本版本 MaaPiCli 使用的 MaaFramework release tag。fork、历史 tag 或 release 包中都带有这个文件，可以直接确认应使用的 runtime 版本。
 
-使用 MaaFramework v6.0.0-beta.1 时，Agent 协议升级到版本 9；项目的 Agent 服务端也需要使用兼容协议 9 的 MaaFramework，才能与 MaaPiCli 连接。
+从 MaaFramework v6.0.0 起，Agent 通信协议升级到版本 9；项目的 Agent 服务端也需要使用兼容协议 9 的 MaaFramework，才能与 MaaPiCli 连接。
 
 编译需要 CMake 3.28 或更新版本、支持 C++20 的编译器，以及 Boost（system、regex）和 OpenCV（core、imgproc、imgcodecs）的开发包。Linux 还需要安装 `libssl-dev` 或发行版等价的 OpenSSL 开发包。
 
