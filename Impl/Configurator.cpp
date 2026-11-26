@@ -1793,7 +1793,8 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
     case InterfaceData::Controller::Type::Win32: {
         RuntimeParam::Win32Param win32;
 
-        win32.hwnd = config_.win32.hwnd;
+        win32.deferred_binding = controller.win32.deferred_binding;
+        win32.hwnd = win32.deferred_binding ? nullptr : config_.win32.hwnd;
 
         // v2: parse from config, use default if not specified or invalid
         if (!controller.win32.screencap.empty()) {
@@ -1801,6 +1802,9 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
         }
         if (win32.screencap == MaaWin32ScreencapMethod_None) {
             win32.screencap = MaaWin32ScreencapMethod_DXGI_DesktopDup;
+            if (win32.deferred_binding) {
+                win32.screencap |= MaaWin32ScreencapMethod_DXGI_DesktopDup_Window;
+            }
         }
 
         if (!controller.win32.mouse.empty()) {
@@ -1971,7 +1975,7 @@ std::optional<RuntimeParam> Configurator::generate_runtime() const
 
     // v2.5.0: prepare PI_* env vars
     std::unordered_map<std::string, std::string> pi_env;
-    pi_env["PI_INTERFACE_VERSION"] = "v2.11.0";
+    pi_env["PI_INTERFACE_VERSION"] = "v2.11.1";
     pi_env["PI_CLIENT_NAME"] = "MaaPiCli";
 #ifndef MAA_PI_CLI_VERSION
 #define MAA_PI_CLI_VERSION "unknown"
